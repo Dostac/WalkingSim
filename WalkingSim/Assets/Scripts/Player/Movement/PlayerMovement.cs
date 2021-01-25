@@ -12,12 +12,10 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
     public InputManager im;
     ///private
-    private CharacterController _controller;
     private Vector3 moveDir;
-    private float _directionY,speed;
+    private float speed;
 
-    private bool _canDoubleJump = false;
-    private int jumpcount;
+    private int jumpcount=1;
 
     void Update()
     {
@@ -60,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
                     downForce = jumpforce;
                 }
             }
+                jumpcount = 1;
         }
         else
         {
@@ -78,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         transform.forward = new Vector3(cam.transform.forward.x, transform.forward.y, cam.transform.forward.z);
         moveDir = transform.TransformDirection(moveDir);
         controller.Move(moveDir.normalized * speed * Time.deltaTime);
-        controller.Move(new Vector3(0, downForce, 0) * speed * Time.deltaTime);
+        controller.Move(new Vector3(0, downForce, 0) * walkingspeed * Time.deltaTime);
 
     } 
 }
