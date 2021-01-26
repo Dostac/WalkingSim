@@ -483,8 +483,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713740}
-  m_LocalRotation: {x: -0.268737, y: -0.07718161, z: -0.02160864, w: 0.95987314}
-  m_LocalPosition: {x: 65.23508, y: 0.10047269, z: 73.130775}
+  m_LocalRotation: {x: -0.24716607, y: -0.40166318, z: -0.113529585, w: 0.8744637}
+  m_LocalPosition: {x: 67.67221, y: 0.10047519, z: 74.55054}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 470015588}
@@ -854,7 +854,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229526293}
-  m_LocalRotation: {x: 0.018141465, y: -0.000000022351744, z: -0.000000014901163, w: 0.99983543}
+  m_LocalRotation: {x: 0.018141462, y: 0.000000029802319, z: 0.0000000074505797, w: 0.99983543}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1330,8 +1330,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 470015586}
-  m_LocalRotation: {x: 0.036324993, y: 0.000000052154064, z: 0.000000026077032, w: 0.99934006}
-  m_LocalPosition: {x: 0.0000035464764, y: -0.028129935, z: 2.165684}
+  m_LocalRotation: {x: 0.036325008, y: 0.000000059604645, z: 0.000000022351742, w: 0.99934006}
+  m_LocalPosition: {x: 0.000009357929, y: -0.027048409, z: 2.1462705}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 832310161}
@@ -1454,13 +1454,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.66
+  m_Height: 1.69
   m_Radius: 0.27
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.77, z: 0}
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!136 &528912178
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1470,7 +1470,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 528912175}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.27
   m_Height: 1.66
   m_Direction: 1
@@ -1484,7 +1484,7 @@ MeshCollider:
   m_GameObject: {fileID: 528912175}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -1504,14 +1504,19 @@ MonoBehaviour:
   walkingspeed: 4
   runningSpeed: 7
   downForce: -1.1258751
-  jumpforce: 1.68
-  crouchHeight: 5
-  bodyHeight: 4
+  jumpforce: 2.1
   groundedCooldown: 4
   gravity: 4.68
   cam: {fileID: 1713744}
   controller: {fileID: 528912177}
   im: {fileID: 528912181}
+  anim: {fileID: 528912182}
+  crouchHeight: 0.98
+  bodyHeight: 1.69
+  slideHeight: 0.59
+  centerNeutral: {x: 0, y: 0.85, z: 0}
+  centerCrouch: {x: 0, y: 0.42, z: 0}
+  centerSlide: {x: 0, y: 0.36, z: 0}
 --- !u!114 &528912181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1543,13 +1548,22 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 528912175}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: b4851fd1bae9a3848a5f26276c5ee7dc, type: 3}
   m_Controller: {fileID: 9100000, guid: c79eeefda63acbc408c17990b91e817e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'mixamorig7:Hips'\n\tTransform 'mixamorig7:RightUpLeg'\n\tTransform
+    'mixamorig7:LeftHandRing1'\n\tTransform 'mixamorig7:RightHandRing1'\n\tTransform
+    'mixamorig7:RightHandThumb3'\n\tTransform 'mixamorig7:LeftHandIndex1'\n\tTransform
+    'mixamorig7:RightHandMiddle2'\n\tTransform 'mixamorig7:LeftFoot'\n\tTransform
+    'mixamorig7:LeftHandRing3'\n\tTransform 'mixamorig7:RightHandPinky1'\n\tand more
+    ...\n\tFrom animation clip 'right walking'\n\tFrom animation clip 'right running'\n\tFrom
+    animation clip 'leftWalk'\n\tFrom animation clip 'left Running'\n\tFrom animation
+    clip 'walking back'\n\tFrom animation clip 'running back'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -2920,6 +2934,11 @@ Transform:
   m_Father: {fileID: 999183457}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: -72.7, z: 0}
+--- !u!4 &1144077674 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3249731390559777099, guid: 8c6ec64846b299848b9195725a0c50cf, type: 3}
+  m_PrefabInstance: {fileID: 2112304679}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1232802281
 GameObject:
   m_ObjectHideFlags: 3
@@ -3502,7 +3521,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1794142259}
-  m_LocalRotation: {x: 0.000000029802322, y: -0.000000029802322, z: -0.000000018626451, w: 1}
+  m_LocalRotation: {x: 0.000000029802322, y: 0.000000059604645, z: 0.000000022351742, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3913,12 +3932,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2087593519}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.056, y: 0.10862571, z: 0.009}
-  m_LocalScale: {x: 0.55, y: 0.825, z: 0.55}
+  m_LocalRotation: {x: 0.036835484, y: -0.36691743, z: -0.0123255, w: 0.9294422}
+  m_LocalPosition: {x: 0.037165385, y: -0.805002, z: -0.006160099}
+  m_LocalScale: {x: 0.55, y: 0.825, z: 0.5500001}
   m_Children: []
-  m_Father: {fileID: 528912176}
-  m_RootOrder: 8
+  m_Father: {fileID: 1144077674}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2112304679
 PrefabInstance:
@@ -3985,7 +4004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8c6ec64846b299848b9195725a0c50cf, type: 3}
       propertyPath: m_Name
-      value: Idle (1)
+      value: player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c6ec64846b299848b9195725a0c50cf, type: 3}

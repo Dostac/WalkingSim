@@ -7,15 +7,19 @@ public class PlayerMovement : MonoBehaviour
     public float walkingspeed = 1f;
     public float runningSpeed = 2f;
     public float downForce = -1f;
-    public float jumpforce, crouchHeight, bodyHeight, groundedCooldown, gravity;
+    public float jumpforce, groundedCooldown, gravity;
     public Camera cam;
     public CharacterController controller;
     public InputManager im;
+    public Animator anim;
+    public float crouchHeight, bodyHeight, slideHeight;
+    public Vector3 centerNeutral, centerCrouch, centerSlide;
     ///private
     private Vector3 moveDir;
     private float speed;
+    private bool sliding,isCrouching;
 
-    private int jumpcount=1;
+    private int jumpcount = 1;
 
     void Update()
     {
@@ -35,19 +39,27 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown("c"))
         {
-            Slider();
+            Slide();
         }
-        //crouch
-        //if (Input.GetButton("Crouch"))
-        //{
-        //    GetComponent<CharacterController>().height = crouchHeight;
-        //}
-        //else
-        //{
-        //    GetComponent<CharacterController>().height = bodyHeight;
-        //}
-
-        //gravity
+        if (Input.GetKey("left ctrl"))
+        {
+            if (!sliding)
+            {
+                isCrouching =true;
+                controller.height = crouchHeight;
+                controller.center = (centerCrouch);
+                anim.SetBool("IsCrouching", true);
+            }
+        }
+        else
+        {
+            if (!sliding)
+            {
+                isCrouching = false;
+                controller.height = bodyHeight;
+                controller.center = (centerNeutral);
+            }
+        }
         if (controller.isGrounded)
         {
             if (Time.time == groundedCooldown + Time.time)
@@ -58,10 +70,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (jumpcount >= 0)
                 {
+                    ResetAnim();
+                    anim.SetBool("IsJumping", true);
+                    Invoke("ResetAnim", 1);
                     downForce = jumpforce;
                 }
             }
-                jumpcount = 1;
+            jumpcount = 1;
         }
         else
         {
@@ -71,6 +86,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (jumpcount > 0)
                 {
+                    ResetAnim();
+                    anim.SetBool("IsJumping", true);
+                    Invoke("ResetAnim", 1);
                     jumpcount--;
                     downForce = jumpforce;
                 }
@@ -80,10 +98,22 @@ public class PlayerMovement : MonoBehaviour
         transform.forward = new Vector3(cam.transform.forward.x, transform.forward.y, cam.transform.forward.z);
         moveDir = transform.TransformDirection(moveDir);
         controller.Move(moveDir.normalized * speed * Time.deltaTime);
-        controller.Move(new Vector3(0, downForce, 0) * walkingspeed  * Time.deltaTime);
-    } 
-    public void Slider()
+        controller.Move(new Vector3(0, downForce, 0) * walkingspeed * Time.deltaTime);
+    }
+    public void Slide()
     {
-
+        sliding = true;
+        controller.height = slideHeight;
+        controller.center = (centerSlide);
+        anim.SetBool("IsSliding", true);
+        Invoke("ResetAnim", 1);
+    }
+    public void ResetAnim()
+    {
+        controller.height = bodyHeight;
+        controller.center = (centerNeutral);
+        anim.SetBool("IsSliding", false);
+        anim.SetBool("IsJumping", false);
+        sliding = false;
     }
 }
