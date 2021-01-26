@@ -33,7 +33,10 @@ public class PlayerMovement : MonoBehaviour
         {
             speed = walkingspeed;
         }
-
+        if (Input.GetKeyDown("c"))
+        {
+            Slider();
+        }
         //crouch
         //if (Input.GetButton("Crouch"))
         //{
@@ -77,7 +80,10 @@ public class PlayerMovement : MonoBehaviour
         transform.forward = new Vector3(cam.transform.forward.x, transform.forward.y, cam.transform.forward.z);
         moveDir = transform.TransformDirection(moveDir);
         controller.Move(moveDir.normalized * speed * Time.deltaTime);
-        controller.Move(new Vector3(0, downForce, 0) * walkingspeed * Time.deltaTime);
-
+        controller.Move(new Vector3(0, downForce, 0) * walkingspeed  * Time.deltaTime);
     } 
+    public void Slider()
+    {
+
+    }
 }
