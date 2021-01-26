@@ -41,25 +41,14 @@ public class PlayerMovement : MonoBehaviour
         {
             Slide();
         }
-        if (Input.GetKey("left ctrl"))
+        if (Input.GetKeyDown("left ctrl"))
         {
             if (!sliding)
             {
-                isCrouching =true;
-                controller.height = crouchHeight;
-                controller.center = (centerCrouch);
-                anim.SetBool("IsCrouching", true);
+                isCrouching = !isCrouching;
+                Crouch(isCrouching);
             }
-        }
-        else
-        {
-            if (!sliding)
-            {
-                isCrouching = false;
-                controller.height = bodyHeight;
-                controller.center = (centerNeutral);
-            }
-        }
+        }        
         if (controller.isGrounded)
         {
             if (Time.time == groundedCooldown + Time.time)
@@ -100,6 +89,20 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(moveDir.normalized * speed * Time.deltaTime);
         controller.Move(new Vector3(0, downForce, 0) * walkingspeed * Time.deltaTime);
     }
+    public void Crouch(bool crouching)
+    {
+        if (crouching==true)
+        {
+            isCrouching = true;
+            controller.height = crouchHeight;
+            controller.center = (centerCrouch);
+            anim.SetBool("IsCrouching", true);
+        }
+        if (crouching==false)
+        {
+            ResetAnim();
+        }
+    }
     public void Slide()
     {
         sliding = true;
@@ -113,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
         controller.height = bodyHeight;
         controller.center = (centerNeutral);
         anim.SetBool("IsSliding", false);
+        anim.SetBool("IsCrouching", false);
         anim.SetBool("IsJumping", false);
         sliding = false;
     }
