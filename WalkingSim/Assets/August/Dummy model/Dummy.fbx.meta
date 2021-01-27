@@ -4,8 +4,11 @@ ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: -7361427651036151181
-    second: rig|Idle
+      74: -3419677966241061911
+    second: rig|AIdle
+  - first:
+      74: -8605183369770867890
+    second: rig|Crouch Idle
   - first:
       74: 2921659094232983241
     second: rig|PoseLib
@@ -18,6 +21,9 @@ ModelImporter:
   - first:
       74: -1613051370999712423
     second: rig|Run Right
+  - first:
+      74: -6646176091235432051
+    second: rig|Slide
   - first:
       74: -6348754861072604633
     second: rig|TPOSE
@@ -48,7 +54,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'rig|Idle' has import animation warnings that
+    animationImportWarnings: "\nClip 'rig|AIdle' has import animation warnings that
       might lower retargeting quality:\nNote: Activate translation DOF on avatar
       to improve retargeting quality.\n\t'DEF-spine.004' is inbetween humanoid transforms
       and has rotation animation that will be discarded.\n\t'DEF-upper_arm.L' has
@@ -60,6 +66,14 @@ ModelImporter:
       that will be discarded.\n\t'DEF-foot.L' has scale animation that will be discarded.\n\t'DEF-thigh.R'
       has scale animation that will be discarded.\n\t'DEF-shin.R' has scale animation
       that will be discarded.\n\t'DEF-foot.R' has scale animation that will be discarded.\n\nClip
+      'rig|Crouch Idle' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'DEF-upper_arm.L'
+      has scale animation that will be discarded.\n\t'DEF-forearm.L' has scale animation
+      that will be discarded.\n\t'DEF-hand.L' has scale animation that will be discarded.\n\t'DEF-upper_arm.R'
+      has scale animation that will be discarded.\n\t'DEF-forearm.R' has scale animation
+      that will be discarded.\n\t'DEF-hand.R' has scale animation that will be discarded.\n\t'DEF-shin.L'
+      has scale animation that will be discarded.\n\t'DEF-foot.L' has scale animation
+      that will be discarded.\n\t'DEF-shin.R' has scale animation that will be discarded.\n\nClip
       'rig|Run' has import animation warnings that might lower retargeting quality:\nNote:
       Activate translation DOF on avatar to improve retargeting quality.\n\t'DEF-spine.004'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'DEF-upper_arm.L'
@@ -150,11 +164,40 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: rig|Idle
-      takeName: rig|Idle
+      name: rig|AIdle
+      takeName: rig|AIdle
       internalID: 0
       firstFrame: 1
       lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: rig|Crouch Idle
+      takeName: rig|Crouch Idle
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 59
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -242,6 +285,35 @@ ModelImporter:
       internalID: 0
       firstFrame: 0
       lastFrame: 49
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: rig|Slide
+      takeName: rig|Slide
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 59
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
