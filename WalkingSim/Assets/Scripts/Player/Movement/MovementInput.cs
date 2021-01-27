@@ -7,6 +7,8 @@ public class MovementInput : MonoBehaviour
     //public
     public float walkingspeed = 1f;
     public float runningSpeed = 2f;
+    public float crouchSpeed = 0.8f;
+    public float crouchRunSpeed = 1.6f;
     public float downForce = -1f;
     public float InputX;
     public float InputZ;
@@ -90,11 +92,25 @@ public class MovementInput : MonoBehaviour
     {
         if (im.runPressed)
         {
-            Movspeed = runningSpeed;
+            if (!isCrouching)
+            {
+                Movspeed = runningSpeed;
+            }
+            else
+            {
+                Movspeed = crouchRunSpeed;
+            }
         }
         else
         {
-            Movspeed = walkingspeed;
+            if (!isCrouching)
+            {
+                Movspeed = walkingspeed;
+            }
+            else
+            {
+                Movspeed = crouchSpeed;
+            }
         }
         if (Input.GetKeyDown("c"))
         {
@@ -126,8 +142,9 @@ public class MovementInput : MonoBehaviour
             }
             if (Input.GetButtonDown("Jump"))
             {
-                if (jumpcount >= 0)
+                if (jumpcount >= 0&&!sliding)
                 {
+                    isCrouching = false;
                     ResetAnim();
                     anim.SetBool("isJumping", true);
                     Invoke("ResetAnim", 1);
