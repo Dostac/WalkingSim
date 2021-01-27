@@ -27,7 +27,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        //UpdateUpdate();
+        ////180 turn on s
+
+
         CheckForWall();
         WallRunInput();
         InPut();
@@ -40,23 +42,18 @@ public class PlayerMovement : MonoBehaviour
     }
     private void StartWallrun()
     {
-        print("start");
-
-        isWallRunning = true;
-
-
-            //Make sure char sticks to wall
+           isWallRunning = true;
+           //Make sure char sticks to wall
            // if (isWallRight)
-               // rb.AddForce(orientation.right * wallrunForce / 5 * Time.deltaTime);
+           // rb.AddForce(orientation.right * wallrunForce / 5 * Time.deltaTime);
            // else
-               // rb.AddForce(-orientation.right * wallrunForce / 5 * Time.deltaTime);
-        //}
+           // rb.AddForce(-orientation.right * wallrunForce / 5 * Time.deltaTime);
     }
     private void StopWallRun()
     {
         isWallRunning = false;        
     }
-    private void CheckForWall() //make sure to call in void Update
+    private void CheckForWall()
     {
         isWallRight = Physics.Raycast(transform.position, orientation.right, 1f, wall);
         isWallLeft = Physics.Raycast(transform.position, -orientation.right, 1f, wall);
@@ -66,6 +63,22 @@ public class PlayerMovement : MonoBehaviour
     }
     private void InPut()
     {
+        if (Input.GetKeyDown("w"))
+        {
+            transform.rotation = Quaternion.Euler(0,0 , 0);
+        }
+        if (Input.GetKeyDown("s"))
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        if (Input.GetKeyDown("a"))
+        {
+            transform.rotation = Quaternion.Euler(0, 270, 0);
+        }
+        if (Input.GetKeyDown("d"))
+        {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+        }
         //sprint
         if (im.runPressed)
         {
@@ -88,14 +101,16 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        transform.forward = new Vector3(cam.transform.forward.x, transform.forward.y, cam.transform.forward.z);
+       //transform.forward = new Vector3(cam.transform.forward.x, transform.forward.y, cam.transform.forward.z);
         if (isWallRight&&isWallRunning)
         {
-            transform.rotation = Quaternion.Euler(cam.transform.forward.x, transform.forward.y, 15);
+            Vector3 v = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, v.y, 15);
         }
         if (isWallLeft&& isWallRunning)
         {
-            transform.rotation = Quaternion.Euler(cam.transform.forward.x, transform.forward.y, -15);
+            Vector3 v = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, v.y, -15);
         }
         moveDir = transform.TransformDirection(moveDir);
         if (controller.isGrounded)

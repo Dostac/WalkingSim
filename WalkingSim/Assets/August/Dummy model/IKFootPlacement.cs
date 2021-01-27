@@ -12,6 +12,12 @@ public class IKFootPlacement : MonoBehaviour
     [Range(0, 1f)]
     public float DistanceToGround; // Distance from where the foot transform is to the lowest possible position of the foot.
 
+    private void Start()
+    {
+
+        anim = GetComponent<Animator>();
+
+    }
     private void OnAnimatorIK(int layerIndex)
     {
 
@@ -37,9 +43,9 @@ public class IKFootPlacement : MonoBehaviour
 
                     Vector3 footPosition = hit.point; // The target foot position is where the raycast hit a walkable object...
                     footPosition.y += DistanceToGround; // ... taking account the distance to the ground we added above.
-                    anim.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);
-                    anim.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
-
+                    anim.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);                    
+                    Vector3 forward = Vector3.ProjectOnPlane(transform.forward, hit.normal);
+                    anim.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(forward, hit.normal));
                 }
 
             }
@@ -55,7 +61,8 @@ public class IKFootPlacement : MonoBehaviour
                     Vector3 footPosition = hit.point;
                     footPosition.y += DistanceToGround;
                     anim.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
-                    anim.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+                    Vector3 forward = Vector3.ProjectOnPlane(transform.forward, hit.normal);
+                    anim.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(forward, hit.normal));
 
                 }
 
