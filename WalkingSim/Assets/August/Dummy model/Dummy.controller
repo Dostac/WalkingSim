@@ -77,31 +77,43 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Velocity z
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsJumping
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsSliding
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsCrouching
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: IKRightFootWeight
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: IKLeftFootWeight
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -124,7 +136,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -7361427651036151181, guid: bbaf507730afd7a4da1d0810b82b97fa, type: 3}
+    m_Motion: {fileID: -7361427651036151181, guid: 493e154aac15b964482972ca3fe7e8d5, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -132,55 +144,47 @@ BlendTree:
     m_DirectBlendParameter: posX
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 1023992570608409904, guid: bbaf507730afd7a4da1d0810b82b97fa, type: 3}
-    m_Threshold: 0.14285715
+    m_Motion: {fileID: 1023992570608409904, guid: 493e154aac15b964482972ca3fe7e8d5, type: 3}
+    m_Threshold: 0.16666667
     m_Position: {x: 0, y: 0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: posX
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 21385622660592746, guid: 2ad396c34b0015b41a40e781055371fc, type: 3}
-    m_Threshold: 0.2857143
-    m_Position: {x: 0, y: -0.5}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: posX
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: -5480419611278045171, guid: bbaf507730afd7a4da1d0810b82b97fa, type: 3}
-    m_Threshold: 0.42857143
+    m_Motion: {fileID: -5480419611278045171, guid: 493e154aac15b964482972ca3fe7e8d5, type: 3}
+    m_Threshold: 0.33333334
     m_Position: {x: 0, y: 2}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: posX
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 3614749586703670653, guid: 2ad396c34b0015b41a40e781055371fc, type: 3}
-    m_Threshold: 0.5714286
+    m_Motion: {fileID: 3614749586703670653, guid: 493e154aac15b964482972ca3fe7e8d5, type: 3}
+    m_Threshold: 0.5
     m_Position: {x: -0.5, y: 0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: posX
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -8978605128304168057, guid: 2ad396c34b0015b41a40e781055371fc, type: 3}
-    m_Threshold: 0.71428573
+    m_Motion: {fileID: -8978605128304168057, guid: 493e154aac15b964482972ca3fe7e8d5, type: 3}
+    m_Threshold: 0.6666667
     m_Position: {x: 0.5, y: 0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: posX
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 4485064405312575913, guid: 2ad396c34b0015b41a40e781055371fc, type: 3}
-    m_Threshold: 0.85714287
+    m_Motion: {fileID: 4485064405312575913, guid: 493e154aac15b964482972ca3fe7e8d5, type: 3}
+    m_Threshold: 0.8333333
     m_Position: {x: -1.5, y: 1.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: posX
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -1613051370999712423, guid: 2ad396c34b0015b41a40e781055371fc, type: 3}
+    m_Motion: {fileID: -1613051370999712423, guid: 493e154aac15b964482972ca3fe7e8d5, type: 3}
     m_Threshold: 1
     m_Position: {x: 1.5, y: 1.5}
     m_TimeScale: 1
