@@ -81,7 +81,6 @@ public class MovementInput : MonoBehaviour
         right.Normalize();
 
         desireMovementDirection = forward * InputZ + right * InputX;
-
         if (!blockRotationPlayer)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desireMovementDirection),desiredRoationSpeed); 
@@ -130,7 +129,7 @@ public class MovementInput : MonoBehaviour
                 if (jumpcount >= 0)
                 {
                     ResetAnim();
-                    anim.SetBool("IsJumping", true);
+                    anim.SetBool("isJumping", true);
                     Invoke("ResetAnim", 1);
                     downForce = jumpforce;
                 }
@@ -142,27 +141,31 @@ public class MovementInput : MonoBehaviour
 
             downForce -= gravity * Time.deltaTime;
         }
-            InputX = Input.GetAxisRaw("Horizontal");
+        InputX = Input.GetAxisRaw("Horizontal");
         InputZ = Input.GetAxisRaw("Vertical");
         moveVector = new Vector3(InputX, 0, InputZ);
         ///0.0 kan naar 0.3 als je niet meteen animatie wil
-        anim.SetFloat("inputz",InputZ,0.0f,Time.deltaTime*2f);
-        anim.SetFloat("inputx", InputX, 0.0f, Time.deltaTime * 2f);
+        //anim.SetFloat("inputz",InputZ,0.0f,Time.deltaTime*2f);
+        //anim.SetFloat("inputx", InputX, 0.0f, Time.deltaTime * 2f);
 
         speed = new Vector2(InputX, InputZ).sqrMagnitude;
 
         if (speed > allowPlayerRotation)
         {
-            anim.SetFloat("inputMagnitude", speed,0.0f,Time.deltaTime);
+            //anim.SetFloat("inputMagnitude", speed,0.0f,Time.deltaTime);
             PlayerMoveAndRotation();
         }
         else if (speed < allowPlayerRotation)
         {
-            anim.SetFloat("inputMagnitude", speed, 0.0f, Time.deltaTime);
+            //anim.SetFloat("inputMagnitude", speed, 0.0f, Time.deltaTime);
         }
-        moveVector = transform.TransformDirection(moveVector);
+        if (InputX == 0 && InputZ == 0)
+        {
+            desireMovementDirection = new Vector3(0, 0, 0);
+        }
+        moveVector = desireMovementDirection;
         controller.Move(moveVector.normalized * Movspeed * Time.deltaTime);
-        controller.Move(new Vector3(0, downForce, 0) * Movspeed * Time.deltaTime);
+        controller.Move(new Vector3(0, downForce, 0) * walkingspeed * Time.deltaTime);
     }
     public void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -171,7 +174,7 @@ public class MovementInput : MonoBehaviour
             if (Input.GetButtonDown("Jump"))
             {
                 ResetAnim();
-                anim.SetBool("IsJumping", true);
+                anim.SetBool("isJumping", true);
                 Invoke("ResetAnim", 1);
                 downForce = jumpforce;
                 moveVector = hit.normal * speed;
@@ -185,7 +188,7 @@ public class MovementInput : MonoBehaviour
             isCrouching = true;
             controller.height = crouchHeight;
             controller.center = (centerCrouch);
-            anim.SetBool("IsCrouching", true);
+            anim.SetBool("isCrouching", true);
         }
         if (crouching == false)
         {
@@ -197,16 +200,16 @@ public class MovementInput : MonoBehaviour
         sliding = true;
         controller.height = slideHeight;
         controller.center = (centerSlide);
-        anim.SetBool("IsSliding", true);
+        anim.SetBool("isSliding", true);
         Invoke("ResetAnim", 1);
     }
     public void ResetAnim()
     {
         controller.height = bodyHeight;
         controller.center = (centerNeutral);
-        anim.SetBool("IsSliding", false);
-        anim.SetBool("IsCrouching", false);
-        anim.SetBool("IsJumping", false);
+        anim.SetBool("isSliding", false);
+        anim.SetBool("isCrouching", false);
+        anim.SetBool("isJumping", false);
         sliding = false;
     }
 }
