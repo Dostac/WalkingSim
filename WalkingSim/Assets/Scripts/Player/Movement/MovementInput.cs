@@ -9,6 +9,7 @@ public class MovementInput : MonoBehaviour
     public float runningSpeed = 2f;
     public float crouchSpeed = 0.8f;
     public float crouchRunSpeed = 1.6f;
+    public float slidingSpeed = 2.5f;
     public float downForce = -1f;
     public float InputX;
     public float InputZ;
@@ -21,7 +22,7 @@ public class MovementInput : MonoBehaviour
     public Animator anim;
     public InputManager im;
     public float speed;
-    public float Movspeed;
+    public float movspeed;
     public float allowPlayerRotation;
     public Camera cam;
     public CharacterController controller;
@@ -44,8 +45,8 @@ public class MovementInput : MonoBehaviour
     private void WallRunInput()
     {
         //Wallrun
-        if (Input.GetKey(KeyCode.D) && isWallRight) StartWallrun();
-        if (Input.GetKey(KeyCode.A) && isWallLeft) StartWallrun();
+        if (Input.GetKey("d") && isWallRight) StartWallrun();
+        if (Input.GetKey("a") && isWallLeft) StartWallrun();
     }
     private void StartWallrun()
     {
@@ -94,23 +95,28 @@ public class MovementInput : MonoBehaviour
         {
             if (!isCrouching)
             {
-                Movspeed = runningSpeed;
+                movspeed = runningSpeed;
             }
             else
             {
-                Movspeed = crouchRunSpeed;
+                movspeed = crouchRunSpeed;
             }
         }
         else
         {
             if (!isCrouching)
             {
-                Movspeed = walkingspeed;
+                movspeed = walkingspeed;
             }
             else
             {
-                Movspeed = crouchSpeed;
+                movspeed = crouchSpeed;
             }
+        }
+        if (sliding)
+        {
+            float x = movspeed;
+            movspeed = slidingSpeed * x / 4;
         }
         if (Input.GetKeyDown("c"))
         {
@@ -176,12 +182,19 @@ public class MovementInput : MonoBehaviour
         {
             //anim.SetFloat("inputMagnitude", speed, 0.0f, Time.deltaTime);
         }
-        if (InputX == 0 && InputZ == 0)
+        if (InputX == 0 && InputZ == 0&&!sliding)
         {
             desireMovementDirection = new Vector3(0, 0, 0);
+            movspeed = 0;
         }
         moveVector = desireMovementDirection;
-        controller.Move(moveVector.normalized * Movspeed * Time.deltaTime);
+        controller.Move(moveVector.normalized * movspeed * Time.deltaTime);
+        if (sliding)
+        {
+            controller.Move(transform.forward * slidingSpeed * Time.deltaTime);
+        }
+
+        //gravity
         controller.Move(new Vector3(0, downForce, 0) * walkingspeed * Time.deltaTime);
     }
     public void OnControllerColliderHit(ControllerColliderHit hit)
@@ -214,6 +227,7 @@ public class MovementInput : MonoBehaviour
     }
     public void Slide()
     {
+        ///sliding speed
         sliding = true;
         controller.height = slideHeight;
         controller.center = (centerSlide);
