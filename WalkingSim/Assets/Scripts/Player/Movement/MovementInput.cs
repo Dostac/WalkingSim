@@ -5,6 +5,8 @@ using UnityEngine;
 public class MovementInput : MonoBehaviour
 {
     //public
+    public float testinfloat, maxtestingfloat;
+
     public float walkingspeed = 1f;
     public float runningSpeed = 2f;
     public float crouchSpeed = 0.8f;
@@ -16,6 +18,7 @@ public class MovementInput : MonoBehaviour
     public float jumpforce= 2.1f;
     public float gravity= 4.68f;
     public float groundedCooldown= 4;
+    public float wallForce=2;
     public Vector3 desireMovementDirection;
     public bool blockRotationPlayer;
     public float desiredRoationSpeed= 0.1f;
@@ -91,6 +94,14 @@ public class MovementInput : MonoBehaviour
     }
     void InputMagnitude()
     {
+
+        if (Input.GetButtonDown("Jump")&&isWallRunning)
+        {
+            ResetAnim();
+            anim.SetBool("isJumping", true);
+            Invoke("ResetAnim", 1);
+            downForce += jumpforce;
+        }
         if (im.runPressed)
         {
             if (!isCrouching)
@@ -130,12 +141,20 @@ public class MovementInput : MonoBehaviour
                 Crouch(isCrouching);
             }
         }
-        if (isWallRight && isWallRunning)
+        if (isWallRight && isWallRunning&&!isGrounded)
         {
             Vector3 v = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(0, v.y, 15);
+            if (testinfloat >= maxtestingfloat)
+            {
+                testinfloat = maxtestingfloat;
+            }
+            testinfloat *=wallForce*Time.deltaTime;
+             downForce = testinfloat;
+            controller.Move(transform.right * wallForce * Time.deltaTime);
+            ///1234
         }
-        if (isWallLeft && isWallRunning)
+        if (isWallLeft && isWallRunning&&!isGrounded)
         {
             Vector3 v = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(0, v.y, -15);
@@ -144,7 +163,10 @@ public class MovementInput : MonoBehaviour
         {
             if (Time.time == groundedCooldown + Time.time)
             {
+                if (!isWallRunning)
+                {
                 downForce = -0.01f;
+                }
             }
             if (Input.GetButtonDown("Jump"))
             {
@@ -162,7 +184,10 @@ public class MovementInput : MonoBehaviour
         {
            moveVector = lastMove;
 
-            downForce -= gravity * Time.deltaTime;
+            if (!isWallRunning)
+            {
+                downForce -= gravity * Time.deltaTime;
+            }
         }
         InputX = Input.GetAxisRaw("Horizontal");
         InputZ = Input.GetAxisRaw("Vertical");
@@ -206,7 +231,7 @@ public class MovementInput : MonoBehaviour
                 ResetAnim();
                 anim.SetBool("isJumping", true);
                 Invoke("ResetAnim", 1);
-                downForce = jumpforce;
+                downForce += jumpforce;
                 moveVector = hit.normal * speed;
             }
         }
