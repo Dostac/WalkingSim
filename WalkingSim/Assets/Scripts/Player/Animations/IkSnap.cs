@@ -6,6 +6,7 @@ public class IkSnap : MonoBehaviour
 {
     public bool useIK;
     public bool leftHandIk, rightHandIk;
+    public GameObject mainObject;
 
     private Animator anim;
 
@@ -39,7 +40,7 @@ public class IkSnap : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawRay(transform.position + new Vector3(0, 2, 0.5f), -transform.up + new Vector3(-0.5f, 0, 0), Color.blue);
-        Debug.DrawRay(transform.position + new Vector3(0, 2, 0.5f), -transform.up + rightHandPos, Color.green);
+        Debug.DrawRay(mainObject.transform.position + new Vector3(0, 2, 0.5f), -mainObject.transform.up + new Vector3(-0.5f, 0, 0), Color.blue);
+        Debug.DrawRay(mainObject.transform.position + new Vector3(0, 2, 0.5f), -mainObject.transform.up + new Vector3(0.5f, 0, 0), Color.green);
     }
 }
