@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class IKHandPlacement : MonoBehaviour
 {
+	[Header("Bools")]
 	public bool useIK = true;
 
 	public bool leftHandIK = false;
@@ -10,6 +11,13 @@ public class IKHandPlacement : MonoBehaviour
 
 	public bool leftFootIK = false;
 	public bool rightFootIK = false;
+	public bool useFootIK = false;
+	[Header("Vectors for placement")]
+	public Vector3 leftHandOffset;
+	public Vector3 rightHandOffset;
+
+	public Vector3 leftFootOffset;
+	public Vector3 rightFootOffset;
 
 	private Vector3 leftHandPos;
 	private Vector3 rightHandPos;
@@ -20,12 +28,6 @@ public class IKHandPlacement : MonoBehaviour
 	private Vector3 curLeftHandPos;
 	private Vector3 curRightHandPos;
 
-	public Vector3 leftHandOffset;
-	public Vector3 rightHandOffset;
-
-	public Vector3 leftFootOffset;
-	public Vector3 rightFootOffset;
-
 	private Quaternion leftHandRot;
 	private Quaternion rightHandRot;
 
@@ -34,12 +36,12 @@ public class IKHandPlacement : MonoBehaviour
 
 	public Quaternion leftFootRotOffset;
 	public Quaternion rightFootRotOffset;
-
-	public bool useFootIK = false;
+	[Header("layers")]
+	public LayerMask layers;
 
 	private Animator anim;
 	private float normalizedTime;
-
+	[Header("weight")]
 	[Range(0, 5f)]
 	public float leftHandWeight = 1f;
 	[Range(0, 5f)]
@@ -66,9 +68,8 @@ public class IKHandPlacement : MonoBehaviour
 		  make sure that the player's z axis is applied according or player is positioned accordingly */
 
 		//Left Hand IK Check
-		if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), out LHit, 1f))
+		if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), out LHit, 1f,layers))
 		{
-
 			Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
 			lookAt = lookAt.y < 0 ? -lookAt : lookAt;
 
@@ -84,7 +85,7 @@ public class IKHandPlacement : MonoBehaviour
 			leftHandIK = false;
 
 		//Right Hand IK Check
-		if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out RHit, 1f))
+		if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out RHit, 1f, layers))
 		{
 
 			Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
@@ -104,7 +105,7 @@ public class IKHandPlacement : MonoBehaviour
 		if (useFootIK)
 		{
 			//Left Foot IK Check
-			if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.35f, 0.5f, 0.0f)), transform.forward, out LFHit, 1f))
+			if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.35f, 0.5f, 0.0f)), transform.forward, out LFHit, 1f, layers))
 			{
 
 				leftFootIK = true;
@@ -115,7 +116,7 @@ public class IKHandPlacement : MonoBehaviour
 				leftFootIK = false;
 
 			//Right Foot IK Check
-			if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.35f, 0.5f, 0.0f)), transform.forward, out RFHit, 1f))
+			if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.35f, 0.5f, 0.0f)), transform.forward, out RFHit, 1f, layers))
 			{
 
 				rightFootIK = true;

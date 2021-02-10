@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -25,14 +23,15 @@ public class PlayerMovement : MonoBehaviour
     public float wallrunForce;
     public float wallRunAngle=60;
 
-    public LayerMask wall;
-
     [Header("Player Components")]
     public GameObject player;
     public Transform orientation;
     public CapsuleCollider col;
     public Camera cam;
     public Animator anim;
+    [Header("wall layers")]
+    public LayerMask wall;
+
     //private
     private float slidegSpeed;
     private float movementSpeed;
@@ -56,14 +55,18 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 desireMovementDirection,lookAt;
 
+    private WallCollision wc;
     private RaycastHit hit;
     private InputManager im;
     private Rigidbody rb;
+    private Rigidbody playerRB;
     private void Start()
     {
         im = GetComponent<InputManager>();
         rb = GetComponent<Rigidbody>();
         jumpCount = jumps;
+        wc=player.GetComponent<WallCollision>();
+        playerRB=player.GetComponent<Rigidbody>();
     }
     public void Update()
     {
@@ -114,14 +117,37 @@ public class PlayerMovement : MonoBehaviour
     }
     public void PlayerInput()
     {
-        if (Input.GetKeyDown("left ctrl"))
+        if (Input.GetKeyDown("left ctrl")&&isGrounded)
         {
             isCrouch = !isCrouch;
             Crouch();
         }
         if (im.spacebar)
         {
-            Jump();
+            if (wc.vault)
+            {
+                Vault();
+                print("Vault");
+            }
+            else if(wc.medium)
+            {
+                print("medium");
+                MediumWall();
+            }
+            else if (wc.large)
+            {
+                print("large");
+                BigWall();
+            }
+            else if (wc.lege)
+            {
+                print("ledge");
+                LedgeGrab();
+            }
+            else if (!wc.lege&&!wc.large&&!wc.medium&&!wc.vault)
+            {
+                Jump();
+            }
         }
         if (Input.GetKeyDown("c"))
         {
@@ -279,6 +305,23 @@ public class PlayerMovement : MonoBehaviour
             jumpCount--;
         }
     }
+    public void LedgeGrab()
+    {
+        //rb.useGravity = false;
+        //inputY = 0;
+    }
+    public void BigWall()
+    {
+
+    }
+    public void MediumWall()
+    {
+       
+    }
+    public void Vault()
+    {
+   
+    }
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.tag == "Walkable")
@@ -286,7 +329,10 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = true;
             jumpCount = jumps;
         }
-        else
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Walkable")
         {
             isGrounded = false;
         }
@@ -297,6 +343,14 @@ public class PlayerMovement : MonoBehaviour
         {
             inputY = 0;
         }
+    }
+    public void FreezePlayerRot()
+    {
+        player.GetComponent<Rigidbody>().isKinematic = playerRB.isKinematic;
+    }
+    public void UNFreezePlayerRot()
+    {
+        player.GetComponent<Rigidbody>().isKinematic = rb.isKinematic;
     }
     public void ResetAnim()
     {
