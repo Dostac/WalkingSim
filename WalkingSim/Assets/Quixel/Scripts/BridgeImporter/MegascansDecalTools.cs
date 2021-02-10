@@ -134,7 +134,7 @@ namespace Quixel
             string prefabPath = MegascansUtilities.ValidateFolderCreate(assetPath, "Prefabs");
             GameObject g = new GameObject(prefabName);
 #if UNITY_2019_4 || UNITY_2020
-            g.transform.rotation = Quaternion.Euler(45f, 45f, 45f);
+            g.transform.rotation = Quaternion.Euler(45f, 0f, 0f);
 #endif
 #if UNITY_2019_3 || UNITY_2019_4 || UNITY_2020
             g.AddComponent<UnityEngine.Rendering.HighDefinition.DecalProjector>();

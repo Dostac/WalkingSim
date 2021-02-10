@@ -121,8 +121,20 @@ namespace Quixel
 
         static void ImportMesh(string sourcePath, string destPath)
         {
-            MegascansUtilities.UpdateProgressBar(1.0f, "Importing Megascans Asset", "Importing Mesh...");
-            MegascansUtilities.CopyFileToProject(sourcePath, destPath);
+            try
+            {
+                MegascansUtilities.UpdateProgressBar(1.0f, "Importing Megascans Asset", "Importing Mesh...");
+                if (File.Exists(sourcePath))
+                {
+                    File.Copy(sourcePath, destPath, true);
+                    AssetDatabase.ImportAsset(destPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("Exception::MegascansMeshUtils::Importing Mesh:: " + ex.ToString());
+                MegascansUtilities.HideProgressBar();
+            }
         }
 
         /// <summary>
@@ -133,7 +145,7 @@ namespace Quixel
         {
             try {
                 string prefabPath = MegascansUtilities.ValidateFolderCreate(prefabData.assetPath, "Prefabs");
-                string prefabName = prefabData.modelNamingConvention;
+                string prefabName = prefabData.finalAssetName.Replace("$mapName", "").Replace("$resolution", "").Replace("$lod", "").Replace("$variation", "");
 
                 //Setting up prefab gameobject
                 GameObject prefabGameObject = new GameObject();
@@ -197,6 +209,14 @@ namespace Quixel
                     foreach (Renderer ren in r)
                     {
                         ren.material = prefabData.finalMat;
+                        //Apply highpoly material if the mesh was highpoly and highpoly filter is enabled.
+                        if (loadedGeometry.name.ToLower().Contains("highpoly") && prefabData.highpoly)
+                        {
+                            ren.material = prefabData.highpolyMat;
+#if UNITY_EDITOR_OSX
+                            ren.material = prefabData.finalMat;
+#endif
+                        }
                         //Apply collision
                         if (prefabData.setupCollision)
                             ren.gameObject.AddComponent<MeshCollider>().sharedMesh = ren.gameObject.GetComponent<MeshFilter>().sharedMesh;
@@ -237,12 +257,14 @@ namespace Quixel
             try
             {
                 string prefabPath = MegascansUtilities.ValidateFolderCreate(prefabData.assetPath, "Prefabs");
+                string tempPrefabName = prefabData.finalAssetName.Replace("$mapName", "").Replace("$resolution", "").Replace("$lod", "");
                 List<GameObject> prefabObjects = new List<GameObject>();
 
                 for (int i = 0; i < prefabData.importedGeometryPaths3DPlant.Count; i++)
                 {
-                    string prefabName = prefabData.modelNamingConvention + "_Var" + (i + 1).ToString();
-                    //Setting up prefab gameobject
+                    string variation = "Var" + (i + 1).ToString();
+                    string prefabName = tempPrefabName.Contains("$variation") ? tempPrefabName.Replace("$variation", variation) : tempPrefabName + "_" + variation;//Prefab saving
+                                                                                                                                                                   //Setting up prefab gameobject
                     GameObject prefabGameObject = new GameObject();
                     prefabGameObject.name = prefabName;
                     prefabGameObject.isStatic = true;
@@ -306,6 +328,14 @@ namespace Quixel
                         foreach (Renderer ren in r)
                         {
                             ren.material = prefabData.finalMat;
+                            //Apply highpoly material if the mesh was highpoly and highpoly filter is enabled.
+                            if (loadedGeometry.name.ToLower().Contains("highpoly") && prefabData.highpoly)
+                            {
+                                ren.material = prefabData.highpolyMat;
+#if UNITY_EDITOR_OSX
+                                ren.material = prefabData.finalMat;
+#endif
+                            }
                             //Billboard material application
                             if (prefabData.hasBillboardLOD && x == (numberOfFiles - 1))
                             {
@@ -369,7 +399,9 @@ namespace Quixel
 
                 for (int i = 0; i < numberOfVariations; i++)
                 {
-                    string prefabName = prefabData.modelNamingConvention + "_Var" + (i + 1).ToString();
+                    string prefabName = prefabData.finalAssetName.Replace("$mapName", "").Replace("$resolution", "").Replace("$lod", "").Replace("$variation", "");
+                    string varName = "Var" + (i + 1).ToString();
+                    prefabName = prefabName.Contains("$variation") ? prefabName.Replace("$variation", "Var" + varName) : prefabName + varName;
 
                     //Setting up prefab gameobject
                     GameObject prefabGameObject = new GameObject();
@@ -447,6 +479,14 @@ namespace Quixel
                         foreach (Renderer ren in r)
                         {
                             ren.material = prefabData.finalMat;
+                            //Apply highpoly material if the mesh was highpoly and highpoly filter is enabled.
+                            if (loadedGeometry.name.ToLower().Contains("highpoly") && prefabData.highpoly)
+                            {
+                                ren.material = prefabData.highpolyMat;
+#if UNITY_EDITOR_OSX
+                                ren.material = prefabData.finalMat;
+#endif
+                            }
                             //Apply collision
                             if (prefabData.setupCollision)
                                 ren.gameObject.AddComponent<MeshCollider>().sharedMesh = ren.gameObject.GetComponent<MeshFilter>().sharedMesh;
@@ -553,7 +593,7 @@ namespace Quixel
     {
         public string assetPath;
         public string assetName;
-        public string modelNamingConvention;
+        public string finalAssetName;
         public int lodFadeMode;
         public bool highpoly;
         public bool addAssetToScene;
@@ -563,15 +603,16 @@ namespace Quixel
         public bool isScatterAsset;
         public bool setupLODs;
         public Material finalMat;
+        public Material highpolyMat;
         public Material billboardMat;
         public List<string> importedGeometryPaths3D;
         public List<List<string>> importedGeometryPaths3DPlant;
 
-        public PrefabData(string assetPath, string assetName, string modelNamingConvention, int lodFadeMode, bool highpoly, bool addAssetToScene, bool setupCollision, bool hasBillboardLOD, bool isAlembic, bool isScatterAsset, bool setupLODs, Material finalMat, Material billboardMat, List<string> importedGeometryPaths3D, List<List<string>> importedGeometryPaths3DPlant)
+        public PrefabData(string assetPath, string assetName, string finalAssetName, int lodFadeMode, bool highpoly, bool addAssetToScene, bool setupCollision, bool hasBillboardLOD, bool isAlembic, bool isScatterAsset, bool setupLODs, Material finalMat, Material highpolyMat, Material billboardMat, List<string> importedGeometryPaths3D, List<List<string>> importedGeometryPaths3DPlant)
         {
             this.assetPath = assetPath;
             this.assetName = assetName;
-            this.modelNamingConvention = modelNamingConvention;
+            this.finalAssetName = finalAssetName;
             this.lodFadeMode = lodFadeMode;
             this.highpoly = highpoly;
             this.addAssetToScene = addAssetToScene;
@@ -581,6 +622,7 @@ namespace Quixel
             this.isScatterAsset = isScatterAsset;
             this.setupLODs = setupLODs;
             this.finalMat = finalMat;
+            this.highpolyMat = highpolyMat;
             this.billboardMat = billboardMat;
             this.importedGeometryPaths3D = importedGeometryPaths3D;
             this.importedGeometryPaths3DPlant = importedGeometryPaths3DPlant;

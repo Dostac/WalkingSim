@@ -8,7 +8,7 @@ namespace Quixel
     public class MegascansImporterWindow : EditorWindow
     {
 
-        public static string version = "3.13";
+        public static string version = "3.12";
 
         static private int texPack;
         static private int texPackUpdate;
@@ -84,6 +84,8 @@ namespace Quixel
         static private bool importLODsUpdate;
         static private bool setupLODUpdate;
         static private bool setupPrefabsUpdate;
+        static private bool flipNormalY;
+        static private bool flipNormalYUpdate;
         static private bool importAllTextures;
         static private bool importAllTexturesUpdate;
 
@@ -100,6 +102,7 @@ namespace Quixel
         static private Rect importLODsLoc;
         static private Rect setupLODLoc;
         static private Rect setupPrefabsLoc;
+        static private Rect flipNormalYLoc;
         static private Rect importAllTexturesLoc;
         static private Rect connectionLoc;
 
@@ -223,6 +226,13 @@ namespace Quixel
 
                 GUILayout.BeginHorizontal();
 
+                flipNormalY = EditorGUI.Toggle(flipNormalYLoc, flipNormalY, MSCheckBox);
+                GUILayout.Box("Flip Normal Y (Green) Channel (2D Surfaces)", MSNormalTextStyle, GUILayout.Height(textSize.y), GUILayout.Width(textSize.x));
+
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+
                 applyToSelection = EditorGUI.Toggle(applyToSelectionLoc, applyToSelection, MSCheckBox);
                 GUILayout.Box("Apply To Selection (2D Surfaces)", MSNormalTextStyle, GUILayout.Height(textSize.y), GUILayout.Width(textSize.x));
 
@@ -268,7 +278,7 @@ namespace Quixel
                 connection = EditorGUI.Toggle(connectionLoc, connection, MSCheckBox);
                 GUILayout.Box("Enable Plugin", MSNormalTextStyle, GUILayout.Height(textSize.y));
                 if (GUILayout.Button("Help...", MSHelpStyle, GUILayout.Width(textSize.x)))
-                    Application.OpenURL("https://docs.google.com/document/d/1NUAh2vQ9UgK-c1J-yhVnqkTgqZxMVm77rRK-X1ukWw0/");
+                    Application.OpenURL("https://docs.google.com/document/d/1cu1ysjZx62O_MoYaXvBI70WjqHTEGpoRYYcfUmRfykc");
 
                 GUILayout.EndHorizontal();
             }
@@ -325,6 +335,19 @@ namespace Quixel
                 GUILayout.EndHorizontal();
 
 #endif
+
+                GUILayout.BeginHorizontal();
+
+                GUILayout.Box("Texture Tools (Beta)", MSHeadingTextStyle, GUILayout.Height(textHeadingSize.y));
+
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+
+                if (GUILayout.Button("Flip Green Channel", MSStrechedWidthStyle, GUILayout.Height(textSize.y)))
+                    MegascansImageUtils.FlipGreenChannel();
+
+                GUILayout.EndHorizontal();
 
 #if (UNITY_2018_3 || UNITY_2018_4 || UNITY_2019 || UNITY_2020)
 
@@ -394,13 +417,14 @@ namespace Quixel
             fieldSize = SuperHD ? new Vector2(290, 54) : new Vector2(152, 30);
             
             collisionLoc = SuperHD ? new Rect(25, 697, 32, 32) : new Rect(13, 380, 17, 17);
-            applyToSelectionLoc = SuperHD ? new Rect(25, 777, 32, 32) : new Rect(13, 423, 17, 17);
-            addAssetToSceneLoc = SuperHD ? new Rect(25, 859, 32, 32) : new Rect(13, 466, 17, 17);
-            setupPrefabsLoc = SuperHD ? new Rect(25, 944, 32, 32) : new Rect(13, 509, 17, 17);
-            importLODsLoc = SuperHD ? new Rect(25, 1020, 32, 32) : new Rect(13, 552, 17, 17);
-            setupLODLoc = SuperHD ? new Rect(25, 1101, 32, 32) : new Rect(13, 595, 17, 17);
-            importAllTexturesLoc = SuperHD ? new Rect(25, 1181, 32, 32) : new Rect(13, 638, 17, 17);
-            connectionLoc = SuperHD ? new Rect(25, 1262, 32, 32) : new Rect(13, 681, 17, 17);
+            flipNormalYLoc = SuperHD ? new Rect(25, 777, 32, 32) : new Rect(13, 423, 17, 17);
+            applyToSelectionLoc = SuperHD ? new Rect(25, 859, 32, 32) : new Rect(13, 466, 17, 17);
+            addAssetToSceneLoc = SuperHD ? new Rect(25, 944, 32, 32) : new Rect(13, 509, 17, 17);
+            setupPrefabsLoc = SuperHD ? new Rect(25, 1020, 32, 32) : new Rect(13, 552, 17, 17);
+            importLODsLoc = SuperHD ? new Rect(25, 1101, 32, 32) : new Rect(13, 595, 17, 17);
+            setupLODLoc = SuperHD ? new Rect(25, 1181, 32, 32) : new Rect(13, 638, 17, 17);
+            importAllTexturesLoc = SuperHD ? new Rect(25, 1262, 32, 32) : new Rect(13, 681, 17, 17);
+            connectionLoc = SuperHD ? new Rect(25, 1343, 32, 32) : new Rect(13, 724, 17, 17);
 
             lineYLoc = SuperHD ? 185f : 102f;
 
@@ -426,6 +450,7 @@ namespace Quixel
             importLODs = EditorPrefs.GetBool("QuixelDefaultImportLODs", true);
             setupLOD = EditorPrefs.GetBool("QuixelDefaultSetupLOD", true);
             setupPrefabs = EditorPrefs.GetBool("QuixelDefaultSetupPrefabs", true);
+            flipNormalY = EditorPrefs.GetBool("QuixelDefaultFlipNormalY", false);
             importAllTextures = EditorPrefs.GetBool("QuixelDefaultImportAllTextures", false);
 
             decalBlend = EditorPrefs.GetString("QuixelDefaultDecalBlend", "100");
@@ -446,6 +471,7 @@ namespace Quixel
             setupPrefabsUpdate = setupPrefabs;
             importLODsUpdate = importLODs;
             setupLODUpdate = setupLOD;
+            flipNormalYUpdate = flipNormalY;
             importResolutionUpdate = importResolution;
             lodFadeModeUpdate = lodFadeMode;
             importAllTexturesUpdate = importAllTextures;
@@ -483,6 +509,7 @@ namespace Quixel
             EditorPrefs.SetBool("QuixelDefaultImportLODs", importLODs);
             EditorPrefs.SetBool("QuixelDefaultSetupLOD", setupLOD);
             EditorPrefs.SetBool("QuixelDefaultSetupPrefabs", setupPrefabs);
+            EditorPrefs.SetBool("QuixelDefaultFlipNormalY", flipNormalY);
             EditorPrefs.SetInt("QuixelDefaultImportResolution", importResolution);
             EditorPrefs.SetInt("QuixelDefaultLodFadeMode", lodFadeMode);
             EditorPrefs.SetBool("QuixelDefaultImportAllTextures", importAllTextures);
@@ -498,6 +525,7 @@ namespace Quixel
             setupPrefabsUpdate = setupPrefabs;
             importLODsUpdate = importLODs;
             setupLODUpdate = setupLOD;
+            flipNormalYUpdate = flipNormalY;
             lodFadeModeUpdate = lodFadeMode;
             importAllTexturesUpdate = importAllTextures;
 
@@ -673,6 +701,7 @@ namespace Quixel
                 (connection != connectionUpdate) ||
                 (importResolution != importResolutionUpdate) ||
                 (lodFadeMode != lodFadeModeUpdate) ||
+                (flipNormalY != flipNormalYUpdate) ||
                 (setupCollision != setupCollisionUpdate) ||
                 (applyToSelection != applyToSelectionUpdate) ||
                 (addAssetToScene != addAssetToSceneUpdate) ||

@@ -26,10 +26,48 @@ namespace Quixel {
             return FixSlashes (tempPath);
         }
 
+        /// <summary>
+        /// fixes slashes so they work in Unity.
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
         public static string FixSlashes (string txt) {
             txt = txt.Replace ("\\", "/");
             txt = txt.Replace (@"\\", "/");
             return txt;
+        }
+
+        /// <summary>
+        /// Replace any spaces with underscores. if more than one input, place underscore between them.
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        public static string FixSpaces(string[] txt)
+        {
+            if (txt == null || txt.Length == 0)
+            {
+                return "";
+            }
+
+            string newTxt = "";
+
+            int maxIterations = txt.Length;
+
+            if (txt[maxIterations - 1] == "")
+            {
+                maxIterations--;
+            }
+
+            for (int i = 0; i < maxIterations; ++i)
+            {
+                if (i > 0)
+                {
+                    newTxt += "_";
+                }
+                newTxt += txt[i];
+            }
+
+            return newTxt;
         }
 
         /// <summary>
@@ -211,27 +249,6 @@ namespace Quixel {
             }
             return t;
         }
-
-        public static void CopyFileToProject(string sourcePath, string destPath)
-        {
-            try
-            {
-                if (File.Exists(sourcePath))
-                {
-                    File.Copy(sourcePath, destPath, true);
-                    AssetDatabase.ImportAsset(destPath);
-                    AssetDatabase.Refresh();
-                } else
-                {
-                    Debug.Log("Exception::MegascansImageUtils::ImportTexture:: Source file does not exist.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.Log("Exception::MegascansMeshUtils::Importing file to project:: " + ex.ToString());
-                HideProgressBar();
-            }
-        }
         #endregion
 
         #region Selection Helpers
@@ -249,6 +266,22 @@ namespace Quixel {
                 }
             }
             return folders;
+        }
+
+        /// <summary>
+        /// Retrieves selected texture.
+        /// </summary>
+        public static string GetSelectedTexture(string fileType = ".png")
+        {
+            foreach (Texture2D obj in Selection.GetFiltered(typeof(Texture2D), SelectionMode.Assets)) //Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets))
+            {
+                string path = AssetDatabase.GetAssetPath(obj);
+                if (path.Contains(fileType))
+                {
+                    return path;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -468,40 +501,6 @@ namespace Quixel {
             }
         }
 
-        #endregion
-
-        #region Channel packed textures data verification
-
-        public static bool AlbedoHasOpacity(JObject channelData)
-        {
-            return channelData == null ? false : verifyMapInList((JArray)channelData["Alpha"], "opacity");
-        }
-
-        public static bool SpecularHasGloss(JObject channelData)
-        {
-            return channelData == null ? false : verifyMapInList((JArray)channelData["Alpha"], "gloss");
-        }
-
-        public static void MaskMapComponents(JObject channelData, out bool hasMetalness, out bool hasAO, out bool hasGloss)
-        {
-            hasMetalness = channelData == null ? false : verifyMapInList((JArray)channelData["Red"], "metalness");
-            hasAO = channelData == null ? false : verifyMapInList((JArray)channelData["Green"], "ao");
-            hasGloss = channelData == null ? false : verifyMapInList((JArray)channelData["Alpha"], "gloss");
-        }
-
-        public static bool verifyMapInList(JArray channelData, string texType)
-        {
-            for (int i = 0; i < channelData.Count; i++)
-            {
-                string packedTex = (string)channelData[i];
-                if (packedTex.ToLower() == texType.ToLower())
-                {
-                    return true;
-                }
-            }
-            return false;
-
-        }
         #endregion
     }
 }

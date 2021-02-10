@@ -1,8 +1,9 @@
 ﻿#if UNITY_EDITOR
 
-using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -44,7 +45,7 @@ namespace Quixel {
                 tcpListener = new TcpListener (IPAddress.Parse ("127.0.0.1"), 13081);
                 tcpListener.Start ();
                 Debug.Log ("Quixel Bridge Plugin - Status: Enabled.");
-                Byte[] bytes = new Byte[4096];
+                Byte[] bytes = new Byte[512];
                 while (true) {
                     using (connectedTcpClient = tcpListener.AcceptTcpClient ()) {
                         using (NetworkStream stream = connectedTcpClient.GetStream ()) {
@@ -54,6 +55,7 @@ namespace Quixel {
                                 try {
                                     byte[] incommingData = new byte[length];
                                     Array.Copy(bytes, 0, incommingData, 0, length);
+                                    //clientMessage += Encoding.ASCII.GetString(incommingData); This one did not support cyrillic character so I changed it a bit. 
                                     UTF8Encoding encodingUnicode = new UTF8Encoding();
                                     clientMessage += encodingUnicode.GetString(incommingData);
                                 } catch (Exception ex)
@@ -133,8 +135,7 @@ namespace Quixel {
                         List<Newtonsoft.Json.Linq.JObject> objectList = new List<Newtonsoft.Json.Linq.JObject>();
                         for (int i = 0; i < testArray.Count; ++i)
                         {
-                            JObject assetObj = testArray[i].ToObject<Newtonsoft.Json.Linq.JObject>();
-                            objectList.Add(assetObj);
+                            objectList.Add(testArray[i].ToObject<Newtonsoft.Json.Linq.JObject>());
                         }
                         string lastFolderPath = null;
                         for (int i = 0; i < objectList.Count; ++i)
