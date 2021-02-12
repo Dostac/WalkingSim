@@ -84,8 +84,8 @@ MonoBehaviour:
     min: 0
     max: 1
   screenFadeDistance:
-    m_OverrideState: 0
-    m_Value: 0.1
+    m_OverrideState: 1
+    m_Value: 0.45
     min: 0
     max: 1
   accumulationFactor:
@@ -112,13 +112,13 @@ MonoBehaviour:
     min: 1
     max: 31
   m_MinSmoothness:
-    m_OverrideState: 0
-    m_Value: 0.9
+    m_OverrideState: 1
+    m_Value: 0.5
     min: 0
     max: 1
   m_SmoothnessFadeStart:
-    m_OverrideState: 0
-    m_Value: 0.9
+    m_OverrideState: 1
+    m_Value: 0.75
     min: 0
     max: 1
   m_RayMaxIterations:
@@ -259,43 +259,43 @@ MonoBehaviour:
   m_AdvancedMode: 0
   quality:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 1
   enable:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   length:
     m_OverrideState: 1
-    m_Value: 0.3
+    m_Value: 0.5
     min: 0
     max: 1
   opacity:
-    m_OverrideState: 0
-    m_Value: 0.645
+    m_OverrideState: 1
+    m_Value: 0.5
     min: 0
     max: 1
   distanceScaleFactor:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.5
     min: 0
     max: 1
   maxDistance:
-    m_OverrideState: 0
-    m_Value: 50
+    m_OverrideState: 1
+    m_Value: 500
     min: 0
   minDistance:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
     min: 0
   fadeDistance:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 5
     min: 0
   fadeInDistance:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
     min: 0
   rayBias:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.2
     min: 0
     max: 1
@@ -306,7 +306,7 @@ MonoBehaviour:
     max: 1
   m_SampleCount:
     m_OverrideState: 1
-    m_Value: 12
+    m_Value: 8
     min: 4
     max: 64
 --- !u!114 &9030733118314902056
