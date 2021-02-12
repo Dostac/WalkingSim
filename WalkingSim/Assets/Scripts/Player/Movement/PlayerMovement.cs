@@ -67,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         jumpCount = jumps;
         wc=player.GetComponent<WallCollision>();
         playerRB=player.GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
     public void Update()
     {
@@ -303,6 +304,7 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("isJumping", true);
             inputY +=jumpForce;
             jumpCount--;
+            isCrouch = false;
         }
     }
     public void LedgeGrab()
@@ -324,7 +326,16 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isVaulting", true);
         playerRB.isKinematic = false;
         Invoke("ResetValues", 1.2f);
+        Invoke("UpForce", 0.8f);
     }
+    public void UpForce()
+    {
+        inputY += jumpForce;
+        sliding = true;
+        float x = movementSpeed;
+        slidegSpeed = slidingSpeed * x / 1.5f * 1.5f;
+    }
+
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.tag == "Walkable")

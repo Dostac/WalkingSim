@@ -47,7 +47,8 @@ public class ResetPointScript : MonoBehaviour
     public void Respawn()
     {
         spawnPos = new Vector3(posX, posY, posZ);
-        transform.position = spawnPos;
+        player.transform.position = spawnPos;
+        print("he ded");
     }
 
     void OnApplicationQuit()

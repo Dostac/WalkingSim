@@ -4,6 +4,7 @@ public class GrablinGun : MonoBehaviour
     public LayerMask whatIsGrappleable;
     public Transform gunTip, camera, player;
     public float offset;
+    public GameObject crosshair;
 
     private LineRenderer lr;
     private Vector3 grapplePoint;
@@ -25,9 +26,18 @@ public class GrablinGun : MonoBehaviour
         {
             StopGrapple();
         }
+        RaycastHit hit;
+        if (Physics.Raycast(camera.position + new Vector3(0, offset, 0), camera.forward, out hit, maxDistance, whatIsGrappleable))
+        {
+            crosshair.SetActive(true);
+            crosshair.transform.position = hit.point;
+            Debug.DrawLine(camera.position + new Vector3(0, offset, 0), camera.forward, Color.red);
+        }
+        else
+        {
+            crosshair.SetActive(false);
+        }
     }
-
-    //Called after Update
     void LateUpdate()
     {
         DrawRope();
