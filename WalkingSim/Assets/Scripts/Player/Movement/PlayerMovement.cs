@@ -31,7 +31,11 @@ public class PlayerMovement : MonoBehaviour
     public Animator anim;
     [Header("wall layers")]
     public LayerMask wall;
-
+    [Header("Action Values")]
+    public float vaultingSpeed=1.5f;
+    [Header("Player Colliders")]
+    public CapsuleCollider isTrigger;
+    public CapsuleCollider notTrigger;
     //private
     private float slidegSpeed;
     private float movementSpeed;
@@ -41,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     private float speed;
     private float allowPlayerRotation;
     private float timer;
+
 
     private int jumpCount;
 
@@ -53,10 +58,13 @@ public class PlayerMovement : MonoBehaviour
     private bool wallLeft;
     private bool wallRight;
 
+    private bool slerpValueOn;
+
     private Vector3 desireMovementDirection,lookAt;
 
-    private WallCollision wc;
+    private CapsuleCollider normalColSize;
     private RaycastHit hit;
+    private WallCollision wc;
     private InputManager im;
     private Rigidbody rb;
     private Rigidbody playerRB;
@@ -75,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerInput();
         CheckForWall();
         TimeUpdate();
+        AtionUpdator();
     }
     public void FixedUpdate()
     {
@@ -103,6 +112,13 @@ public class PlayerMovement : MonoBehaviour
         Vector3 v = transform.rotation.eulerAngles;
         transform.rotation = Quaternion.Euler(0, v.y, 0);
     }
+    public void AtionUpdator()
+    {
+        if (slerpValueOn)
+        {
+            transform.position = Vector3.Lerp(transform.position, wc.endPivot.position, vaultingSpeed * Time.deltaTime);
+        }
+    }
     public void PlayerRotUpdate()
     {
         speed = new Vector2(inputX, inputZ).sqrMagnitude;
@@ -125,25 +141,25 @@ public class PlayerMovement : MonoBehaviour
         }
         if (im.spacebar)
         {
-            if (wc.vault)
+            if (wc.vault&&isGrounded)
             {
                 Vault();
                 print("Vault");
             }
             else if(wc.medium)
             {
-                print("medium");
                 MediumWall();
+                print("medium");
             }
             else if (wc.large)
             {
-                print("large");
                 BigWall();
+                print("large");
             }
-            else if (wc.lege)
+            else if (wc.lege&&!isGrounded)
             {
-                print("ledge");
                 LedgeGrab();
+                print("ledge");
             }
             else if (!wc.lege&&!wc.large&&!wc.medium&&!wc.vault)
             {
@@ -256,12 +272,12 @@ public class PlayerMovement : MonoBehaviour
     {      
         var movementVec= new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         var jumpVec = new Vector3(0, inputY, 0);
-        if (!sliding)
+        if (!sliding&& !slerpValueOn)
         {
         transform.Translate(movementVec * Time.deltaTime * movementSpeed);
         transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
         }
-        if (sliding && !isWallRunning)
+        if (sliding && !isWallRunning&&!slerpValueOn)
         {
             transform.Translate(new Vector3(0,0,1) * Time.deltaTime * slidegSpeed);
             transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
@@ -307,26 +323,30 @@ public class PlayerMovement : MonoBehaviour
             isCrouch = false;
         }
     }
-    public void LedgeGrab()
-    {
-        //rb.useGravity = false;
-        //inputY = 0;
-    }
-    public void BigWall()
-    {
-
-    }
-    public void MediumWall()
-    {
-       
-    }
     public void Vault()
     {
         ResetAnim();
         anim.SetBool("isVaulting", true);
         playerRB.isKinematic = false;
-        Invoke("ResetValues", 1.2f);
-        Invoke("UpForce", 0.8f);
+        Invoke("ResetValues", 1.4f);
+        slerpValueOn = true;
+        isTrigger.height = 0.9370761f;
+        isTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
+        notTrigger.height = isTrigger.height;
+        notTrigger.center= isTrigger.center;
+    }
+    public void MediumWall()
+    {
+       
+    }
+    public void BigWall()
+    {
+
+    }
+    public void LedgeGrab()
+    {
+        //rb.useGravity = false;
+        //inputY = 0;
     }
     public void UpForce()
     {
@@ -380,5 +400,10 @@ public class PlayerMovement : MonoBehaviour
         ResetAnim();
         sliding = false;
         playerRB.isKinematic = true;
+        slerpValueOn = false;
+        isTrigger.height = 1.592172f;
+        isTrigger.center = new Vector3(-0.01670074f, 0.8977467f, 0.0531683f);
+        notTrigger.height = isTrigger.height;
+        notTrigger.center = isTrigger.center;
     }
 }
