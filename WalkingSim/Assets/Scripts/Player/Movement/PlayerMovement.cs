@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float walkingSpeed;
     public float crouchingSpeed;
     public float runningCrouchingSpeed;
+    public float ledgeSpeed;
 
     [Header("Jump Values")]
     public float jumpForce;
@@ -25,17 +26,22 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Player Components")]
     public GameObject player;
+    public GameObject hips;
     public Transform orientation;
     public CapsuleCollider col;
     public Camera cam;
     public Animator anim;
     [Header("wall layers")]
     public LayerMask wall;
+    public LayerMask ledgeLayer;
     [Header("Action Values")]
     public float vaultingSpeed=1.5f;
     [Header("Player Colliders")]
     public CapsuleCollider isTrigger;
     public CapsuleCollider notTrigger;
+
+
+    public Vector3 lookitsavector;
     //private
     private float slidegSpeed;
     private float movementSpeed;
@@ -46,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     private float allowPlayerRotation;
     private float timer;
 
+    private float curentYPos;
 
     private int jumpCount;
 
@@ -59,6 +66,9 @@ public class PlayerMovement : MonoBehaviour
     private bool wallRight;
 
     private bool slerpValueOn;
+    private bool freezeRot;
+    private bool ledge;
+    private bool gotYValue;
 
     private Vector3 desireMovementDirection,lookAt;
 
@@ -91,32 +101,57 @@ public class PlayerMovement : MonoBehaviour
     }
     void PlayerRotation()
     {
-        inputX = Input.GetAxisRaw("Horizontal");
-        inputZ = Input.GetAxisRaw("Vertical");
-
-        var forward = cam.transform.forward;
-        var right = cam.transform.right;
-
-        forward.y = 0;
-        right.y = 0;
-
-        forward.Normalize();
-        right.Normalize();
-
-        desireMovementDirection = forward * inputZ + right * inputX;
-        if (!isWallRunning)
+        if (!freezeRot)
         {
-            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.LookRotation(desireMovementDirection), desiredRoationSpeed);
+            inputX = Input.GetAxisRaw("Horizontal");
+            inputZ = Input.GetAxisRaw("Vertical");
+
+            var forward = cam.transform.forward;
+            var right = cam.transform.right;
+
+            forward.y = 0;
+            right.y = 0;
+
+            forward.Normalize();
+            right.Normalize();
+
+            desireMovementDirection = forward * inputZ + right * inputX;
+            if (!isWallRunning)
+            {
+                player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.LookRotation(desireMovementDirection), desiredRoationSpeed);
+            }
+            transform.forward = new Vector3(cam.transform.forward.x, cam.transform.forward.y, cam.transform.forward.z);
+            Vector3 v = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(0, v.y, 0);
         }
-        transform.forward = new Vector3(cam.transform.forward.x, cam.transform.forward.y, cam.transform.forward.z);
-        Vector3 v = transform.rotation.eulerAngles;
-        transform.rotation = Quaternion.Euler(0, v.y, 0);
     }
     public void AtionUpdator()
     {
+        //vaut
         if (slerpValueOn)
         {
-            transform.position = Vector3.Lerp(transform.position, wc.endPivot.position, vaultingSpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
+        }
+        //ledge
+        if (ledge)
+        {
+            RaycastHit forwardHit;
+
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f,ledgeLayer))
+            {
+            }
+            else
+            {
+                ResetValues();
+            }
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
+            {
+                print("hasright");
+            }
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
+            {
+                print("hasleft");
+            }
         }
     }
     public void PlayerRotUpdate()
@@ -145,6 +180,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vault();
                 print("Vault");
+            }
+            else if (ledge&&wc.lege)
+            {
+                ResetValues();
             }
             else if(wc.medium)
             {
@@ -269,18 +308,36 @@ public class PlayerMovement : MonoBehaviour
         rb.useGravity = true;
     }
     public void Movement()
-    {      
-        var movementVec= new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-        var jumpVec = new Vector3(0, inputY, 0);
-        if (!sliding&& !slerpValueOn)
+    {
+        if (!ledge)
         {
-        transform.Translate(movementVec * Time.deltaTime * movementSpeed);
-        transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+            var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+            var jumpVec = new Vector3(0, inputY, 0);
+            if (!sliding && !slerpValueOn)
+            {
+                transform.Translate(movementVec * Time.deltaTime * movementSpeed);
+                transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+            }
+            if (sliding && !isWallRunning && !slerpValueOn)
+            {
+                transform.Translate(new Vector3(0, 0, 1) * Time.deltaTime * slidegSpeed);
+                transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+            }
         }
-        if (sliding && !isWallRunning&&!slerpValueOn)
+        else
         {
-            transform.Translate(new Vector3(0,0,1) * Time.deltaTime * slidegSpeed);
-            transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+            var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0).normalized;
+            if (!gotYValue)
+            {
+            GetYAxees();
+            }
+           // curentYPos = transform.position.y;
+            var jumpVec = new Vector3(0, curentYPos, 0);
+            lookitsavector = jumpVec;
+
+            transform.Translate(movementVec * Time.deltaTime * ledgeSpeed);
+            var curentPos =new Vector3(transform.position.x, curentYPos, transform.position.z);
+            transform.position = curentPos;
         }
     }
     public void TimeUpdate()
@@ -328,8 +385,9 @@ public class PlayerMovement : MonoBehaviour
         ResetAnim();
         anim.SetBool("isVaulting", true);
         playerRB.isKinematic = false;
-        Invoke("ResetValues", 1.4f);
+        Invoke("ResetValues", 1.2f);
         slerpValueOn = true;
+        freezeRot = true;
         isTrigger.height = 0.9370761f;
         isTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
         notTrigger.height = isTrigger.height;
@@ -337,7 +395,15 @@ public class PlayerMovement : MonoBehaviour
     }
     public void MediumWall()
     {
-       
+        ResetAnim();
+        anim.SetBool("isCliming", true);
+        playerRB.isKinematic = false;
+        Invoke("ResetValues", 2);
+        slerpValueOn = true;
+        isTrigger.height = 0.9370761f;
+        isTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
+        notTrigger.height = isTrigger.height;
+        notTrigger.center = isTrigger.center;
     }
     public void BigWall()
     {
@@ -345,8 +411,11 @@ public class PlayerMovement : MonoBehaviour
     }
     public void LedgeGrab()
     {
-        //rb.useGravity = false;
-        //inputY = 0;
+        ResetAnim();
+        anim.SetBool("isLedgeGrabbing", true);
+        ledge = true;
+        freezeRot = true;
+        rb.useGravity = false;
     }
     public void UpForce()
     {
@@ -386,6 +455,11 @@ public class PlayerMovement : MonoBehaviour
     {
         player.GetComponent<Rigidbody>().isKinematic = rb.isKinematic;
     }
+    public void GetYAxees()
+    {
+        gotYValue = true;
+        curentYPos = transform.position.y;
+    }
     public void ResetAnim()
     {
         anim.SetBool("isJumping", false);
@@ -394,6 +468,7 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isVaulting", false);
         anim.SetBool("isCrouching", false);
         anim.SetBool("isCliming", false);
+        anim.SetBool("isLedgeGrabbing", false);
     }
     public void ResetValues()
     {
@@ -401,9 +476,21 @@ public class PlayerMovement : MonoBehaviour
         sliding = false;
         playerRB.isKinematic = true;
         slerpValueOn = false;
+        rb.useGravity = true;
+        freezeRot = false;
+        ledge = false;
+        gotYValue = false;
+
         isTrigger.height = 1.592172f;
         isTrigger.center = new Vector3(-0.01670074f, 0.8977467f, 0.0531683f);
         notTrigger.height = isTrigger.height;
         notTrigger.center = isTrigger.center;
+    }
+    void OnDrawGizmos()
+    {
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, Color.yellow);
+
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);
     }
 }

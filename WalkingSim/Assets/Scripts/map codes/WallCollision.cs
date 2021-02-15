@@ -9,8 +9,7 @@ public class WallCollision : MonoBehaviour
     public bool vault;
     public bool lege;
     [Header("Pivot Transforms")]
-    public Transform beginPivot;
-    public Transform endPivot;
+    public Transform destenation;
 
     LargeWall largewall = null;
     MediumWall mediumwall = null;
@@ -23,29 +22,25 @@ public class WallCollision : MonoBehaviour
         if (largewall != null)
         {
             large = true;
-            beginPivot = other.gameObject.GetComponent<LargeWall>().beginPivot;
-            endPivot=other.gameObject.GetComponent<LargeWall>().endPivot;
+            destenation = other.gameObject.GetComponent<LargeWall>().destenation;
         }
         mediumwall = other.gameObject.GetComponent<MediumWall>();
         if (mediumwall != null)
         {
             medium = true;
-            beginPivot = other.gameObject.GetComponent<MediumWall>().beginPivot;
-            endPivot = other.gameObject.GetComponent<MediumWall>().endPivot;
+            destenation = other.gameObject.GetComponent<MediumWall>().destenation;
         }
         vaultwall = other.gameObject.GetComponent<VaultWall>();
         if (vaultwall != null)
         {
             vault = true;
-            beginPivot = other.gameObject.GetComponent<VaultWall>().beginPivot;
-            endPivot = other.gameObject.GetComponent<VaultWall>().endPivot;
+            destenation = other.gameObject.GetComponent<VaultWall>().destenation;
         }
         legecol = other.gameObject.GetComponent<Lege>();
         if (legecol != null)
         {
             lege = true;
-            beginPivot = other.gameObject.GetComponent<Lege>().beginPivot;
-            endPivot = other.gameObject.GetComponent<Lege>().endPivot;
+            destenation = other.gameObject.GetComponent<Lege>().destenation;
         }
     }
     private void OnTriggerExit(Collider other)
