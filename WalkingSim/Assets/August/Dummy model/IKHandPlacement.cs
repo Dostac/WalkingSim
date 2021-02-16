@@ -38,8 +38,9 @@ public class IKHandPlacement : MonoBehaviour
 	public Quaternion rightFootRotOffset;
 	[Header("layers")]
 	public LayerMask layers;
-
-	private Animator anim;
+    [Header("Player script reference")]
+    public PlayerMovement pm;
+    private Animator anim;
 	private float normalizedTime;
 	[Header("weight")]
 	[Range(0, 5f)]
@@ -64,44 +65,92 @@ public class IKHandPlacement : MonoBehaviour
 		RaycastHit LFHit;
 		RaycastHit RFHit;
 
-		/*NOTE :- The z axis of the Hands are not applied using IK so in order for the hands to match the obstacle, 
+        /*NOTE :- The z axis of the Hands are not applied using IK so in order for the hands to match the obstacle, 
 		  make sure that the player's z axis is applied according or player is positioned accordingly */
+        if (!pm.ledge)
+        {
+            //Left Hand IK Check
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), out LHit, 1f, layers))
+            {
+                Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
+                lookAt = lookAt.y < 0 ? -lookAt : lookAt;
 
-		//Left Hand IK Check
-		if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), out LHit, 1f,layers))
-		{
-			Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
-			lookAt = lookAt.y < 0 ? -lookAt : lookAt;
+                //Setting true if raycast hits something
+                leftHandIK = true;
 
-			//Setting true if raycast hits something
-			leftHandIK = true;
+                //Setting leftHandPos to raycast hit points and subtracting the offsets
+                leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
+                //leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
+                leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
+            }
+            else
+            {
+                leftHandIK = false;
+            }
 
-			//Setting leftHandPos to raycast hit points and subtracting the offsets
-			leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
-			//leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
-			leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
-		}
-		else
-			leftHandIK = false;
+            //Right Hand IK Check
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out RHit, 1f, layers))
+            {
 
-		//Right Hand IK Check
-		if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out RHit, 1f, layers))
-		{
+                Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
+                lookAt = lookAt.y < 0 ? -lookAt : lookAt;
 
-			Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
-			lookAt = lookAt.y < 0 ? -lookAt : lookAt;
+                //Setting true if raycast hits something
+                rightHandIK = true;
+                rightHandIK = true;
 
-			//Setting true if raycast hits something
-			rightHandIK = true;
+                //Setting rightHandPos to raycast hit points and subtracting the offsets
+                rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
+                //rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
+                rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
+            }
+            else
+            {
+                rightHandIK = false;
+            }
+        }
+        else
+        {
+            //Left Hand IK Check
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out LHit, 1f, layers))
+            {
+                Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
+                lookAt = lookAt.y < 0 ? -lookAt : lookAt;
 
-			//Setting rightHandPos to raycast hit points and subtracting the offsets
-			rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
-			//rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
-			rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
-		}
-		else
-			rightHandIK = false;
+                //Setting true if raycast hits something
+                leftHandIK = true;
 
+                //Setting leftHandPos to raycast hit points and subtracting the offsets
+                leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
+                //leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
+                leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
+            }
+            else
+            {
+                leftHandIK = false;
+            }
+
+            //Right Hand IK Check
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out RHit, 1f, layers))
+            {
+
+                Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
+                lookAt = lookAt.y < 0 ? -lookAt : lookAt;
+
+                //Setting true if raycast hits something
+                rightHandIK = true;
+                rightHandIK = true;
+
+                //Setting rightHandPos to raycast hit points and subtracting the offsets
+                rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
+                //rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
+                rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
+            }
+            else
+            {
+                rightHandIK = false;
+            }
+        }
 		if (useFootIK)
 		{
 			//Left Foot IK Check
@@ -176,7 +225,15 @@ public class IKHandPlacement : MonoBehaviour
 
 		//Right Foot IK Visual Ray
 		Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.5f, 0.5f, 0.0f)), transform.forward, Color.red);
-	}
+
+        //ledge grab
+
+        //Left Hand IK Visual Ray
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), Color.green);
+
+        //Right Hand IK Visual Ray
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), Color.green);
+    }
 
 	void OnAnimatorIK()
 	{

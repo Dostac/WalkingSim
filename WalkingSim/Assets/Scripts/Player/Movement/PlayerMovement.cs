@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask ledgeLayer;
     [Header("Action Values")]
     public float vaultingSpeed=1.5f;
+    public bool ledge;
+    public Transform handRayCastPivot;
     [Header("Player Colliders")]
     public CapsuleCollider isTrigger;
     public CapsuleCollider notTrigger;
@@ -67,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool slerpValueOn;
     private bool freezeRot;
-    private bool ledge;
+
     private bool gotYValue;
 
     private Vector3 desireMovementDirection,lookAt;
@@ -136,19 +138,28 @@ public class PlayerMovement : MonoBehaviour
         if (ledge)
         {
             RaycastHit forwardHit;
+            RaycastHit forwardHitL;
+            RaycastHit forwardHitR;
 
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f,ledgeLayer))
             {
+                Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
+                transform.rotation = rotation;
+                player.transform.rotation = rotation;
+                float dist = Vector3.Distance(forwardHit.point, handRayCastPivot.transform.position);
+             //   transform.position += Vector3..*dist;
+                //123
+                //hier distance fixen disstance + dinges murtje herres
             }
             else
             {
                 ResetValues();
             }
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitL, 1f, ledgeLayer))
             {
                 print("hasright");
             }
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitR, 1f, ledgeLayer))
             {
                 print("hasleft");
             }
@@ -169,6 +180,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void PlayerInput()
     {
+        RaycastHit ledgeCheck;
         if (Input.GetKeyDown("left ctrl")&&isGrounded)
         {
             isCrouch = !isCrouch;
@@ -181,9 +193,13 @@ public class PlayerMovement : MonoBehaviour
                 Vault();
                 print("Vault");
             }
-            else if (ledge&&wc.lege)
+            else if (ledge&&!im.forwardPressed)
             {
                 ResetValues();
+            }
+            else if (ledge && im.forwardPressed)
+            {
+                LedgeCLimb();
             }
             else if(wc.medium)
             {
@@ -195,14 +211,15 @@ public class PlayerMovement : MonoBehaviour
                 BigWall();
                 print("large");
             }
-            else if (wc.lege&&!isGrounded)
+            else if (wc.lege&&!isGrounded&& (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
             {
                 LedgeGrab();
-                print("ledge");
+                print("bam");
             }
-            else if (!wc.lege&&!wc.large&&!wc.medium&&!wc.vault)
+            else if (!ledge&&!wc.large&&!wc.medium&&!wc.vault)
             {
                 Jump();
+                print("bamfasfa");
             }
         }
         if (Input.GetKeyDown("c"))
@@ -304,7 +321,6 @@ public class PlayerMovement : MonoBehaviour
     public void EndWallRun()
     {
         isWallRunning = false;
-        print("endwallrunning");
         rb.useGravity = true;
     }
     public void Movement()
@@ -327,11 +343,11 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0).normalized;
+            anim.SetFloat("ledgeVelocity", Input.GetAxisRaw("Horizontal")+1);
             if (!gotYValue)
             {
             GetYAxees();
             }
-           // curentYPos = transform.position.y;
             var jumpVec = new Vector3(0, curentYPos, 0);
             lookitsavector = jumpVec;
 
@@ -385,7 +401,7 @@ public class PlayerMovement : MonoBehaviour
         ResetAnim();
         anim.SetBool("isVaulting", true);
         playerRB.isKinematic = false;
-        Invoke("ResetValues", 1.2f);
+        Invoke("ResetValues", 1f);
         slerpValueOn = true;
         freezeRot = true;
         isTrigger.height = 0.9370761f;
@@ -398,7 +414,7 @@ public class PlayerMovement : MonoBehaviour
         ResetAnim();
         anim.SetBool("isCliming", true);
         playerRB.isKinematic = false;
-        Invoke("ResetValues", 2);
+        Invoke("ResetValues", 1.3f);
         slerpValueOn = true;
         isTrigger.height = 0.9370761f;
         isTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
@@ -416,6 +432,11 @@ public class PlayerMovement : MonoBehaviour
         ledge = true;
         freezeRot = true;
         rb.useGravity = false;
+    }
+    public void LedgeCLimb()
+    {
+        ResetValues();
+        print("climb");
     }
     public void UpForce()
     {
@@ -462,6 +483,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void ResetAnim()
     {
+        anim.SetFloat("ledgeVelocity", 1);
         anim.SetBool("isJumping", false);
         anim.SetBool("isCrouching", false);
         anim.SetBool("isSliding", false);
@@ -488,9 +510,10 @@ public class PlayerMovement : MonoBehaviour
     }
     void OnDrawGizmos()
     {
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, Color.yellow);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.15f, 0.0f)), transform.forward, Color.yellow);
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.15f, 0.0f)), transform.forward, Color.blue);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.15f, 0.0f)), transform.forward, Color.blue);
+
     }
 }
