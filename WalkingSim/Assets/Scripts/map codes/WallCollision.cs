@@ -81,4 +81,12 @@ public class WallCollision : MonoBehaviour
             balancingBar = false;
         }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        legecol = other.gameObject.GetComponent<Lege>();
+        if (legecol != null)
+        {
+            lege = true;
+        }
+    }
 }

@@ -145,34 +145,30 @@ public class PlayerMovement : MonoBehaviour
 
             RaycastHit leftSideHit;
             RaycastHit rightSideHit;
-
+            //123
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f,ledgeLayer))
             {
                 Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
                 transform.rotation = rotation;
                 player.transform.rotation = rotation;
-                float dist = Vector3.Distance(forwardHit.point, handRayCastPivot.transform.position);
-             //   transform.position += Vector3..*dist;
-                //123
-                //hier distance fixen disstance + dinges murtje herres
             }
             else
-            {
-                ResetValues();
-            }
-            if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitL, 1f, ledgeLayer))
-            {
+            {                                  
                 if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, out leftSideHit, 1f, ledgeLayer))
                 {
+                    Quaternion rotation = Quaternion.LookRotation(-leftSideHit.normal, Vector3.up);
+                    transform.rotation = rotation;
                     transform.position = leftSideHit.point;
-                    print("doe dan");
                 }
-            }
-            else if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitR, 1f, ledgeLayer))
-            {
-                if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, out rightSideHit, 1f, ledgeLayer))
+                else if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, out rightSideHit, 1f, ledgeLayer))
                 {
-                    print("ewa ja");
+                    Quaternion rotation = Quaternion.LookRotation(-rightSideHit.normal, Vector3.up);
+                    transform.rotation = rotation;
+                    transform.position = rightSideHit.point;
+                }
+                else if(!wc.lege)
+                {
+                    ResetValues();
                 }
             }
         }
@@ -308,7 +304,7 @@ public class PlayerMovement : MonoBehaviour
         {
             EndWallRun();
         }
-    }//-72.45
+    }
     public void StartWallRun()
     {
         if (rb.velocity.magnitude <= maxWallSpeed)
@@ -473,11 +469,19 @@ public class PlayerMovement : MonoBehaviour
     }
     public void LedgeGrab()
     {
-        ResetAnim();
-        anim.SetBool("isLedgeGrabbing", true);
-        ledge = true;
-        freezeRot = true;
-        rb.useGravity = false;
+        RaycastHit forwardHit;
+        if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
+        {
+            ResetAnim();
+            anim.SetBool("isLedgeGrabbing", true);
+            float dist = Vector3.Distance(forwardHit.point, handRayCastPivot.transform.position);
+            col.enabled = false;
+            //transform.localPosition += (Vector3.right- new Vector3(0.5f, 0.0f, 0.0f)) * dist;
+            ledge = true;
+            freezeRot = true;
+            rb.useGravity = false;
+            //456
+        }
     }
     public void LedgeCLimb()
     {
@@ -566,6 +570,7 @@ public class PlayerMovement : MonoBehaviour
 
         wc.balanceBegin = false;
         wc.balanceEnd = false;
+        col.enabled = true;
 
         isTrigger.height = 1.592172f;
         isTrigger.center = new Vector3(-0.01670074f, 0.8977467f, 0.0531683f);
