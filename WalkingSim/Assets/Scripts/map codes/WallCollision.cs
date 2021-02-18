@@ -8,6 +8,9 @@ public class WallCollision : MonoBehaviour
     public bool medium;
     public bool vault;
     public bool lege;
+    public bool balancingBar;
+    public bool balanceBegin;
+    public bool balanceEnd;
     [Header("Pivot Transforms")]
     public Transform destenation;
 
@@ -15,6 +18,7 @@ public class WallCollision : MonoBehaviour
     MediumWall mediumwall = null;
     VaultWall vaultwall = null;
     Lege legecol = null;
+    BalancingBar balancB = null;
 
     public void OnTriggerEnter(Collider other)
     {
@@ -42,6 +46,12 @@ public class WallCollision : MonoBehaviour
             lege = true;
             destenation = other.gameObject.GetComponent<Lege>().destenation;
         }
+        balancB = other.gameObject.GetComponent<BalancingBar>();
+        if (balancB != null)
+        {
+            balancingBar = true;
+            destenation = other.gameObject.GetComponent<BalancingBar>().destenation;
+        }
     }
     private void OnTriggerExit(Collider other)
     {
@@ -64,7 +74,11 @@ public class WallCollision : MonoBehaviour
         if (legecol != null)
         {
             lege = false;
-
+        }
+        balancB = other.gameObject.GetComponent<BalancingBar>();
+        if (balancB != null)
+        {
+            balancingBar = false;
         }
     }
 }

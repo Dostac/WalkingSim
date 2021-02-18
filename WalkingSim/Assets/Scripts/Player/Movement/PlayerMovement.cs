@@ -37,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Action Values")]
     public float vaultingSpeed=1.5f;
     public bool ledge;
+    public bool balancebar;
     public Transform handRayCastPivot;
     [Header("Player Colliders")]
     public CapsuleCollider isTrigger;
@@ -141,6 +142,9 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit forwardHitL;
             RaycastHit forwardHitR;
 
+            RaycastHit leftSideHit;
+            RaycastHit rightSideHit;
+
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f,ledgeLayer))
             {
                 Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
@@ -155,13 +159,20 @@ public class PlayerMovement : MonoBehaviour
             {
                 ResetValues();
             }
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitL, 1f, ledgeLayer))
+            if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitL, 1f, ledgeLayer))
             {
-                print("hasright");
+                if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, out leftSideHit, 1f, ledgeLayer))
+                {
+                    transform.position = leftSideHit.point;
+                    print("doe dan");
+                }
             }
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitR, 1f, ledgeLayer))
+            else if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitR, 1f, ledgeLayer))
             {
-                print("hasleft");
+                if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, out rightSideHit, 1f, ledgeLayer))
+                {
+                    print("ewa ja");
+                }
             }
         }
     }
@@ -181,10 +192,17 @@ public class PlayerMovement : MonoBehaviour
     public void PlayerInput()
     {
         RaycastHit ledgeCheck;
-        if (Input.GetKeyDown("left ctrl")&&isGrounded)
+        if (Input.GetKeyDown("left ctrl"))
         {
-            isCrouch = !isCrouch;
-            Crouch();
+            if (isGrounded && wc.balancingBar)
+            {
+                BalancingBar();
+            }
+            else if (!balancebar && isGrounded)
+            {
+                isCrouch = !isCrouch;
+                Crouch();
+            }
         }
         if (im.spacebar)
         {
@@ -204,7 +222,6 @@ public class PlayerMovement : MonoBehaviour
             else if(wc.medium)
             {
                 MediumWall();
-                print("medium");
             }
             else if (wc.large)
             {
@@ -214,12 +231,10 @@ public class PlayerMovement : MonoBehaviour
             else if (wc.lege&&!isGrounded&& (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
             {
                 LedgeGrab();
-                print("bam");
             }
             else if (!ledge&&!wc.large&&!wc.medium&&!wc.vault)
             {
                 Jump();
-                print("bamfasfa");
             }
         }
         if (Input.GetKeyDown("c"))
@@ -264,6 +279,8 @@ public class PlayerMovement : MonoBehaviour
         float x = movementSpeed;
         slidegSpeed =slidingSpeed * x / 1.5f*1.5f;
         Invoke("ResetValues", slidingTime);
+        isTrigger.height = 0.7743956f;
+        isTrigger.center = new Vector3(-0.01670074f, 0.4888585f, 0.0531683f);
     }
     public void CheckForWall()
     {
@@ -276,6 +293,7 @@ public class PlayerMovement : MonoBehaviour
             Physics.Raycast(transform.position, orientation.right, out hit);
             Vector3 v = player.transform.rotation.eulerAngles;
             player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(0, v.y, wallRunAngle), desiredRoationSpeed);
+            player.transform.localPosition = new Vector3(0.278f, -0.233f, 0.003f);
         }
         if (wallLeft && !isGrounded)
         {
@@ -283,6 +301,7 @@ public class PlayerMovement : MonoBehaviour
             Physics.Raycast(transform.position, -orientation.right, out hit);
             Vector3 v = player.transform.rotation.eulerAngles;
             player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(0, v.y, -wallRunAngle), desiredRoationSpeed);
+            player.transform.localPosition = new Vector3(-0.123F, -0.196f, 0.2f);
         }
         if (isWallRunning&&!wallLeft && !wallRight)
         {
@@ -322,10 +341,11 @@ public class PlayerMovement : MonoBehaviour
     {
         isWallRunning = false;
         rb.useGravity = true;
+        player.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
     }
     public void Movement()
     {
-        if (!ledge)
+        if (!ledge & !balancebar)
         {
             var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
             var jumpVec = new Vector3(0, inputY, 0);
@@ -340,20 +360,35 @@ public class PlayerMovement : MonoBehaviour
                 transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
             }
         }
-        else
+        else if (ledge & !balancebar)
         {
             var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0).normalized;
-            anim.SetFloat("ledgeVelocity", Input.GetAxisRaw("Horizontal")+1);
+            anim.SetFloat("ledgeVelocity", Input.GetAxisRaw("Horizontal") + 1);
             if (!gotYValue)
             {
-            GetYAxees();
+                GetYAxees();
             }
             var jumpVec = new Vector3(0, curentYPos, 0);
             lookitsavector = jumpVec;
 
             transform.Translate(movementVec * Time.deltaTime * ledgeSpeed);
-            var curentPos =new Vector3(transform.position.x, curentYPos, transform.position.z);
+            var curentPos = new Vector3(transform.position.x, curentYPos, transform.position.z);
             transform.position = curentPos;
+        }
+        else if (!ledge && balancebar)
+        {
+            if (!wc.balancingBar&&wc.balanceBegin || !wc.balancingBar && wc.balanceEnd)
+            {
+                ResetValues();
+            }
+            var movementVec = new Vector3(0 ,0, Input.GetAxisRaw("Vertical")).normalized;
+            anim.SetFloat("balancingVelocity", Input.GetAxisRaw("Vertical") + 1);
+            var jumpVec = new Vector3(0, inputY, 0);
+            if (!sliding && !slerpValueOn)
+            {
+                transform.Translate(movementVec * Time.deltaTime * crouchingSpeed);
+                transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+            }
         }
     }
     public void TimeUpdate()
@@ -379,10 +414,12 @@ public class PlayerMovement : MonoBehaviour
         if (isCrouch)
         {
             anim.SetBool("isCrouching", true);
+            isTrigger.height = 0.7743956f;
+            isTrigger.center = new Vector3(-0.01670074f, 0.4888585f, 0.0531683f);
         }
         if (!isCrouch)
         {
-            anim.SetBool("isCrouching", false);
+            ResetValues();
         }
     }
     public void Jump()
@@ -438,6 +475,16 @@ public class PlayerMovement : MonoBehaviour
         ResetValues();
         print("climb");
     }
+    public void BalancingBar()
+    {
+        freezeRot = true;
+        balancebar = true;
+
+        transform.LookAt(wc.destenation);
+        player.transform.LookAt(wc.destenation);
+
+        anim.SetBool("isBalancing", true);
+    }
     public void UpForce()
     {
         inputY += jumpForce;
@@ -491,6 +538,7 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isCrouching", false);
         anim.SetBool("isCliming", false);
         anim.SetBool("isLedgeGrabbing", false);
+        anim.SetBool("isBalancing", false);
     }
     public void ResetValues()
     {
@@ -502,6 +550,10 @@ public class PlayerMovement : MonoBehaviour
         freezeRot = false;
         ledge = false;
         gotYValue = false;
+        balancebar = false;
+
+        wc.balanceBegin = false;
+        wc.balanceEnd = false;
 
         isTrigger.height = 1.592172f;
         isTrigger.center = new Vector3(-0.01670074f, 0.8977467f, 0.0531683f);
@@ -510,10 +562,12 @@ public class PlayerMovement : MonoBehaviour
     }
     void OnDrawGizmos()
     {
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.15f, 0.0f)), transform.forward, Color.yellow);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, Color.yellow);
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.15f, 0.0f)), transform.forward, Color.blue);
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.15f, 0.0f)), transform.forward, Color.blue);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);
 
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, Color.cyan);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, Color.cyan);
     }
 }

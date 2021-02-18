@@ -11,7 +11,6 @@ public class Lege : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-
         destenation = beginPivot;
     }
     private void Update()
