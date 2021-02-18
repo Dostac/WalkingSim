@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
     private float speed;
     private float allowPlayerRotation;
     private float timer;
-
+    private float runningSpeedAftherRun;
     private float curentYPos;
 
     private int jumpCount;
@@ -89,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
         wc=player.GetComponent<WallCollision>();
         playerRB=player.GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
+        runningSpeedAftherRun = runningSpeed;
     }
     public void Update()
     {
@@ -342,6 +343,7 @@ public class PlayerMovement : MonoBehaviour
         isWallRunning = false;
         rb.useGravity = true;
         player.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        runningSpeedAftherRun -= 1;
     }
     public void Movement()
     {
@@ -352,13 +354,20 @@ public class PlayerMovement : MonoBehaviour
             if (!sliding && !slerpValueOn)
             {
                 transform.Translate(movementVec * Time.deltaTime * movementSpeed);
-                transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+                transform.Translate(jumpVec * Time.deltaTime * runningSpeedAftherRun);
             }
             if (sliding && !isWallRunning && !slerpValueOn)
             {
                 transform.Translate(new Vector3(0, 0, 1) * Time.deltaTime * slidegSpeed);
-                transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+                transform.Translate(jumpVec * Time.deltaTime * runningSpeedAftherRun);
             }
+            //var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), inputY, Input.GetAxisRaw("Vertical")).normalized;
+
+
+            //rb.AddRelativeForce(movementVec * movementSpeed);
+            //Vector3 v = player.transform.rotation.eulerAngles;
+            //player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(v), 6);
+            ////movementSpeed
         }
         else if (ledge & !balancebar)
         {
@@ -387,7 +396,7 @@ public class PlayerMovement : MonoBehaviour
             if (!sliding && !slerpValueOn)
             {
                 transform.Translate(movementVec * Time.deltaTime * crouchingSpeed);
-                transform.Translate(jumpVec * Time.deltaTime * walkingSpeed);
+                transform.Translate(jumpVec * Time.deltaTime * runningSpeed);
             }
         }
     }
@@ -506,6 +515,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Walkable")
         {
             isGrounded = false;
+            runningSpeedAftherRun -= 3.5f;
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -513,6 +523,8 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Walkable")
         {
             inputY = 0;
+            player.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+            runningSpeedAftherRun = runningSpeed;
         }
     }
     public void FreezePlayerRot()
