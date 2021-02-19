@@ -140,8 +140,6 @@ public class PlayerMovement : MonoBehaviour
         if (ledge)
         {
             RaycastHit forwardHit;
-            RaycastHit forwardHitL;
-            RaycastHit forwardHitR;
 
             RaycastHit leftSideHit;
             RaycastHit rightSideHit;
@@ -151,20 +149,32 @@ public class PlayerMovement : MonoBehaviour
                 Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
                 transform.rotation = rotation;
                 player.transform.rotation = rotation;
+                //GetYAxees();
+                //transform.position = forwardHit.point;
+                //GetYAxees();
+                var jumpVec = new Vector3(0, curentYPos, 0);
             }
             else
             {                                  
                 if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, out leftSideHit, 1f, ledgeLayer))
                 {
-                    Quaternion rotation = Quaternion.LookRotation(-leftSideHit.normal, Vector3.up);
-                    transform.rotation = rotation;
-                    transform.position = leftSideHit.point;
+                    //left
+                    if (im.rightPressed && Input.GetKey("space"))
+                    {
+                        Quaternion rotation = Quaternion.LookRotation(-leftSideHit.normal, Vector3.up);
+                        transform.rotation = rotation;
+                        transform.position = leftSideHit.point;
+                    }
                 }
                 else if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, out rightSideHit, 1f, ledgeLayer))
                 {
-                    Quaternion rotation = Quaternion.LookRotation(-rightSideHit.normal, Vector3.up);
-                    transform.rotation = rotation;
-                    transform.position = rightSideHit.point;
+                    //right
+                    if (im.leftPressed && Input.GetKey("space"))
+                    {
+                        Quaternion rotation = Quaternion.LookRotation(-rightSideHit.normal, Vector3.up);
+                        transform.rotation = rotation;
+                        transform.position = rightSideHit.point;
+                    }
                 }
                 else if(!wc.lege)
                 {
@@ -201,20 +211,20 @@ public class PlayerMovement : MonoBehaviour
                 Crouch();
             }
         }
+         if (Input.GetKey("space") && ledge && im.forwardPressed)
+        {
+            LedgeCLimb();
+        }
+        else if (Input.GetKey("space") && ledge&&im.backwardsPressed)
+        {
+            ResetValues();
+        }
         if (im.spacebar)
         {
             if (wc.vault&&isGrounded)
             {
                 Vault();
                 print("Vault");
-            }
-            else if (ledge&&!im.forwardPressed)
-            {
-                ResetValues();
-            }
-            else if (ledge && im.forwardPressed)
-            {
-                LedgeCLimb();
             }
             else if(wc.medium)
             {
@@ -234,7 +244,7 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
             }
         }
-        if (Input.GetKeyDown("c"))
+        if (Input.GetKeyDown("c")&&!ledge&& !slerpValueOn&&!balancebar)
         {
             Slide();
         }
@@ -357,13 +367,6 @@ public class PlayerMovement : MonoBehaviour
                 transform.Translate(new Vector3(0, 0, 1) * Time.deltaTime * slidegSpeed);
                 transform.Translate(jumpVec * Time.deltaTime * runningSpeedAftherRun);
             }
-            //var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), inputY, Input.GetAxisRaw("Vertical")).normalized;
-
-
-            //rb.AddRelativeForce(movementVec * movementSpeed);
-            //Vector3 v = player.transform.rotation.eulerAngles;
-            //player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(v), 6);
-            ////movementSpeed
         }
         else if (ledge & !balancebar)
         {
@@ -416,7 +419,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Crouch()
     {
-        if (isCrouch)
+        if (isCrouch&& !ledge && !slerpValueOn && !balancebar)
         {
             anim.SetBool("isCrouching", true);
             isTrigger.height = 0.7743956f;
@@ -485,7 +488,6 @@ public class PlayerMovement : MonoBehaviour
     }
     public void LedgeCLimb()
     {
-        ResetValues();
         print("climb");
     }
     public void BalancingBar()
