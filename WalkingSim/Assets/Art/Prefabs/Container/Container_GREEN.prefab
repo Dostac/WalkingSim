@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 4852884028970300182}
   - component: {fileID: 361123570325013607}
   m_Layer: 0
-  m_Name: Container_Green
+  m_Name: Container_GREEN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,7 +242,7 @@ GameObject:
   - component: {fileID: 4959115395354957048}
   m_Layer: 0
   m_Name: container_LOD0
-  m_TagString: Untagged
+  m_TagString: Walkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295

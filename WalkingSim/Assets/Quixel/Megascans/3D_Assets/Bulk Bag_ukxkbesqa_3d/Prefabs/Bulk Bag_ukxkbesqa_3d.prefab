@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6213512222995846215}
   m_Layer: 0
   m_Name: Bulk Bag_LOD0__ukxkbesqa
-  m_TagString: Untagged
+  m_TagString: Walkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 1903457343265918427}
   m_Layer: 0
   m_Name: Bulk Bag_ukxkbesqa_3d
-  m_TagString: Untagged
+  m_TagString: Walkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295

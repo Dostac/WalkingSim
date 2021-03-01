@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2299744471507629608}
   m_Layer: 0
   m_Name: Rusted Metal Barrel_LOD4__teraccgda
-  m_TagString: Untagged
+  m_TagString: Walkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 8659522306019367889}
   m_Layer: 0
   m_Name: Rusted Metal Barrel_LOD2__teraccgda
-  m_TagString: Untagged
+  m_TagString: Walkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 8799640033769499436}
   m_Layer: 0
   m_Name: Rusted Metal Barrel_LOD0__teraccgda
-  m_TagString: Untagged
+  m_TagString: Walkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
