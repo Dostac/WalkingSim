@@ -3,9 +3,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     ///public
-    public Transform[] gahierheen;
-    public GameObject voorwerp;
-    public int snelint;
      [Header("Speed Values")]
     public float desiredRoationSpeed;
     public float slidingSpeed;
@@ -91,10 +88,6 @@ public class PlayerMovement : MonoBehaviour
     private InputManager im;
     private Rigidbody rb;
     private Rigidbody playerRB;
-    public void PlusPlus()
-    {
-        snelint++;
-    }
     private void Start()
     {
         im = GetComponent<InputManager>();
@@ -153,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (hoping)
         {
-            transform.position = Vector3.Lerp(transform.position, gahierheen[snelint].position, blockHopSpeed * Time.deltaTime);
+         //  transform.position = Vector3.Lerp(transform.position, gahierheen[snelint].position, blockHopSpeed * Time.deltaTime);
         }
         //ledge
         if (ledge)
@@ -623,7 +616,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Walkable")
         {
             isGrounded = false;
-            if (runningSpeedAftherRun >= 2)
+            if (runningSpeedAftherRun >= 4.5f)
             {
             runningSpeedAftherRun -= 3.5f;
             }
