@@ -139,6 +139,11 @@ public class PlayerMovement : MonoBehaviour
     }
     public void AtionUpdator()
     {
+        RaycastHit ledgeCheck;
+        if (wc.lege && !isGrounded && (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
+        {
+            LedgeGrab();
+        }
         //vaut
         if (lerpValueOn)
         {
@@ -237,7 +242,6 @@ public class PlayerMovement : MonoBehaviour
     }
     public void PlayerInput()
     {
-        RaycastHit ledgeCheck;
         RaycastHit LedgeClimbSpace;
         if (Input.GetKeyDown("left ctrl"))
         {
@@ -276,10 +280,6 @@ public class PlayerMovement : MonoBehaviour
             else if (wc.large)
             {
                 BigWall();
-            }
-            else if (wc.lege&&!isGrounded&& (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
-            {
-                LedgeGrab();
             }
             else if (!ledge&&!wc.large&&!wc.medium&&!wc.vault)
             {
@@ -550,13 +550,14 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit forwardHit;
         if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
         {
+            print("ledge");
             Invoke("LedgeClimbBool", 0.75f);
             ResetAnim();
             anim.SetBool("isLedgeGrabbing", true);
             float dist = Vector3.Distance(forwardHit.point, handRayCastPivot.transform.position);
             notTrigger.enabled = false;
             //transform.localPosition += (Vector3.right- new Vector3(0.5f, 0.0f, 0.0f)) * dist;
-            transform.position = Vector3.Lerp(transform.position, forwardHit.point, speed * Time.deltaTime);
+            //transform.position = Vector3.Lerp(transform.position, forwardHit.point, speed * Time.deltaTime);
             ledge = true;
             freezeRot = true;
             rb.useGravity = false;
