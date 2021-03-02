@@ -11,6 +11,9 @@ public class WallCollision : MonoBehaviour
     public bool balancingBar;
     public bool balanceBegin;
     public bool balanceEnd;
+    public bool laderbool;
+    public bool hop;
+    public bool isHopping;
     [Header("Pivot Transforms")]
     public Transform destenation;
 
@@ -19,6 +22,8 @@ public class WallCollision : MonoBehaviour
     VaultWall vaultwall = null;
     Lege legecol = null;
     BalancingBar balancB = null;
+    Hops hops=null;
+    Lader lader = null;
 
     public void OnTriggerEnter(Collider other)
     {
@@ -44,13 +49,24 @@ public class WallCollision : MonoBehaviour
         if (legecol != null)
         {
             lege = true;
-            destenation = other.gameObject.GetComponent<Lege>().destenation;
+            destenation = other.gameObject.GetComponent<Lege>().climbPoint;
         }
         balancB = other.gameObject.GetComponent<BalancingBar>();
         if (balancB != null)
         {
             balancingBar = true;
             destenation = other.gameObject.GetComponent<BalancingBar>().destenation;
+        }
+        lader = other.gameObject.GetComponent<Lader>();
+        if (lader != null)
+        {
+            laderbool = true;            
+        }
+        hops = other.gameObject.GetComponent<Hops>();
+        if (hops != null)
+        {
+            hop = true;
+            destenation = other.gameObject.GetComponent<Hops>().destenation;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -79,6 +95,16 @@ public class WallCollision : MonoBehaviour
         if (balancB != null)
         {
             balancingBar = false;
+        }
+        lader = other.gameObject.GetComponent<Lader>();
+        if (lader != null)
+        {
+            laderbool = false;
+        }
+        hops = other.gameObject.GetComponent<Hops>();
+        if (hops != null)
+        {
+            hop = false;
         }
     }
     private void OnTriggerStay(Collider other)

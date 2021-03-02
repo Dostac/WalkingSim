@@ -7,6 +7,8 @@ TagManager:
   - Walkable
   - GameManager
   - PlayerVisual
+  - Ledge
+  - WallRunWall
   layers:
   - Default
   - TransparentFX

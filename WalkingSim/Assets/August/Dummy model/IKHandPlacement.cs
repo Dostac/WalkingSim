@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class IKHandPlacement : MonoBehaviour
 {
-	[Header("Bools")]
+    [Header("Bools")]
 	public bool useIK = true;
 
 	public bool leftHandIK = false;
@@ -47,27 +47,24 @@ public class IKHandPlacement : MonoBehaviour
 	public float leftHandWeight = 1f;
 	[Range(0, 5f)]
 	public float rightHandWeight = 1f;
-
-	// Use this for initialization
 	void Start()
 	{
 
 		anim = GetComponent<Animator>();
 	}
-
-	// Update is called once per frame
 	void FixedUpdate()
 	{
-
+        if (Input.GetKey("t"))
+        {
+            Time.timeScale = 0;
+        }
 		RaycastHit LHit;
 		RaycastHit RHit;
 
 		RaycastHit LFHit;
 		RaycastHit RFHit;
 
-        /*NOTE :- The z axis of the Hands are not applied using IK so in order for the hands to match the obstacle, 
-		  make sure that the player's z axis is applied according or player is positioned accordingly */
-        if (!pm.ledge)
+        if (!pm.ledge && !pm.isWallRunning)
         {
             //Left Hand IK Check
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), out LHit, 1f, layers))
@@ -86,6 +83,7 @@ public class IKHandPlacement : MonoBehaviour
             else
             {
                 leftHandIK = false;
+                leftFootIK = false;
             }
 
             //Right Hand IK Check
@@ -107,9 +105,10 @@ public class IKHandPlacement : MonoBehaviour
             else
             {
                 rightHandIK = false;
+                rightFootIK = false;
             }
         }
-        else
+        else if (pm.ledge && !pm.isWallRunning)
         {
             //Left Hand IK Check
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out LHit, 1f, layers))
@@ -128,6 +127,7 @@ public class IKHandPlacement : MonoBehaviour
             else
             {
                 leftHandIK = false;
+                leftFootIK = false;
             }
 
             //Right Hand IK Check
@@ -149,40 +149,120 @@ public class IKHandPlacement : MonoBehaviour
             else
             {
                 rightHandIK = false;
+                rightFootIK = false;
             }
         }
-		if (useFootIK)
-		{
-			//Left Foot IK Check
-			if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.35f, 0.5f, 0.0f)), transform.forward, out LFHit, 1f, layers))
-			{
+        else if (!pm.ledge && pm.isWallRunning)
+        {
+            //wallrunning handslide 
+            //Left Hand IK Check
 
-				leftFootIK = true;
-				leftFootPos = LFHit.point - leftFootOffset;
-				leftFootRot = (Quaternion.FromToRotation(Vector3.up, LFHit.normal)) * leftFootRotOffset;
-			}
-			else
-				leftFootIK = false;
 
-			//Right Foot IK Check
-			if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.35f, 0.5f, 0.0f)), transform.forward, out RFHit, 1f, layers))
-			{
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), out LHit, 1f, layers))
+            {
+                Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
+                lookAt = lookAt.y < 0 ? -lookAt : lookAt;
 
-				rightFootIK = true;
-				rightFootPos = RFHit.point - rightFootOffset;
-				rightFootRot = (Quaternion.FromToRotation(Vector3.up, RFHit.normal)) * rightFootRotOffset;
-			}
-			else
-				rightFootIK = false;
-		}
+                //Setting true if raycast hits something
+                leftHandIK = true;
+
+                //Setting leftHandPos to raycast hit points and subtracting the offsets
+                leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
+                //leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
+                leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
+            }
+            else
+            {
+                leftHandIK = false;
+            }
+
+            //Right Hand IK Check
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), out RHit, 1f, layers))
+            {
+
+                Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
+                lookAt = lookAt.y < 0 ? -lookAt : lookAt;
+
+                //Setting true if raycast hits something
+                rightHandIK = true;
+
+                //Setting rightHandPos to raycast hit points and subtracting the offsets
+                rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
+                //rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
+                rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
+            }
+            else
+            {
+                rightHandIK = false;
+            }
+	        if (useFootIK)
+	        {
+                if (pm.wallLeft && !pm.wallRight)
+                {
+                    ///left foot
+		            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), out LFHit, 1f, layers))
+                    {
+
+                        leftFootIK = true;
+			            leftFootPos = LFHit.point - leftFootOffset;
+			            leftFootRot = (Quaternion.FromToRotation(Vector3.up, LFHit.normal)) * leftFootRotOffset;
+		            }
+                    else
+                    {
+			            leftFootIK = false;
+                    }
+
+                    //Right Foot IK Check
+                    if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), out RFHit, 1f, layers))
+                    {
+
+                        rightFootIK = true;
+			            rightFootPos = RFHit.point - rightFootOffset;
+			            rightFootRot = (Quaternion.FromToRotation(Vector3.up, RFHit.normal)) * rightFootRotOffset;
+		            }
+                    else
+                    {
+			            rightFootIK = false;
+                    }
+
+                }
+                else if (!pm.wallLeft && pm.wallRight)
+                {
+                    ///left foot
+                    if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), out LFHit, 1f, layers))
+                    {
+
+                        leftFootIK = true;
+                        leftFootPos = LFHit.point - leftFootOffset;
+                        leftFootRot = (Quaternion.FromToRotation(Vector3.up, LFHit.normal)) * leftFootRotOffset;
+                    }
+                    else
+                    {
+                        leftFootIK = false;
+                    }
+
+                    //Right Foot IK Check
+                    if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), out RFHit, 1f, layers))
+                    {
+
+                        rightFootIK = true;
+                        rightFootPos = RFHit.point - rightFootOffset;
+                        rightFootRot = (Quaternion.FromToRotation(Vector3.up, RFHit.normal)) * rightFootRotOffset;
+                    }
+                    else
+                    {
+                        rightFootIK = false;
+                    }
+                }
+	        }
+        }
 		normalizedTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1;
 
 		if (anim)
 		{
 
 			if (anim.GetCurrentAnimatorStateInfo(0).IsName("IdlePose"))
-			{ //Change the name to whatever your "ON LEDGE MOVING" animation is named to...
-
+			{
 				float vel = 0.0f;
 
 				if (normalizedTime < 0.25f)
@@ -205,8 +285,8 @@ public class IKHandPlacement : MonoBehaviour
 			else
 			{ //Resets the hand weights back to 1.0f, add further animation info here to make sure that weights are 0.0f when in normal player movement
 
-				leftHandWeight = 1.0f;
-				rightHandWeight = 1.0f;
+				leftHandWeight = 0.3f;
+				rightHandWeight = 0.3f;
 			}
 		}
 	}
@@ -233,6 +313,21 @@ public class IKHandPlacement : MonoBehaviour
 
         //Right Hand IK Visual Ray
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), Color.green);
+
+
+        //wallrun      
+        //hands
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.green);
+
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.green);
+        //feets
+
+        //right wall
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0f, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.red);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.red);
+        //leftwall
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.red);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.red);
     }
 
 	void OnAnimatorIK()
