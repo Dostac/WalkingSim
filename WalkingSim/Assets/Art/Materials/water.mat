@@ -228,7 +228,7 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _Smoothness: 0.984
+    - _Smoothness: 0.957
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
     - _SpecularAAScreenSpaceVariance: 0.1
@@ -271,9 +271,9 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Color_944ebc9d52cf48709cb02566ddd117a8: {r: 0.069654256, g: 0.103773594, b: 0.06608224, a: 0}
-    - _BaseColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+    - _BaseColor: {r: 0.038916, g: 0.092, b: 0.038916, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.17924526, g: 0.17924526, b: 0.17924526, a: 1}
+    - _Color: {r: 0.038916, g: 0.09199997, b: 0.038916, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
