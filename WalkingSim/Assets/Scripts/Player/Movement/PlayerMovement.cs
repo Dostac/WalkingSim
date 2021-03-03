@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask ledgeLayer;
     [Header("Action Values")]
     public float vaultingSpeed=1.5f;
+    public float resetTimeVault=1;
     public float blockHopSpeed=1.5f;
     public bool ledge;
     public bool balancebar;
@@ -361,7 +362,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (rb.velocity.magnitude <= maxWallSpeed)
         {
-            rb.AddForce(transform.forward * wallrunForce * Time.deltaTime);
             if (wallRight)
             {
                 rb.AddForce(transform.right * wallrunForce / 5 * Time.deltaTime);
@@ -392,9 +392,13 @@ public class PlayerMovement : MonoBehaviour
         isWallRunning = false;
         rb.useGravity = true;
         player.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-        if (runningSpeedAftherRun >= 6.5f)
+        if (runningSpeedAftherRun >= 2f)
         {
-        runningSpeedAftherRun -= 1;
+        runningSpeedAftherRun -= 4;
+        }
+        if (runningSpeedAftherRun <= 1)
+        {
+            runningSpeedAftherRun = 1;
         }
     }
     public void Movement()
@@ -414,10 +418,11 @@ public class PlayerMovement : MonoBehaviour
                 transform.Translate(jumpVec * Time.deltaTime * runningSpeedAftherRun);
             }
         }
-        else if (ledge & !balancebar&& !wc.laderbool && !isLedgeClimbing)
+        else if (ledge && !balancebar && !wc.laderbool && !isLedgeClimbing)
         {
+            print("oof");
             var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0).normalized;
-            anim.SetFloat("ledgeVelocity", Input.GetAxisRaw("Horizontal") + 1);
+            anim.SetFloat("ledgeVelocity",(Input.GetAxisRaw("Horizontal")+1));
             if (!gotYValue)
             {
                 GetYAxees();
@@ -428,6 +433,7 @@ public class PlayerMovement : MonoBehaviour
             transform.Translate(movementVec * Time.deltaTime * ledgeSpeed);
             var curentPos = new Vector3(transform.position.x, curentYPos, transform.position.z);
             transform.position = curentPos;
+            print("einde");
         }
         else if (!ledge && balancebar&&!wc.laderbool)
         {
@@ -525,7 +531,7 @@ public class PlayerMovement : MonoBehaviour
         ResetAnim();
         anim.SetBool("isVaulting", true);
         playerRB.isKinematic = false;
-        Invoke("ResetValues", 1f);
+        Invoke("ResetValues", resetTimeVault);
         lerpValueOn = true;
         freezeRot = true;
         notTrigger.height = 0.9370761f;
@@ -617,13 +623,13 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Walkable")
         {
             isGrounded = false;
-            if (runningSpeedAftherRun >= 4.5f)
+            if (runningSpeedAftherRun >= 4)
             {
-            runningSpeedAftherRun -= 3.5f;
+            runningSpeedAftherRun -= 4;
             }
-            else if(runningSpeedAftherRun <= 2)
+            else if(runningSpeedAftherRun <= 1)
             {
-                runningSpeedAftherRun=2;
+                runningSpeedAftherRun=1;
             }
         }
     }
