@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     public float runningSpeed;
     public float walkingSpeed;
     public float crouchingSpeed;
-    public float runningCrouchingSpeed;
     public float ledgeSpeed;
 
     [Header("Jump Values")]
@@ -244,16 +243,20 @@ public class PlayerMovement : MonoBehaviour
     public void PlayerInput()
     {
         RaycastHit LedgeClimbSpace;
-        if (Input.GetKeyDown("left ctrl"))
+        if (Input.GetKeyDown("c"))
         {
             if (isGrounded && wc.balancingBar)
             {
                 BalancingBar();
             }
-            else if (!balancebar && isGrounded&&!sliding)
+            else if (!balancebar && isGrounded&&!sliding&& !im.runPressed)
             {
                 isCrouch = !isCrouch;
                 Crouch();
+            }
+            else if (!balancebar && !sliding&&im.runPressed)
+            {
+                Slide();
             }
         }
          if (Input.GetKey("space") && ledge && im.forwardPressed&& isClimable)
@@ -287,10 +290,6 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
             }
         }
-        if (Input.GetKeyDown("c")&&!ledge&& !lerpValueOn && !balancebar&&!isCrouch)
-        {
-            Slide();
-        }
         if (!isCrouch && !im.forwardPressed && !im.backwardsPressed && !im.leftPressed && !im.rightPressed)
         {
             getsInput = false;
@@ -306,10 +305,6 @@ public class PlayerMovement : MonoBehaviour
         if (!im.runPressed && !sliding&&!isCrouch&& getsInput)
         {
             movementSpeed = walkingSpeed;
-        }
-        if (im.runPressed&&!sliding && isCrouch&& getsInput)
-        {
-            movementSpeed = runningCrouchingSpeed;
         }
         if (!im.runPressed && !sliding && isCrouch&& getsInput)
         {
