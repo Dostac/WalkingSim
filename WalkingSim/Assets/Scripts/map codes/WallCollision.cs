@@ -7,7 +7,7 @@ public class WallCollision : MonoBehaviour
     public bool large;
     public bool medium;
     public bool vault;
-    public bool lege;
+    public bool ledge;
     public bool balancingBar;
     public bool balanceBegin;
     public bool balanceEnd;
@@ -20,7 +20,7 @@ public class WallCollision : MonoBehaviour
     LargeWall largewall = null;
     MediumWall mediumwall = null;
     VaultWall vaultwall = null;
-    Lege legecol = null;
+    Ledge legecol = null;
     BalancingBar balancB = null;
     Hops hops=null;
     Lader lader = null;
@@ -45,11 +45,11 @@ public class WallCollision : MonoBehaviour
             vault = true;
             destenation = other.gameObject.GetComponent<VaultWall>().destenation;
         }
-        legecol = other.gameObject.GetComponent<Lege>();
+        legecol = other.gameObject.GetComponent<Ledge>();
         if (legecol != null)
         {
-            lege = true;
-            destenation = other.gameObject.GetComponent<Lege>().climbPoint;
+            ledge = true;
+            destenation = other.gameObject.GetComponent<Ledge>().climbPoint;
         }
         balancB = other.gameObject.GetComponent<BalancingBar>();
         if (balancB != null)
@@ -69,7 +69,7 @@ public class WallCollision : MonoBehaviour
             destenation = other.gameObject.GetComponent<Hops>().destenation;
         }
     }
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
         largewall = other.gameObject.GetComponent<LargeWall>();
         if (largewall != null)
@@ -86,10 +86,10 @@ public class WallCollision : MonoBehaviour
         {
             vault = false;
         }
-        legecol = other.gameObject.GetComponent<Lege>();
+        legecol = other.gameObject.GetComponent<Ledge>();
         if (legecol != null)
         {
-            lege = false;
+            ledge = false;
         }
         balancB = other.gameObject.GetComponent<BalancingBar>();
         if (balancB != null)
@@ -107,12 +107,12 @@ public class WallCollision : MonoBehaviour
             hop = false;
         }
     }
-    private void OnTriggerStay(Collider other)
+    public void OnTriggerStay(Collider other)
     {
-        legecol = other.gameObject.GetComponent<Lege>();
+        legecol = other.gameObject.GetComponent<Ledge>();
         if (legecol != null)
         {
-            lege = true;
+            ledge = true;
         }
     }
 }

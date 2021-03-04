@@ -1,5 +1,5 @@
 using UnityEngine;
-public class Lege : MonoBehaviour
+public class Ledge : MonoBehaviour
 {
     [Header("for other script")]
     public Transform climbPoint;

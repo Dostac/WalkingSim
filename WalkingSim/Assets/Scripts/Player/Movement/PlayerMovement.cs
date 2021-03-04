@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     private bool lerpValueOn;
     private bool freezeRot;
     private bool isClimable;
+    private bool canLedge;
     private bool gotYValue;
 
     private bool isLedgeClimbing;
@@ -98,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
         playerRB =player.GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         runningSpeedAftherRun = runningSpeed;
+        canLedge = true;
     }
     public void Update()
     {
@@ -140,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
     public void AtionUpdator()
     {
         RaycastHit ledgeCheck;
-        if (wc.lege && !isGrounded && (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
+        if (canLedge && wc.ledge && !isGrounded && (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
         {
             LedgeGrab();
         }
@@ -152,6 +154,7 @@ public class PlayerMovement : MonoBehaviour
         if (hoping)
         {
          //  transform.position = Vector3.Lerp(transform.position, gahierheen[snelint].position, blockHopSpeed * Time.deltaTime);
+         //this is for later
         }
         //ledge
         if (ledge)
@@ -175,36 +178,38 @@ public class PlayerMovement : MonoBehaviour
                 var jumpVec = new Vector3(0, curentYPos, 0);
             }
             else if(!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
-            {                                  
-                if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, out rightSideHit, 1f, ledgeLayer))
+            {
+                if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitleft, 1f))
                 {
-                    if (rightSideHit.transform.tag != "Ledge")
+                    if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, out rightSideHit, 1f, ledgeLayer))
                     {
-                    }
-                    else
-                    {
-                        if (im.leftPressed && Input.GetKey("space"))
+                        if (rightSideHit.transform.tag != "Ledge")
                         {
-                            if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitleft, 1f))
+
+                        }
+                        else
+                        {
+                            if (im.leftPressed && Input.GetKey("space"))
                             {
                                 Quaternion rotation = Quaternion.LookRotation(-rightSideHit.normal, Vector3.up);
                                 transform.rotation = rotation;
                                 transform.position = Vector3.Lerp(transform.position, rightSideHit.point, speed * Time.deltaTime);
                             }
+
                         }
                     }
                 }
-                else if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, out leftSideHit, 1f, ledgeLayer))
+                else if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitRight, 1f))
                 {
-                    if (leftSideHit.transform.tag != "Ledge")
+                    if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, out leftSideHit, 1f, ledgeLayer))
                     {
-
-                    }
-                    else
-                    {
-                        if (im.rightPressed && Input.GetKey("space"))
+                        if (leftSideHit.transform.tag != "Ledge")
                         {
-                            if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitRight, 1f))
+
+                        }
+                        else
+                        {
+                            if (im.rightPressed && Input.GetKey("space"))
                             {
                                 Quaternion rotation = Quaternion.LookRotation(-leftSideHit.normal, Vector3.up);
                                 transform.rotation = rotation;
@@ -213,16 +218,14 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
                 }
-                else if(ledge)
-                {
-                    if (!wc.lege)
-                    {
-                    ResetValues();
-                    }
-                }
+            if (!wc.ledge)
+            {
+            ResetValues();
+            Invoke("LedgeGrabBool", 1);
             }
         }
-        else if (wc.isHopping)//blockhop
+            }
+        else if (wc.isHopping)//blockhop//for later
         {
             transform.position = Vector3.Lerp(transform.position, wc.destenation.position, blockHopSpeed * Time.deltaTime);
         }
@@ -259,17 +262,18 @@ public class PlayerMovement : MonoBehaviour
                 Slide();
             }
         }
-         if (Input.GetKey("space") && ledge && im.forwardPressed&& isClimable)
+        if (Input.GetKey("space") && ledge && im.forwardPressed&&isClimable)
         {
             if(!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f))
             {
-            LedgeCLimb();
+                LedgeCLimb();
             }
             
         }
         else if (Input.GetKey("space") && ledge&&im.backwardsPressed)
         {
             ResetValues();
+            Invoke("LedgeGrabBool", 1);
         }
         if (im.spacebar)
         {
@@ -366,7 +370,6 @@ public class PlayerMovement : MonoBehaviour
                 rb.AddForce(-transform.right * wallrunForce / 5 * Time.deltaTime);
             }
         }
-        ///transfrom kan oritation moeten tereug dingens
         jumpCount = 2;
         IKHP.useFootIK = true;
         isWallRunning = true;
@@ -380,7 +383,7 @@ public class PlayerMovement : MonoBehaviour
             lookAt = Vector3.Cross(hit.normal, transform.right);
         }
         //player.transform.LookAt(lookAt);
-        ///ditte normal ding
+        ///maybe hitnormal for player to lookat othewise get a point from the wal for player to look at just like vault
     }
     public void EndWallRun()
     {
@@ -389,7 +392,7 @@ public class PlayerMovement : MonoBehaviour
         player.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
         if (runningSpeedAftherRun >= 2f)
         {
-        runningSpeedAftherRun -= 4;
+            runningSpeedAftherRun -= 4;
         }
         if (runningSpeedAftherRun <= 1)
         {
@@ -415,7 +418,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (ledge && !balancebar && !wc.laderbool && !isLedgeClimbing)
         {
-            print("oof");
             var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0).normalized;
             anim.SetFloat("ledgeVelocity",(Input.GetAxisRaw("Horizontal")+1));
             if (!gotYValue)
@@ -428,7 +430,6 @@ public class PlayerMovement : MonoBehaviour
             transform.Translate(movementVec * Time.deltaTime * ledgeSpeed);
             var curentPos = new Vector3(transform.position.x, curentYPos, transform.position.z);
             transform.position = curentPos;
-            print("einde");
         }
         else if (!ledge && balancebar&&!wc.laderbool)
         {
@@ -549,20 +550,19 @@ public class PlayerMovement : MonoBehaviour
     public void LedgeGrab()
     {
         RaycastHit forwardHit;
-        if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
+        if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer) && !ledge)
         {
-            print("ledge");
-            Invoke("LedgeClimbBool", 0.75f);
+            notTrigger.enabled = false; 
             ResetAnim();
             anim.SetBool("isLedgeGrabbing", true);
             float dist = Vector3.Distance(forwardHit.point, handRayCastPivot.transform.position);
-            notTrigger.enabled = false;
-            //transform.localPosition += (Vector3.right- new Vector3(0.5f, 0.0f, 0.0f)) * dist;
-            //transform.position = Vector3.Lerp(transform.position, forwardHit.point, speed * Time.deltaTime);
-            ledge = true;
+            //transform.localPosition += (Vector3.right - new Vector3(0.5f, 0.0f, 0.0f)) * dist;
+            //transform.localPosition = Vector3.Lerp(transform.position, forwardHit.point, speed * Time.deltaTime);
+            transform.localPosition =  forwardHit.point-new Vector3(0,handRayCastPivot.position.y,0);
             freezeRot = true;
+            ledge = true;
             rb.useGravity = false;
-            //456
+            Invoke("LedgeClimbBool", 0.5f);
         }
     }
     public void LedgeCLimb()
@@ -582,6 +582,10 @@ public class PlayerMovement : MonoBehaviour
     public void LedgeClimbBool()
     {
         isClimable = true;
+    }
+    public void LedgeGrabBool()
+    {
+        canLedge = true;
     }
     public void StartHop()
     {
@@ -610,6 +614,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Walkable")
         {
             isGrounded = true;
+            canLedge = true;
             jumpCount = jumps;
         }
     }
@@ -673,6 +678,7 @@ public class PlayerMovement : MonoBehaviour
         ledge = false;
         gotYValue = false;
         balancebar = false;
+        canLedge = false;
         isClimable = false;
         isLedgeClimbing = false;
 
@@ -684,9 +690,10 @@ public class PlayerMovement : MonoBehaviour
         notTrigger.height = isTrigger.height;
         notTrigger.center = isTrigger.center;
     }
-    void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         //ledge raycast
+
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3f, 0.0f)), transform.forward, Color.magenta);
 
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, Color.yellow);
