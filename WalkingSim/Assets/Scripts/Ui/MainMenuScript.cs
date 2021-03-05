@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 public class MainMenuScript : MonoBehaviour
 {
-    public GameObject options, credits, mainMenu, controlls;
+    public GameObject options, credits, mainMenu, controlls,conRes;
     Resolution[] resolutions;
     public TMP_Dropdown resolutionDropDown;
     public void Start()
@@ -62,6 +62,11 @@ public class MainMenuScript : MonoBehaviour
         UiOff();
         mainMenu.SetActive(true);
     }
+    public void ConRes()
+    {
+        UiOff();
+        conRes.SetActive(true);
+    }
     public void Control()
     {
         UiOff();
@@ -73,6 +78,7 @@ public class MainMenuScript : MonoBehaviour
         options.SetActive(false);
         credits.SetActive(false);
         controlls.SetActive(false);
+        conRes.SetActive(false);
     }
     public void SetFullScreen(bool isFullscreen)
     {

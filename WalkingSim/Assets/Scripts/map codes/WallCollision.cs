@@ -33,17 +33,17 @@ public class WallCollision : MonoBehaviour
             large = true;
             destenation = other.gameObject.GetComponent<LargeWall>().destenation;
         }
-        mediumwall = other.gameObject.GetComponent<MediumWall>();
-        if (mediumwall != null)
-        {
-            medium = true;
-            destenation = other.gameObject.GetComponent<MediumWall>().destenation;
-        }
         vaultwall = other.gameObject.GetComponent<VaultWall>();
         if (vaultwall != null)
         {
             vault = true;
             destenation = other.gameObject.GetComponent<VaultWall>().destenation;
+        }
+        mediumwall = other.gameObject.GetComponent<MediumWall>();
+        if (mediumwall != null)
+        {
+            medium = true;
+            destenation = other.gameObject.GetComponent<MediumWall>().destenation;
         }
         legecol = other.gameObject.GetComponent<Ledge>();
         if (legecol != null)

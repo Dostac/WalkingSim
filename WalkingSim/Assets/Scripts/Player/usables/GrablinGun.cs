@@ -2,7 +2,7 @@ using UnityEngine;
 public class GrablinGun : MonoBehaviour
 {
     public LayerMask whatIsGrappleable;
-    public Transform gunTip, camera, player;
+    public Transform gunTip, cam, player;
     public float offset;
     public GameObject crosshair;
 
@@ -27,11 +27,11 @@ public class GrablinGun : MonoBehaviour
             StopGrapple();
         }
         RaycastHit hit;
-        if (Physics.Raycast(camera.position + new Vector3(0, offset, 0), camera.forward, out hit, maxDistance, whatIsGrappleable))
+        if (Physics.Raycast(cam.position + new Vector3(0, offset, 0), cam.forward, out hit, maxDistance, whatIsGrappleable))
         {
             crosshair.SetActive(true);
             crosshair.transform.position = hit.point;
-            Debug.DrawLine(camera.position + new Vector3(0, offset, 0), camera.forward, Color.red);
+            Debug.DrawLine(cam.position + new Vector3(0, offset, 0), cam.forward, Color.red);
         }
         else
         {
@@ -49,7 +49,7 @@ public class GrablinGun : MonoBehaviour
     void StartGrapple()
     {
         RaycastHit hit;
-        if (Physics.Raycast(camera.position + new Vector3(0, offset, 0), camera.forward, out hit, maxDistance, whatIsGrappleable))
+        if (Physics.Raycast(cam.position + new Vector3(0, offset, 0), cam.forward, out hit, maxDistance, whatIsGrappleable))
         {
             grapplePoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();

@@ -4,7 +4,10 @@ using UnityEngine;
 public class IKHandPlacement : MonoBehaviour
 {
     [Header("Bools")]
-	public bool useIK = true;
+    public bool presentatie;
+
+
+    public bool useIK = true;
 
 	public bool leftHandIK = false;
 	public bool rightHandIK = false;
@@ -47,17 +50,15 @@ public class IKHandPlacement : MonoBehaviour
 	public float leftHandWeight = 1f;
 	[Range(0, 5f)]
 	public float rightHandWeight = 1f;
-	void Start()
+    [Header("transform")]
+    public Transform handpos;
+    void Start()
 	{
 
 		anim = GetComponent<Animator>();
 	}
 	void FixedUpdate()
 	{
-        if (Input.GetKey("t"))
-        {
-            Time.timeScale = 0;
-        }
 		RaycastHit LHit;
 		RaycastHit RHit;
 
@@ -108,10 +109,11 @@ public class IKHandPlacement : MonoBehaviour
                 rightFootIK = false;
             }
         }
-        else if (pm.ledge && !pm.isWallRunning)
+        else if (pm.ledge && !pm.isWallRunning && !presentatie)
         {
+            print("koek");
             //Left Hand IK Check
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out LHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), out LHit, 1f, layers))
             {
                 Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
                 lookAt = lookAt.y < 0 ? -lookAt : lookAt;
@@ -123,6 +125,7 @@ public class IKHandPlacement : MonoBehaviour
                 leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
                 //leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
                 leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
+                print("gsg");
             }
             else
             {
@@ -131,7 +134,7 @@ public class IKHandPlacement : MonoBehaviour
             }
 
             //Right Hand IK Check
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), out RHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), out RHit, 1f, layers))
             {
 
                 Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
@@ -145,6 +148,7 @@ public class IKHandPlacement : MonoBehaviour
                 rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
                 //rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
                 rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
+                print("gas");
             }
             else
             {
@@ -313,6 +317,10 @@ public class IKHandPlacement : MonoBehaviour
 
         //Right Hand IK Visual Ray
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), Color.green);
+
+        //ledge
+        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), Color.yellow);
+        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), Color.yellow);
 
 
         //wallrun      

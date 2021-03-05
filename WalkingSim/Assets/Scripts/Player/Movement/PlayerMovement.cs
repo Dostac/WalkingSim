@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    ///public
-     [Header("Speed Values")]
+    #region public values
+    [Header("Speed Values")]
     public float desiredRoationSpeed;
     public float slidingSpeed;
     public float runningSpeed;
@@ -48,7 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
 
     public Vector3 lookitsavector;
-    //private
+    #endregion
+    #region private values
     private float slidegSpeed;
     private float movementSpeed;
     private float inputX;
@@ -89,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
     private InputManager im;
     private Rigidbody rb;
     private Rigidbody playerRB;
+    #endregion
     private void Start()
     {
         im = GetComponent<InputManager>();
@@ -113,6 +115,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerRotUpdate();
         Movement();
     }
+    #region player rotation
     void PlayerRotation()
     {
         if (!freezeRot)
@@ -139,6 +142,21 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, v.y, 0);
         }
     }
+    public void PlayerRotUpdate()
+    {
+        speed = new Vector2(inputX, inputZ).sqrMagnitude;
+        inputX = Input.GetAxisRaw("Horizontal");
+        inputZ = Input.GetAxisRaw("Vertical");
+
+        speed = new Vector2(inputX, inputZ).sqrMagnitude;
+
+        if (speed > allowPlayerRotation)
+        {
+            PlayerRotation();
+        }
+    }
+    #endregion
+    #region action updator (update)
     public void AtionUpdator()
     {
         RaycastHit ledgeCheck;
@@ -153,8 +171,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if (hoping)
         {
-         //  transform.position = Vector3.Lerp(transform.position, gahierheen[snelint].position, blockHopSpeed * Time.deltaTime);
-         //this is for later
+            //  transform.position = Vector3.Lerp(transform.position, gahierheen[snelint].position, blockHopSpeed * Time.deltaTime);
+            //this is for later
         }
         //ledge
         if (ledge)
@@ -167,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit leftSideHit;
             RaycastHit rightSideHit;
             //123
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f,ledgeLayer))
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
             {
                 Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
                 transform.rotation = rotation;
@@ -177,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
                 //GetYAxees();
                 var jumpVec = new Vector3(0, curentYPos, 0);
             }
-            else if(!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
+            else if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
             {
                 if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, out forwardHitleft, 1f))
                 {
@@ -218,31 +236,20 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
                 }
-            if (!wc.ledge)
-            {
-            ResetValues();
-            Invoke("LedgeGrabBool", 1);
+                if (!wc.ledge)
+                {
+                    ResetValues();
+                    Invoke("LedgeGrabBool", 1);
+                }
             }
         }
-            }
         else if (wc.isHopping)//blockhop//for later
         {
             transform.position = Vector3.Lerp(transform.position, wc.destenation.position, blockHopSpeed * Time.deltaTime);
         }
     }
-    public void PlayerRotUpdate()
-    {
-        speed = new Vector2(inputX, inputZ).sqrMagnitude;
-        inputX = Input.GetAxisRaw("Horizontal");
-        inputZ = Input.GetAxisRaw("Vertical");
-
-        speed = new Vector2(inputX, inputZ).sqrMagnitude;
-
-        if (speed > allowPlayerRotation)
-        {
-            PlayerRotation();
-        }
-    }
+    #endregion
+    #region playerinput
     public void PlayerInput()
     {
         RaycastHit LedgeClimbSpace;
@@ -257,7 +264,7 @@ public class PlayerMovement : MonoBehaviour
                 isCrouch = !isCrouch;
                 Crouch();
             }
-            else if (!balancebar && !sliding&&im.runPressed)
+            else if (!balancebar && !sliding&&im.runPressed&&isGrounded)
             {
                 Slide();
             }
@@ -281,7 +288,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vault();
             }
-            else if(wc.medium)
+            else if(wc.medium&&!wc.vault)
             {
                 MediumWall();
             }
@@ -319,18 +326,8 @@ public class PlayerMovement : MonoBehaviour
             movementSpeed = walkingSpeed/2;
         }
     }
-    public void Slide()
-    {
-        isCrouch = false;
-        ResetAnim();
-        anim.SetBool("isSliding", true);
-        sliding = true;
-        float x = movementSpeed;
-        slidegSpeed =slidingSpeed * x / 1.5f*1.5f;
-        Invoke("ResetValues", slidingTime);
-        notTrigger.height = 0.7743956f;
-        notTrigger.center = new Vector3(-0.01670074f, 0.4888585f, 0.0531683f);
-    }
+    #endregion
+    #region wallrun
     public void CheckForWall()
     {
         wallRight = Physics.Raycast(transform.position, orientation.right, 1f, wall);
@@ -399,6 +396,8 @@ public class PlayerMovement : MonoBehaviour
             runningSpeedAftherRun = 1;
         }
     }
+    #endregion
+    #region player movement (update)
     public void Movement()
     {
         if (!ledge && !balancebar&& !wc.laderbool)
@@ -480,23 +479,19 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    public void TimeUpdate()
+    #endregion
+    #region player actions
+    public void Slide()
     {
-        if (isWallRunning)
-        {
-            if(timer< wallRunningTime)
-            {
-                timer +=Time.deltaTime;
-            }
-            else if(timer >= wallRunningTime)
-            {
-                 EndWallRun();
-            }
-        }
-        else
-        {
-            timer = 0;
-        }
+        isCrouch = false;
+        ResetAnim();
+        anim.SetBool("isSliding", true);
+        sliding = true;
+        float x = movementSpeed;
+        slidegSpeed = slidingSpeed * x / 1.5f * 1.5f;
+        Invoke("ResetValues", slidingTime);
+        notTrigger.height = 0.7743956f;
+        notTrigger.center = new Vector3(-0.01670074f, 0.4888585f, 0.0531683f);
     }
     public void Crouch()
     {
@@ -555,29 +550,29 @@ public class PlayerMovement : MonoBehaviour
             notTrigger.enabled = false; 
             ResetAnim();
             anim.SetBool("isLedgeGrabbing", true);
-            float dist = Vector3.Distance(forwardHit.point, handRayCastPivot.transform.position);
-            //transform.localPosition += (Vector3.right - new Vector3(0.5f, 0.0f, 0.0f)) * dist;
-            //transform.localPosition = Vector3.Lerp(transform.position, forwardHit.point, speed * Time.deltaTime);
-            transform.localPosition =  forwardHit.point-new Vector3(0,handRayCastPivot.position.y,0);
+            transform.localPosition =  forwardHit.point-new Vector3(0,2.153f,0);
+            Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
+            transform.rotation = rotation;
             freezeRot = true;
-            ledge = true;
             rb.useGravity = false;
+            ledge = true;
             Invoke("LedgeClimbBool", 0.5f);
         }
     }
     public void LedgeCLimb()
     {
-        //ResetValues();
-        //isLedgeClimbing = true;
-        //runningSpeedAftherRun = 10;
-        //inputY = 0;
-        //Invoke("ResetValues", 3f);
-        //playerRB.isKinematic = false;
-        //slerpValueOn = true;
-        //isGrounded = true;
+        ResetValues();
+
+        lerpValueOn = true;
+        isLedgeClimbing = true;
+        runningSpeedAftherRun = 10;
+        inputY = 0;
+        notTrigger.height = 0.9370761f;
+        notTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
+        Invoke("ResetValues", 3f);
         ResetValues();
         Invoke("ResetValues", 3f);
-        transform.position = wc.destenation.position;
+        //transform.position = wc.destenation.position;
     }
     public void LedgeClimbBool()
     {
@@ -608,7 +603,8 @@ public class PlayerMovement : MonoBehaviour
         float x = movementSpeed;
         slidegSpeed = slidingSpeed * x / 1.5f * 1.5f;
     }
-
+    #endregion
+    #region colision
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.tag == "Walkable")
@@ -642,6 +638,26 @@ public class PlayerMovement : MonoBehaviour
             runningSpeedAftherRun = runningSpeed;
         }
     }
+    #endregion
+    #region player value voids
+    public void TimeUpdate()
+    {
+        if (isWallRunning)
+        {
+            if (timer < wallRunningTime)
+            {
+                timer += Time.deltaTime;
+            }
+            else if (timer >= wallRunningTime)
+            {
+                EndWallRun();
+            }
+        }
+        else
+        {
+            timer = 0;
+        }
+    }
     public void FreezePlayerRot()
     {
         player.GetComponent<Rigidbody>().isKinematic = playerRB.isKinematic;
@@ -655,6 +671,8 @@ public class PlayerMovement : MonoBehaviour
         gotYValue = true;
         curentYPos = transform.position.y;
     }
+    #endregion
+    #region resets
     public void ResetAnim()
     {
         anim.SetFloat("ledgeVelocity", 1);
@@ -690,6 +708,8 @@ public class PlayerMovement : MonoBehaviour
         notTrigger.height = isTrigger.height;
         notTrigger.center = isTrigger.center;
     }
+    #endregion
+    #region gizoms
     public void OnDrawGizmos()
     {
         //ledge raycast
@@ -704,4 +724,5 @@ public class PlayerMovement : MonoBehaviour
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, Color.cyan);
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, Color.cyan);
     }
+    #endregion
 }
