@@ -80,8 +80,10 @@ public class PlayerMovement : MonoBehaviour
     private bool gotYValue;
 
     private bool isLedgeClimbing;
+    private bool isCliming;
 
     private Vector3 desireMovementDirection,lookAt;
+    private Transform LedgeDes;
 
     private CapsuleCollider normalColSize;
     private RaycastHit hit;
@@ -159,7 +161,20 @@ public class PlayerMovement : MonoBehaviour
     #region action updator (update)
     public void AtionUpdator()
     {
-        RaycastHit ledgeCheck;
+        //testing 
+        if (Input.GetKeyDown("t"))
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+        if (Input.GetKeyDown("m"))
+        {
+            Time.timeScale = 1;
+        }
+        if (Input.GetKeyDown("n"))
+        {
+            Time.timeScale = 0.05f;
+        }        
+            RaycastHit ledgeCheck;
         if (canLedge && wc.ledge && !isGrounded && (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
         {
             LedgeGrab();
@@ -168,6 +183,10 @@ public class PlayerMovement : MonoBehaviour
         if (lerpValueOn)
         {
             transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
+        }
+        else if (isCliming)
+        {///678
+            transform.position = Vector3.Lerp(transform.position, LedgeDes.position+new Vector3(0,2,0), vaultingSpeed * Time.deltaTime*2);
         }
         if (hoping)
         {
@@ -190,10 +209,8 @@ public class PlayerMovement : MonoBehaviour
                 Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
                 transform.rotation = rotation;
                 player.transform.rotation = rotation;
-                //GetYAxees();
-                //transform.position = forwardHit.point;
-                //GetYAxees();
                 var jumpVec = new Vector3(0, curentYPos, 0);
+                LedgeDes = forwardHit.transform;
             }
             else if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer))
             {
@@ -557,26 +574,34 @@ public class PlayerMovement : MonoBehaviour
             rb.useGravity = false;
             ledge = true;
             Invoke("LedgeClimbBool", 0.5f);
+            transform.rotation = rotation;
         }
     }
     public void LedgeCLimb()
     {
-        ResetValues();
-
-        lerpValueOn = true;
         isLedgeClimbing = true;
+        isCliming = true;
+        rb.useGravity = true;
+        ledge = false;
+        freezeRot = false;
+        //lerpValueOn = true;
         runningSpeedAftherRun = 10;
         inputY = 0;
         notTrigger.height = 0.9370761f;
         notTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
-        Invoke("ResetValues", 3f);
-        ResetValues();
-        Invoke("ResetValues", 3f);
-        //transform.position = wc.destenation.position;
+        Invoke("LerpValueBool", 0.6f);
+        Invoke("ResetValues", 0.65f);
+        ///eerst naar raycast hit dan naar destenation
+        //////1234
     }
     public void LedgeClimbBool()
     {
         isClimable = true;
+    }
+    public void LerpValueBool()
+    {
+        isCliming = false;
+        lerpValueOn = true;
     }
     public void LedgeGrabBool()
     {
@@ -699,6 +724,7 @@ public class PlayerMovement : MonoBehaviour
         canLedge = false;
         isClimable = false;
         isLedgeClimbing = false;
+        isCliming = false;
 
         IKHP.useFootIK = false;
         wc.balanceBegin = false;
