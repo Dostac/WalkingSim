@@ -326,8 +326,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AORemapMax: 0.9999999
-    - _AORemapMin: 0.6934435
+    - _AORemapMax: 1
+    - _AORemapMin: 0
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 0
@@ -456,7 +456,7 @@ Material:
     - _ShiverDrag: 0.2
     - _Smoothness: 1
     - _SmoothnessRemapMax: 1
-    - _SmoothnessRemapMin: 0.2678665
+    - _SmoothnessRemapMin: 0.23269945
     - _SmoothnessTextureChannel: 0
     - _SmoothnessViewAngleOffset: 0.5
     - _SpecularAAScreenSpaceVariance: 0.1
