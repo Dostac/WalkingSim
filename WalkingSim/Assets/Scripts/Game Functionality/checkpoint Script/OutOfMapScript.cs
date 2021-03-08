@@ -13,7 +13,7 @@ public class OutOfMapScript : MonoBehaviour
     private float currentTime=0;
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag ("Player"))
         {
             currentTime += Time.deltaTime;
             timeText.text = currentTime.ToString();
@@ -26,7 +26,7 @@ public class OutOfMapScript : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             currentTime = 0;
             Ui.SetActive(false); ;
@@ -34,7 +34,7 @@ public class OutOfMapScript : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             Ui.SetActive(true); 
         }

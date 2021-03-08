@@ -38,7 +38,7 @@ public class IKFootPlacement : MonoBehaviour
             {
 
                 // We're only concerned with objects that are tagged as "Walkable"
-                if (hit.transform.tag == "Walkable" || hit.transform.tag == "WallRunWall")
+                if (hit.transform.CompareTag("Walkable") || hit.transform.CompareTag("WallRunWall"))
                 {
 
                     Vector3 footPosition = hit.point; // The target foot position is where the raycast hit a walkable object...
@@ -55,7 +55,7 @@ public class IKFootPlacement : MonoBehaviour
             if (Physics.Raycast(ray, out hit, DistanceToGround + 1f, layerMask))
             {
 
-                if (hit.transform.tag == "Walkable"|| hit.transform.tag == "WallRunWall")
+                if (hit.transform.CompareTag("Walkable") || hit.transform.CompareTag("WallRunWall"))
                 {
 
                     Vector3 footPosition = hit.point;

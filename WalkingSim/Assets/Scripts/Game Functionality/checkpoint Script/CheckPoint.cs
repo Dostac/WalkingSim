@@ -16,7 +16,7 @@ public class CheckPoint : MonoBehaviour
     {
         if (canBeTriggert)
         {
-            if (!achieved && other.gameObject.tag == "Player")
+            if (!achieved && other.gameObject.CompareTag("Player"))
             {
                 Add();
                 achieved = false;

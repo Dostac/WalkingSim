@@ -651,7 +651,7 @@ public class PlayerMovement : MonoBehaviour
     #region colision
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.tag == "Walkable")
+        if (collision.gameObject.CompareTag("Walkable"))
         {
             isGrounded = true;
             canLedge = true;
@@ -660,7 +660,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "Walkable")
+        if (collision.gameObject.CompareTag("Walkable"))
         {
             isGrounded = false;
             if (runningSpeedAftherRun >= 4)
@@ -675,7 +675,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Walkable")
+        if (collision.gameObject.CompareTag("Walkable"))
         {
             inputY = 0;
             player.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
