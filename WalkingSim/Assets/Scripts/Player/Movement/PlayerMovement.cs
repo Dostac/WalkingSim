@@ -291,8 +291,7 @@ public class PlayerMovement : MonoBehaviour
             if(!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f))
             {
                 LedgeCLimb();
-            }
-            
+            }            
         }
         else if (Input.GetKey("space") && ledge&&im.backwardsPressed)
         {
@@ -309,19 +308,16 @@ public class PlayerMovement : MonoBehaviour
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
                  {
                      MediumWall();
-                print("med");
                  }
             else if (wc.large && !ledge&&!sliding&& !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
                  { 
                     BigWall();
-                print("big");
 
             }
             else if (!ledge&&!lerpValueOn)
             {
                 Jump();
-                print("jump");
             }
         }
         if (!isCrouch && !im.forwardPressed && !im.backwardsPressed && !im.leftPressed && !im.rightPressed)
@@ -440,7 +436,24 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (ledge && !balancebar && !wc.laderbool && !isLedgeClimbing)
         {
-            var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0).normalized;
+            RaycastHit LedgeCheckWallLeft;
+            RaycastHit LedgeCheckWallRight;
+            float ledgeInput = (Input.GetAxisRaw("Horizontal"));
+            if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), transform.right, out LedgeCheckWallLeft, 0.5f))//right
+            {
+                if (ledgeInput == 1)
+                {
+                    ledgeInput = 0;
+                }
+            }
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), -transform.right, out LedgeCheckWallRight, 0.5f))//left
+            {
+                if (ledgeInput == -1)
+                {
+                    ledgeInput = 0;
+                }
+            }
+            var movementVec = new Vector3(ledgeInput, 0, 0).normalized;
             anim.SetFloat("ledgeVelocity",(Input.GetAxisRaw("Horizontal")+1));
             if (!gotYValue)
             {
@@ -592,14 +605,12 @@ public class PlayerMovement : MonoBehaviour
         rb.useGravity = true;
         ledge = false;
         freezeRot = false;
-        //lerpValueOn = true;
         runningSpeedAftherRun = 10;
         inputY = 0;
         notTrigger.height = 0.9370761f;
         notTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
         Invoke("LerpValueBool", 0.6f);
         Invoke("ResetValues", 0.65f);
-        ///eerst naar raycast hit dan naar destenation
         //////1234
     }
     public void LedgeClimbBool()
@@ -757,6 +768,9 @@ public class PlayerMovement : MonoBehaviour
 
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, Color.cyan);
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, Color.cyan);
+
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), transform.right, Color.blue, 0.5f);//wall detection
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), -transform.right, Color.blue, 0.5f);
     }
     #endregion
 }
