@@ -305,29 +305,23 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vault();
             }
-            else if(wc.medium&&!wc.vault && !ledge&&!sliding)
-            {
-                if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
-                {
-                    if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f))
-                    {
-                        MediumWall();
-                    }
-                }
+            else if(wc.medium&&!wc.vault && !ledge&&!sliding&& !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
+                 {
+                     MediumWall();
+                print("med");
+                 }
+            else if (wc.large && !ledge&&!sliding&& !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
+                 { 
+                    BigWall();
+                print("big");
+
             }
-            else if (wc.large && !ledge&&!sliding)
-            {
-                if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
-                {
-                    if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f))
-                    {
-                        BigWall();
-                    }
-                }
-            }
-            else if (!ledge&&!wc.large&&!wc.medium&&!wc.vault)
+            else if (!ledge&&!lerpValueOn)
             {
                 Jump();
+                print("jump");
             }
         }
         if (!isCrouch && !im.forwardPressed && !im.backwardsPressed && !im.leftPressed && !im.rightPressed)
@@ -593,6 +587,7 @@ public class PlayerMovement : MonoBehaviour
     public void LedgeCLimb()
     {
         isLedgeClimbing = true;
+        lerpValueOn = false;
         isCliming = true;
         rb.useGravity = true;
         ledge = false;
