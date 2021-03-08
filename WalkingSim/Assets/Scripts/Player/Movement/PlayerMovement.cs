@@ -301,17 +301,29 @@ public class PlayerMovement : MonoBehaviour
         }
         if (im.spacebar)
         {
-            if (wc.vault&&isGrounded)
+            if (wc.vault&&isGrounded&&!ledge)
             {
                 Vault();
             }
-            else if(wc.medium&&!wc.vault)
+            else if(wc.medium&&!wc.vault && !ledge&&!sliding)
             {
-                MediumWall();
+                if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
+                {
+                    if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f))
+                    {
+                        MediumWall();
+                    }
+                }
             }
-            else if (wc.large)
+            else if (wc.large && !ledge&&!sliding)
             {
-                BigWall();
+                if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
+                {
+                    if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f))
+                    {
+                        BigWall();
+                    }
+                }
             }
             else if (!ledge&&!wc.large&&!wc.medium&&!wc.vault)
             {
