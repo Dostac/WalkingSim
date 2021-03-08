@@ -175,7 +175,7 @@ public class PlayerMovement : MonoBehaviour
             Time.timeScale = 0.05f;
         }        
             RaycastHit ledgeCheck;
-        if (canLedge && wc.ledge && !isGrounded && (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
+        if (canLedge && wc.ledge &&!lerpValueOn&&!isCliming&&!isCrouch&& !isGrounded && (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
         {
             LedgeGrab();
         }
@@ -575,6 +575,7 @@ public class PlayerMovement : MonoBehaviour
             ledge = true;
             Invoke("LedgeClimbBool", 0.5f);
             transform.rotation = rotation;
+            player.transform.rotation = rotation;
         }
     }
     public void LedgeCLimb()
