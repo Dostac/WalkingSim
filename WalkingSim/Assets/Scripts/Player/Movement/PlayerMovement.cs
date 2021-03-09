@@ -175,9 +175,28 @@ public class PlayerMovement : MonoBehaviour
             Time.timeScale = 0.05f;
         }        
             RaycastHit ledgeCheck;
-        if (canLedge && wc.ledge &&!lerpValueOn&&!isCliming&&!isCrouch&& !isGrounded && (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer)))
+        if (canLedge && wc.ledge && !lerpValueOn && !isCliming && !isCrouch && !isGrounded)
         {
-            LedgeGrab();
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer))
+            {
+                LedgeGrab();
+            }
+            else if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.28f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer))
+            {
+                LedgeGrab();
+            }
+            else if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.31f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer))
+            {
+                LedgeGrab();
+            }
+            else if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.22f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer))
+            {
+                LedgeGrab();
+            }
+            else if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.19f, 0.0f)), transform.forward, out ledgeCheck, 1f, ledgeLayer))
+            {
+                LedgeGrab();
+            }
         }
         //vaut
         if (lerpValueOn)
@@ -257,6 +276,8 @@ public class PlayerMovement : MonoBehaviour
                 {
                     ResetValues();
                     Invoke("LedgeGrabBool", 1);
+                    print("stops1");
+                    ///deze beter maken
                 }
             }
         }
@@ -297,6 +318,7 @@ public class PlayerMovement : MonoBehaviour
         {
             ResetValues();
             Invoke("LedgeGrabBool", 1);
+            print("reset 2");
         }
         if (im.spacebar)
         {
