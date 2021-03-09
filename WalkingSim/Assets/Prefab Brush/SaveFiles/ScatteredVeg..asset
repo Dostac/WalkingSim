@@ -16,14 +16,16 @@ MonoBehaviour:
   prefabData:
   - prefab: {fileID: 1584198843794870, guid: 3dbf7e32b433b4b4f9ca4247821b0872, type: 3}
     selected: 1
+  - prefab: {fileID: 1547321089394726, guid: c2cf0ab48ed74a448a17217b33f6ba87, type: 3}
+    selected: 1
   paintType: 0
-  brushSize: 4
+  brushSize: 2
   minBrushSize: 0.1
   maxBrushSize: 20
   paintDeltaDistance: 0.5
   maxPaintDeltaDistance: 3
   minPaintDeltaDistance: 0.1
-  prefabsPerStroke: 2
+  prefabsPerStroke: 1
   maxprefabsPerStroke: 20
   minprefabsPerStroke: 1
   spawnHeight: 10

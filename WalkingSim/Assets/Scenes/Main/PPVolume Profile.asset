@@ -24,7 +24,7 @@ MonoBehaviour:
     max: 100
   colorFilter:
     m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 0.97, g: 0.9909192, b: 1, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
@@ -34,8 +34,8 @@ MonoBehaviour:
     min: -180
     max: 180
   saturation:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: -5
     min: -100
     max: 100
 --- !u!114 &-6438793612428202299
@@ -138,98 +138,7 @@ MonoBehaviour:
   - {fileID: 8256960668492947274}
   - {fileID: -6019430827321547838}
   - {fileID: -6438793612428202299}
-  - {fileID: 385445804105437794}
   - {fileID: 1223102377615083178}
---- !u!114 &385445804105437794
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42ef2681fa3dc8c4fa031f044e68c63f, type: 3}
-  m_Name: GlobalIllumination
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  quality:
-    m_OverrideState: 1
-    m_Value: 2
-  enable:
-    m_OverrideState: 1
-    m_Value: 1
-  depthBufferThickness:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-    max: 1
-  m_RaySteps:
-    m_OverrideState: 1
-    m_Value: 64
-    min: 16
-    max: 128
-  m_FullResolutionSS:
-    m_OverrideState: 1
-    m_Value: 1
-  m_FilterRadius:
-    m_OverrideState: 1
-    m_Value: 7
-    min: 2
-    max: 8
-  rayTracing:
-    m_OverrideState: 0
-    m_Value: 0
-  layerMask:
-    m_OverrideState: 0
-    m_Value:
-      serializedVersion: 2
-      m_Bits: 4294967295
-  mode:
-    m_OverrideState: 0
-    m_Value: 2
-  sampleCount:
-    m_OverrideState: 0
-    m_Value: 2
-    min: 1
-    max: 32
-  bounceCount:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 1
-    max: 31
-  m_RayLength:
-    m_OverrideState: 1
-    m_Value: 50
-    min: 0.01
-  m_ClampValue:
-    m_OverrideState: 1
-    m_Value: 1.5
-    min: 0.001
-    max: 10
-  m_FullResolution:
-    m_OverrideState: 1
-    m_Value: 1
-  m_UpscaleRadius:
-    m_OverrideState: 1
-    m_Value: 4
-    min: 2
-    max: 4
-  m_Denoise:
-    m_OverrideState: 1
-    m_Value: 1
-  m_HalfResolutionDenoiser:
-    m_OverrideState: 1
-    m_Value: 0
-  m_DenoiserRadius:
-    m_OverrideState: 1
-    m_Value: 1
-    min: 0.001
-    max: 1
-  m_SecondDenoiserPass:
-    m_OverrideState: 1
-    m_Value: 1
 --- !u!114 &1223102377615083178
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -242,17 +151,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5ab44aadfb1804db5fd470983ac1b8, type: 3}
   m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   m_AdvancedMode: 0
   lift:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: -0.24489796}
+    m_Value: {x: 1, y: 1, z: 1, w: -0.21186443}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0.10204081}
+    m_Value: {x: 1, y: 1, z: 1, w: 0.40254226}
 --- !u!114 &4574322600484085759
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -287,7 +196,7 @@ MonoBehaviour:
     m_Value: 7
   limitMax:
     m_OverrideState: 1
-    m_Value: 13
+    m_Value: 12
   curveMap:
     m_OverrideState: 0
     m_Value:

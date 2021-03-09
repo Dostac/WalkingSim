@@ -175,6 +175,7 @@ namespace UnityTemplateProjects
             if (IsRightMouseButtonDown())
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                transform.Rotate(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
             }
 
             // Unlock and show cursor when right mouse button released
