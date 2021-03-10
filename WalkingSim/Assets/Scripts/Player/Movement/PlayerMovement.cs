@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Action Values")]
     public float vaultingSpeed=1.5f;
     public float resetTimeVault=1;
-    public float blockHopSpeed=1.5f;
     public bool ledge;
     public bool balancebar;
     public bool isWallRunning;
@@ -68,9 +67,6 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private bool getsInput;
 
-    private bool hoping;
-
-
     private bool frozen;
 
     private bool lerpValueOn;
@@ -81,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isLedgeClimbing;
     private bool isCliming;
+    private bool cooldownActionAftherLedge;
 
     private Vector3 desireMovementDirection,lookAt;
     private Transform LedgeDes;
@@ -204,13 +201,8 @@ public class PlayerMovement : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
         }
         else if (isCliming)
-        {///678
-            transform.position = Vector3.Lerp(transform.position, LedgeDes.position+new Vector3(0,2,0), vaultingSpeed * Time.deltaTime*2);
-        }
-        if (hoping)
         {
-            //  transform.position = Vector3.Lerp(transform.position, gahierheen[snelint].position, blockHopSpeed * Time.deltaTime);
-            //this is for later
+            transform.position = Vector3.Lerp(transform.position, LedgeDes.position+new Vector3(0,2,0), vaultingSpeed * Time.deltaTime*2);
         }
         //ledge
         if (ledge)
@@ -239,7 +231,6 @@ public class PlayerMovement : MonoBehaviour
                     {
                         if (rightSideHit.transform.tag != "Ledge")
                         {
-
                         }
                         else
                         {
@@ -249,7 +240,6 @@ public class PlayerMovement : MonoBehaviour
                                 transform.rotation = rotation;
                                 transform.position = Vector3.Lerp(transform.position, rightSideHit.point, speed * Time.deltaTime);
                             }
-
                         }
                     }
                 }
@@ -276,14 +266,9 @@ public class PlayerMovement : MonoBehaviour
                 {
                     ResetValues();
                     Invoke("LedgeGrabBool", 1);
-                    print("stops1");
-                    ///deze beter maken
+                    Invoke("ResetLedge", 1);
                 }
             }
-        }
-        else if (wc.isHopping)//blockhop//for later
-        {
-            transform.position = Vector3.Lerp(transform.position, wc.destenation.position, blockHopSpeed * Time.deltaTime);
         }
     }
     #endregion
@@ -309,7 +294,9 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey("space") && ledge && im.forwardPressed&&isClimable)
         {
-            if(!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f))
+            //two raycast forward and up to check if there is a object blocking the climb
+            if(!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
             {
                 LedgeCLimb();
             }            
@@ -318,21 +305,23 @@ public class PlayerMovement : MonoBehaviour
         {
             ResetValues();
             Invoke("LedgeGrabBool", 1);
-            print("reset 2");
+            Invoke("ResetLedge", 1);
         }
         if (im.spacebar)
         {
-            if (wc.vault&&isGrounded&&!ledge)
+            if (wc.vault&&isGrounded&&!ledge && !cooldownActionAftherLedge)
             {
                 Vault();
             }
-            else if(wc.medium&&!wc.vault && !ledge&&!sliding&& !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
-                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
-                 {
+            else if(wc.medium&&!wc.vault && !ledge&&!sliding&& !cooldownActionAftherLedge && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
+            {
                      MediumWall();
                  }
-            else if (wc.large && !ledge&&!sliding&& !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
-                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f))
+            else if (wc.large && !ledge&&!sliding && !cooldownActionAftherLedge && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
                  { 
                     BigWall();
 
@@ -461,18 +450,52 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit LedgeCheckWallLeft;
             RaycastHit LedgeCheckWallRight;
             float ledgeInput = (Input.GetAxisRaw("Horizontal"));
-            if(Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), transform.right, out LedgeCheckWallLeft, 0.5f))//right
+            Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), -transform.right, Color.green, 0.1f);
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), -transform.right, out LedgeCheckWallRight, 0.1f, ledgeLayer))//right
             {
+                if (LedgeCheckWallRight.transform.tag != "Ledge")
+                {
+                    print("gasgasg");
+                }
+                else
+                {
+                    if (im.rightPressed && Input.GetKey("space"))
+                    {
+                        Quaternion rotation = Quaternion.LookRotation(-LedgeCheckWallRight.normal, Vector3.up);
+                        transform.rotation = rotation;
+                        transform.position = Vector3.Lerp(transform.position, LedgeCheckWallRight.point, speed * Time.deltaTime*10);
+                        print("right");
+                    }
+                    print("gasgasgasg");
+                }
                 if (ledgeInput == 1)
                 {
                     ledgeInput = 0;
+                    print("wall right");
                 }
             }
-            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), -transform.right, out LedgeCheckWallRight, 0.5f))//left
+            Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), transform.right, Color.red, 0.1f);
+            if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), transform.right, out LedgeCheckWallLeft, 0.1f))//left
             {
-                if (ledgeInput == -1)
+                if (LedgeCheckWallLeft.transform.tag != "Ledge")
+                {
+                    print("1");
+                }
+                else
+                {
+                    if (im.leftPressed && Input.GetKey("space"))
+                    {
+                        Quaternion rotation = Quaternion.LookRotation(-LedgeCheckWallLeft.normal, Vector3.up);
+                        transform.rotation = rotation;
+                        transform.position = Vector3.Lerp(transform.position, LedgeCheckWallLeft.point, speed * Time.deltaTime * 10);
+                        print("2");
+                    }
+                    print("3");
+                }
+                if (ledgeInput == 1)
                 {
                     ledgeInput = 0;
+                    print("wall left");
                 }
             }
             var movementVec = new Vector3(ledgeInput, 0, 0).normalized;
@@ -608,6 +631,7 @@ public class PlayerMovement : MonoBehaviour
             notTrigger.enabled = false; 
             ResetAnim();
             anim.SetBool("isLedgeGrabbing", true);
+            cooldownActionAftherLedge = true;
             transform.localPosition =  forwardHit.point-new Vector3(0,2.153f,0);
             Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
             transform.rotation = rotation;
@@ -633,6 +657,7 @@ public class PlayerMovement : MonoBehaviour
         notTrigger.center = new Vector3(-0.01670074f, 1.225295f, 0.0531683f);
         Invoke("LerpValueBool", 0.6f);
         Invoke("ResetValues", 0.65f);
+        Invoke("ResetLedge", 1);
         //////1234
     }
     public void LedgeClimbBool()
@@ -647,10 +672,6 @@ public class PlayerMovement : MonoBehaviour
     public void LedgeGrabBool()
     {
         canLedge = true;
-    }
-    public void StartHop()
-    {
-        hoping = true;
     }
     public void BalancingBar()
     {
@@ -775,24 +796,28 @@ public class PlayerMovement : MonoBehaviour
         notTrigger.height = isTrigger.height;
         notTrigger.center = isTrigger.center;
     }
+    public void ResetLedge()
+    {
+        cooldownActionAftherLedge = false;
+    }
     #endregion
     #region gizoms
     public void OnDrawGizmos()
     {
         //ledge raycast
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3f, 0.0f)), transform.forward, Color.magenta);
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 3f, 0.0f)), transform.forward, Color.magenta);
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, Color.yellow);
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, Color.yellow);
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);//right
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);//left
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);//right
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.0f)), transform.forward, Color.blue);//left
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, Color.cyan);
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, Color.cyan);
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.75f, 2.25f, 0.5f)), -transform.right, Color.cyan);
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.75f, 2.25f, 0.5f)), transform.right, Color.cyan);
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), transform.right, Color.blue, 0.5f);//wall detection
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), -transform.right, Color.blue, 0.5f);
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), transform.right, Color.blue, 0.5f);//wall detection
+        //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), -transform.right, Color.blue, 0.5f);
     }
     #endregion
 }
