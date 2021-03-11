@@ -4346,7 +4346,7 @@ GameObject:
   - component: {fileID: 3926226822674342788}
   - component: {fileID: 5969223798660642407}
   - component: {fileID: 4059234770355593063}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: walkable
   m_TagString: Walkable
   m_Icon: {fileID: 0}
