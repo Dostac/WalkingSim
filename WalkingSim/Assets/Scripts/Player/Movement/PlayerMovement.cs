@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("wall layers")]
     public LayerMask wall;
     public LayerMask ledgeLayer;
+    public LayerMask groundLayer;
     [Header("Action Values")]
     public float vaultingSpeed=1.5f;
     public float resetTimeVault=1;
@@ -68,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
     private bool getsInput;
 
     private bool frozen;
+
+    private bool lader;
 
     private bool lerpValueOn;
     private bool freezeRot;
@@ -270,6 +273,17 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0f, 0.25f, 0.75f)), -transform.up.normalized, Color.red,0.2f);
+        RaycastHit groundCheck;
+        if (lader&&Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0f, 0.25f, 0.25f)), -transform.up, out groundCheck,0.2f,groundLayer))
+        {
+            print("poepo");
+            ResetValues();
+        }
+        if (!lader && wc.laderbool)
+        {
+            StartLader();
+        }
     }
     #endregion
     #region playerinput
@@ -313,13 +327,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vault();
             }
-            else if(wc.medium&&!wc.vault && !ledge&&!sliding&& !cooldownActionAftherLedge && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+            else if(wc.medium&&!wc.vault && !ledge&&!sliding&& !cooldownActionAftherLedge && isGrounded && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
             {
                      MediumWall();
                  }
-            else if (wc.large && !ledge&&!sliding && !cooldownActionAftherLedge && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+            else if (wc.large && !ledge&&!sliding && !cooldownActionAftherLedge &&isGrounded&& !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
                  { 
@@ -526,7 +540,7 @@ public class PlayerMovement : MonoBehaviour
                 transform.Translate(jumpVec * Time.deltaTime * runningSpeed);
             }
         }
-        else if (!ledge && !balancebar && wc.laderbool && !isLedgeClimbing)
+        else if (!ledge && !balancebar && wc.laderbool && !isLedgeClimbing&&lader)
         {
             if (im.forwardPressed)
             {
@@ -673,6 +687,10 @@ public class PlayerMovement : MonoBehaviour
     {
         canLedge = true;
     }
+    public void StartLader()
+    {
+        lader = true;
+    }
     public void BalancingBar()
     {
         freezeRot = true;
@@ -779,6 +797,7 @@ public class PlayerMovement : MonoBehaviour
         playerRB.isKinematic = true;
         lerpValueOn = false;
         rb.useGravity = true;
+        rb.isKinematic = false;
         freezeRot = false;
         ledge = false;
         gotYValue = false;
@@ -787,6 +806,7 @@ public class PlayerMovement : MonoBehaviour
         isClimable = false;
         isLedgeClimbing = false;
         isCliming = false;
+        lader = false;
 
         IKHP.useFootIK = false;
         wc.balanceBegin = false;
@@ -818,6 +838,9 @@ public class PlayerMovement : MonoBehaviour
 
         //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), transform.right, Color.blue, 0.5f);//wall detection
         //Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.25f)), -transform.right, Color.blue, 0.5f);
+
+        //lader ground detection
+       // Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 0.25f, 1)), -transform.up, Color.magenta,0.2f);
     }
     #endregion
 }
