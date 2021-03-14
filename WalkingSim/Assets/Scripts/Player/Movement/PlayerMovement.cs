@@ -749,7 +749,7 @@ public class PlayerMovement : MonoBehaviour
             cooldownActionAftherLedge = true;
             action = true;
 
-            transform.localPosition = forwardHit.point - new Vector3(0, handRayCastPivot.position.y, 0);
+            transform.localPosition = forwardHit.point - new Vector3(0, handRayCastPivot.localPosition.y, 0);
             Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
 
             transform.rotation = rotation;
