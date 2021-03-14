@@ -4,7 +4,6 @@ using UnityEngine;
 public class WallCollision : MonoBehaviour
 {
     [Header("bools to check")]
-    public bool large;
     public bool medium;
     public bool vault;
     public bool ledge;
@@ -17,7 +16,6 @@ public class WallCollision : MonoBehaviour
     [Header("Pivot Transforms")]
     public Transform destenation;
 
-    LargeWall largewall = null;
     MediumWall mediumwall = null;
     VaultWall vaultwall = null;
     Ledge legecol = null;
@@ -27,12 +25,6 @@ public class WallCollision : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        largewall = other.gameObject.GetComponent<LargeWall>();
-        if (largewall != null)
-        {
-            large = true;
-            destenation = other.gameObject.GetComponent<LargeWall>().destenation;
-        }
         vaultwall = other.gameObject.GetComponent<VaultWall>();
         if (vaultwall != null)
         {
@@ -71,11 +63,6 @@ public class WallCollision : MonoBehaviour
     }
     public void OnTriggerExit(Collider other)
     {
-        largewall = other.gameObject.GetComponent<LargeWall>();
-        if (largewall != null)
-        {
-            large = false;
-        }
         mediumwall = other.gameObject.GetComponent<MediumWall>();
         if (mediumwall != null)
         {
