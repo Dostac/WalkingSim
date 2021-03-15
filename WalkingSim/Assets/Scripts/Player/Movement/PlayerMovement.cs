@@ -324,7 +324,7 @@ public class PlayerMovement : MonoBehaviour
                         }
                         else
                         {
-                            if (im.leftPressed && Input.GetKey("space"))
+                            if (im.leftPressed && Input.GetButton("Jump"))
                             {
                                 Quaternion rotation = Quaternion.LookRotation(-rightSideHit.normal, Vector3.up);
                                 transform.rotation = rotation;
@@ -344,7 +344,7 @@ public class PlayerMovement : MonoBehaviour
                         }
                         else
                         {
-                            if (im.rightPressed && Input.GetKey("space"))
+                            if (im.rightPressed && Input.GetButton("Jump"))
                             {
                                 Quaternion rotation = Quaternion.LookRotation(-leftSideHit.normal, Vector3.up);
                                 transform.rotation = rotation;
@@ -397,7 +397,7 @@ public class PlayerMovement : MonoBehaviour
     public void PlayerInput()
     {
         RaycastHit LedgeClimbSpace;
-        if (Input.GetKeyDown("c"))
+        if (Input.GetButtonDown("C"))
         {
             if (isGrounded && wc.balancingBar)
             {
@@ -413,7 +413,7 @@ public class PlayerMovement : MonoBehaviour
                 Slide();
             }
         }
-        if (Input.GetKey("space") && ledge && im.forwardPressed && isClimable)
+        if (Input.GetButton("Jump") && ledge && im.forwardPressed && isClimable)
         {
             //two raycast forward and up to check if there is a object blocking the climb
             if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f)
@@ -422,7 +422,7 @@ public class PlayerMovement : MonoBehaviour
                 LedgeCLimb();
             }
         }
-        else if (Input.GetKey("space") && ledge && im.backwardsPressed)
+        else if (Input.GetButton("Jump") && ledge && im.backwardsPressed)
         {
             ResetValues();
             Invoke("LedgeGrabBool", 1);
@@ -563,7 +563,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    if (im.rightPressed && Input.GetKey("space"))
+                    if (im.rightPressed && Input.GetButton("Jump"))
                     {
                         if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), transform.right, out LedgeCheckWallLeft, 0.5f, ledgeLayer))//right
                         {
@@ -590,7 +590,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    if (im.leftPressed && Input.GetKey("space"))
+                    if (im.leftPressed && Input.GetButton("Jump"))
                     {
                         if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), -transform.right, out LedgeCheckWallLeft, 0.5f, ledgeLayer))
                         {
