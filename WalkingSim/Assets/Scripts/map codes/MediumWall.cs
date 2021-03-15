@@ -1,13 +1,20 @@
 using UnityEngine;
 public class MediumWall : MonoBehaviour
 {
+    #region public componants
     [Header("for other script")]
+    [Tooltip("the destentation wall detection wil get and then playermovement")]
     public Transform destenation;
     [Header("Pivot Transforms")]
+    [Tooltip("begin transform position check if it is the right position ")]
     public Transform beginPivot;
+    [Tooltip("end transform position check if it is the right position ")]
     public Transform endPivot;
-
+    #endregion
+    #region private componants
     private GameObject player;
+    #endregion
+    #region checking player position
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -27,4 +34,5 @@ public class MediumWall : MonoBehaviour
             destenation = beginPivot;
         }
     }
+    #endregion
 }

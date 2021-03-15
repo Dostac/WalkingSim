@@ -1,13 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public class LastCheckPoint : MonoBehaviour
 {
-    //public
+    #region public componants
+    [Tooltip("checkpointmanager")]
     public CheckPointManager cpm;
-    public bool canBeTriggert = false;
-    //private
+    [Space(5)]
+    [Tooltip("a bool that gets checked ingame")]
+    public bool canBeTriggert = false;   
+    #endregion
+    #region private componants
     private bool achieved;
+    #endregion
+    #region colission
     private void OnTriggerEnter(Collider other)
     {
         if (canBeTriggert)
@@ -19,4 +23,5 @@ public class LastCheckPoint : MonoBehaviour
             }
         }
     }
+    #endregion
 }

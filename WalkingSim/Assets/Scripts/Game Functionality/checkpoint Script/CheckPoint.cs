@@ -1,13 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public class CheckPoint : MonoBehaviour
-{ 
-    //public
+{
+    #region public componants
+    [Tooltip("the checkpoint manager")]
     public CheckPointManager cpm;
-    public bool canBeTriggert=false;
-    //private
+    [Tooltip("dont touch this in code it checks if it can be triggert")]
+    public bool canBeTriggert = false;
+    #endregion
+    #region private componants
     private bool achieved;
+    #endregion
+    #region collision
     public void Add()
     {
         cpm.index++;
@@ -23,4 +26,5 @@ public class CheckPoint : MonoBehaviour
             }
         }
     }
+    #endregion
 }

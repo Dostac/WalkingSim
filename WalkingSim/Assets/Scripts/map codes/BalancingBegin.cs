@@ -1,7 +1,10 @@
 using UnityEngine;
 public class BalancingBegin : MonoBehaviour
 {
+    #region private componant
     private WallCollision wc;
+    #endregion
+    #region collision detection
     private void Start()
     {
         wc = GameObject.FindGameObjectWithTag("PlayerVisual").GetComponent<WallCollision>();
@@ -13,4 +16,5 @@ public class BalancingBegin : MonoBehaviour
             wc.balanceBegin = true;
         }
     }
+    #endregion
 }

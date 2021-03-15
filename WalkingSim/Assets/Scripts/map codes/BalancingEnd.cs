@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class BalancingEnd : MonoBehaviour
 {
+    #region private componant
     private WallCollision wc;
+    #endregion
+    #region colission detection
     private void Start()
     {
         wc = GameObject.FindGameObjectWithTag("PlayerVisual").GetComponent<WallCollision>();
@@ -16,4 +16,5 @@ public class BalancingEnd : MonoBehaviour
             wc.balanceEnd = true;
         }
     }
+    #endregion
 }

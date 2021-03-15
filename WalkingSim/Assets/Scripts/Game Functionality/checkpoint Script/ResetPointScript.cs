@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public class ResetPointScript : MonoBehaviour
 {
-    //public
+    #region public componants
+    [Tooltip("so you can see where it is and so other scripts can get it")]
     public Vector3 spawnPos;
+    [Tooltip("for testing and before building")]
     public bool setActieve, resetPos;
-    //private
+    #endregion
+    #region private componants
     private float posX, posY, posZ;
     private GameObject player;
-
+    #endregion
+    #region button void
     public void OnCheckPoint()
     {
         SetPosition();
@@ -17,6 +19,8 @@ public class ResetPointScript : MonoBehaviour
         GetPos();
         Respawn();
     }
+    #endregion
+    #region respawn function and save
     private void Start()
     {
         if (resetPos)
@@ -72,4 +76,5 @@ public class ResetPointScript : MonoBehaviour
         PlayerPrefs.SetFloat("posZ", 3.45f);
         spawnPos = new Vector3(posX, posY, posZ);
     }
-} 
+    #endregion
+}

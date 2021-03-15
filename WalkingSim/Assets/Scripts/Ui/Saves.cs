@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Saves : MonoBehaviour
 {
+    #region componants
+    [Tooltip("the value that it gets from a other script named (AudioManager)")]
     public List<float> audioSaves;
-
-    public void SaveEveryFuckingThing(float ooga1, float ooga2, float ooga3, float ooga4)
+    #endregion
+    #region the save
+    public void SaveEveryThink(float master, float sfx, float music, float ui)
     {
-        audioSaves[0] = ooga1;
-        audioSaves[1] = ooga2;
-        audioSaves[2] = ooga3;
-        audioSaves[3] = ooga4;
+        audioSaves[0] = master;
+        audioSaves[1] = sfx;
+        audioSaves[2] = music;
+        audioSaves[3] = ui;
 
         PlayerPrefs.SetFloat("mastervalue", audioSaves[0]);
         PlayerPrefs.SetFloat("sfxvalue", audioSaves[1]);
         PlayerPrefs.SetFloat("musicvalue", audioSaves[2]);
         PlayerPrefs.SetFloat("uivalue", audioSaves[3]);
     }
+    #endregion
 }

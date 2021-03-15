@@ -3,25 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 public class WallCollision : MonoBehaviour
 {
+    #region public componants
     [Header("bools to check")]
+    [Tooltip("bool that will be checked in an other script")]
     public bool medium;
+    [Tooltip("bool that will be checked in an other script")]
     public bool vault;
+    [Tooltip("bool that will be checked in an other script")]
     public bool ledge;
+    [Tooltip("bool that will be checked in an other script")]
     public bool balancingBar;
+    [Tooltip("bool that will be checked in an other script")]
     public bool balanceBegin;
+    [Tooltip("bool that will be checked in an other script")]
     public bool balanceEnd;
+    [Tooltip("bool that will be checked in an other script")]
     public bool laderbool;
-    public bool hop;
-    public bool isHopping;
-    [Header("Pivot Transforms")]
+    [Space(10)]
+    [Tooltip("the destenation that the code wil set and the playermovement wil get")]
     public Transform destenation;
-
-    MediumWall mediumwall = null;
-    VaultWall vaultwall = null;
-    Ledge legecol = null;
-    BalancingBar balancB = null;
-    Lader lader = null;
-
+    #endregion
+    #region private componants
+    private MediumWall mediumwall = null;
+    private VaultWall vaultwall = null;
+    private Ledge legecol = null;
+    private BalancingBar balancB = null;
+    private Lader lader = null;
+    #endregion
+    #region collision
     public void OnTriggerEnter(Collider other)
     {
         vaultwall = other.gameObject.GetComponent<VaultWall>();
@@ -90,4 +99,5 @@ public class WallCollision : MonoBehaviour
             ledge = true;
         }
     }
+    #endregion
 }

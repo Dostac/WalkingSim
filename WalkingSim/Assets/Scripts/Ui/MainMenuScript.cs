@@ -2,42 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using TMPro;
 public class MainMenuScript : MonoBehaviour
 {
-    public GameObject options, credits, mainMenu, controlls,conRes;
-    Resolution[] resolutions;
-    public TMP_Dropdown resolutionDropDown;
+    #region componants
+    [Header("Ui canvases")]
+    [Tooltip("Get the componant ui canvas/ empty object where the main menu is under")]
+    public GameObject mainMenu;
+    [Space(1)]
+    [Tooltip("Get the componant ui canvas/ empty object where the options is under")]
+    public GameObject options;
+    [Space(1)]
+    [Tooltip("Get the componant ui canvas/ empty object where the credits is under")]
+    public GameObject credits;
+    [Space(1)]
+    [Tooltip("Get the componant ui canvas/ empty object where the controlls is under")]
+    public GameObject controlls;
+    [Space(1)]
+    [Tooltip("Get the componant ui canvas/ empty object where the contiune/reset is under")]
+    public GameObject conRes;
+    #endregion
     public void Start()
     {
-        resolutions = Screen.resolutions;
-
-        resolutionDropDown.ClearOptions();
-
-        List<string> options = new List<string>();
-        int currentResolutionIndex = 0;
-        for (int i = 0; i < resolutions.Length; i++)
-        {
-            string option = resolutions[i].width + "x" + resolutions[i].height;
-            options.Add(option);
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
-            {
-                currentResolutionIndex = i;
-            }
-        }
-        resolutionDropDown.AddOptions(options);
-        resolutionDropDown.value = currentResolutionIndex;
-        resolutionDropDown.RefreshShownValue();
-
         Main();
     }
-    public void SetResolution(int resolutionIndex)
-    {
-        Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-    }
+    #region button functions
     public void QuitGame()
     {
         Application.Quit();
@@ -72,6 +60,8 @@ public class MainMenuScript : MonoBehaviour
         UiOff();
         controlls.SetActive(true);
     }
+    #endregion
+    #region ui set active clear void
     public void UiOff()
     {
         mainMenu.SetActive(false);
@@ -80,12 +70,5 @@ public class MainMenuScript : MonoBehaviour
         controlls.SetActive(false);
         conRes.SetActive(false);
     }
-    public void SetFullScreen(bool isFullscreen)
-    {
-        Screen.fullScreen = isFullscreen;
-    }
-    public void SetQuality(int qualityIndex)
-    {
-        QualitySettings.SetQualityLevel(qualityIndex);
-    }
+    #endregion
 }

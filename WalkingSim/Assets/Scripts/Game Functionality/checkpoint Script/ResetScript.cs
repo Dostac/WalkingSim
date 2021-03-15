@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class ResetScript : MonoBehaviour
 {
+    #region private componants
     private ResetPointScript resetPointHolder;
+    #endregion
+    #region colision
     private void Start()
     {
         resetPointHolder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ResetPointScript>();
@@ -16,4 +16,5 @@ public class ResetScript : MonoBehaviour
             resetPointHolder.Respawn();
         }
     }
+    #endregion
 }
