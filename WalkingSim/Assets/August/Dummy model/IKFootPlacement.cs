@@ -26,9 +26,7 @@ public class IKFootPlacement : MonoBehaviour
 
             // Set the weights of left and right feet to the current value defined by the curve in our animations.
             anim.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
-            anim.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1f);
             anim.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
-            anim.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1f);
 
             // Left Foot
             RaycastHit hit;

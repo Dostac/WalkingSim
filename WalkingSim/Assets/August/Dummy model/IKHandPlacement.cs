@@ -113,8 +113,10 @@ public class IKHandPlacement : MonoBehaviour
         {
             ///1234
             print("koek");
+            //Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
+            //Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
             //Left Hand IK Check
-            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), out LHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, out LHit, 1f, layers))
             {
                 Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
                 lookAt = lookAt.y < 0 ? -lookAt : lookAt;
@@ -310,6 +312,9 @@ public class IKHandPlacement : MonoBehaviour
         //ledge grab
         Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), Color.yellow);
         Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), Color.blue);
+
+        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
+        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
 
         //wallrun      
         //hands
