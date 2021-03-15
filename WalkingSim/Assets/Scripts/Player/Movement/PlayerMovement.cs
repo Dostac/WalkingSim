@@ -93,6 +93,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Action Values")]
     [Tooltip("Reset time for actions")]
     public float resetTimeVault = 1;
+    [Space(5)]
+    [Range(0.0005f,0.25f)][Tooltip("Ledge Offset this is the distance between the ledge and the player")]
+    public float ledgeOffSet = 0.15f;
     [Space(10)]
     [Tooltip("This is a bool that wil be checked in a other code")]
     public bool ledge;
@@ -326,6 +329,7 @@ public class PlayerMovement : MonoBehaviour
                                 Quaternion rotation = Quaternion.LookRotation(-rightSideHit.normal, Vector3.up);
                                 transform.rotation = rotation;
                                 transform.position = Vector3.Lerp(transform.position, rightSideHit.point, speed * Time.deltaTime);
+                                transform.position -= transform.forward * ledgeOffSet;
                             }
                         }
                     }
@@ -345,6 +349,7 @@ public class PlayerMovement : MonoBehaviour
                                 Quaternion rotation = Quaternion.LookRotation(-leftSideHit.normal, Vector3.up);
                                 transform.rotation = rotation;
                                 transform.position = Vector3.Lerp(transform.position, leftSideHit.point, speed * Time.deltaTime);
+                                transform.position -= transform.forward * ledgeOffSet;
                             }
                         }
                     }
@@ -759,6 +764,7 @@ public class PlayerMovement : MonoBehaviour
 
             transform.rotation = rotation;
             player.transform.rotation = rotation;
+            transform.position -= transform.forward * ledgeOffSet;
 
             Invoke("LedgeClimbBool", ledgeClimbBoolInvoke);
         }
