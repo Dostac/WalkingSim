@@ -111,9 +111,10 @@ public class IKHandPlacement : MonoBehaviour
         }
         else if (pm.ledge && !pm.isWallRunning && !presentatie)
         {
+            ///1234
             print("koek");
             //Left Hand IK Check
-            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), out LHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), out LHit, 1f, layers))
             {
                 Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
                 lookAt = lookAt.y < 0 ? -lookAt : lookAt;
@@ -134,7 +135,7 @@ public class IKHandPlacement : MonoBehaviour
             }
 
             //Right Hand IK Check
-            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), out RHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), out RHit, 1f, layers))
             {
 
                 Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
@@ -158,10 +159,6 @@ public class IKHandPlacement : MonoBehaviour
         }
         else if (!pm.ledge && pm.isWallRunning)
         {
-            //wallrunning handslide 
-            //Left Hand IK Check
-
-
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), out LHit, 1f, layers))
             {
                 Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
@@ -297,7 +294,7 @@ public class IKHandPlacement : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
-
+        //678
 		//Left Hand IK Visual Ray
 		Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), Color.green);
 
@@ -311,17 +308,8 @@ public class IKHandPlacement : MonoBehaviour
 		Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.5f, 0.5f, 0.0f)), transform.forward, Color.red);
 
         //ledge grab
-
-        //Left Hand IK Visual Ray
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), Color.green);
-
-        //Right Hand IK Visual Ray
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), Color.green);
-
-        //ledge
-        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), Color.yellow);
-        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.05f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), Color.yellow);
-
+        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), Color.yellow);
+        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), Color.blue);
 
         //wallrun      
         //hands
@@ -340,8 +328,6 @@ public class IKHandPlacement : MonoBehaviour
 
 	void OnAnimatorIK()
 	{
-
-		//Setting up IK Weights and positions
 		if (useIK)
 		{
 
