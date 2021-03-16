@@ -217,14 +217,92 @@ public class PlayerMovement : MonoBehaviour
         PlayerRotUpdate();
         Movement();
     }
+    #region playerinput (update)
+    public void PlayerInput()
+    {
+        inputX = Input.GetAxisRaw("Horizontal");
+        inputZ = Input.GetAxisRaw("Vertical");
+
+        RaycastHit LedgeClimbSpace;
+        if (Input.GetButtonDown("C"))
+        {
+            if (isGrounded && wc.balancingBar)
+            {
+                BalancingBar();
+            }
+            else if (!balancebar && isGrounded && !sliding && !im.runPressed)
+            {
+                isCrouch = !isCrouch;
+                Crouch();
+            }
+            else if (!balancebar && !sliding && im.runPressed && isGrounded)
+            {
+                Slide();
+            }
+        }
+        if (Input.GetButton("Jump") && ledge && im.forwardPressed && isClimable)
+        {
+            //two raycast forward and up to check if there is a object blocking the climb
+            if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
+            {
+                LedgeCLimb();
+            }
+        }
+        else if (Input.GetButton("Jump") && ledge && im.backwardsPressed)
+        {
+            ResetValues();
+            Invoke("LedgeGrabBool", 1);
+            Invoke("ResetLedge", ledeReset);
+        }
+        if (im.spacebar)
+        {
+            if (wc.vault && isGrounded && !ledge && !cooldownActionAftherLedge)
+            {
+                Vault();
+            }
+            else if (wc.medium && !wc.vault && !ledge && !sliding && !cooldownActionAftherLedge && isGrounded && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
+                 {
+                MediumWall();
+                 }
+            else if (!ledge && !lerpValueOn)
+            {
+                Jump();
+            }
+        }
+        if (!isCrouch && !im.forwardPressed && !im.backwardsPressed && !im.leftPressed && !im.rightPressed)
+        {
+            getsInput = false;
+        }
+        else
+        {
+            getsInput = true;
+        }
+        if (im.runPressed && !sliding && !isCrouch && getsInput)
+        {
+            movementSpeed = runningSpeed;
+        }
+        if (!im.runPressed && !sliding && !isCrouch && getsInput)
+        {
+            movementSpeed = walkingSpeed;
+        }
+        if (!im.runPressed && !sliding && isCrouch && getsInput)
+        {
+            movementSpeed = crouchingSpeed;
+        }
+        if (sliding && !getsInput)
+        {
+            movementSpeed = walkingSpeed / 2;
+        }
+    }
+    #endregion
     #region player rotation
     void PlayerRotation()
     {
         if (!freezeRot)
         {
-            inputX = Input.GetAxisRaw("Horizontal");
-            inputZ = Input.GetAxisRaw("Vertical");
-
             var forward = cam.transform.forward;
             var right = cam.transform.right;
 
@@ -246,10 +324,6 @@ public class PlayerMovement : MonoBehaviour
     }
     public void PlayerRotUpdate()
     {
-        speed = new Vector2(inputX, inputZ).sqrMagnitude;
-        inputX = Input.GetAxisRaw("Horizontal");
-        inputZ = Input.GetAxisRaw("Vertical");
-
         speed = new Vector2(inputX, inputZ).sqrMagnitude;
 
         if (speed > allowPlayerRotation)
@@ -393,84 +467,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
-    #region playerinput (update)
-    public void PlayerInput()
-    {
-        RaycastHit LedgeClimbSpace;
-        if (Input.GetButtonDown("C"))
-        {
-            if (isGrounded && wc.balancingBar)
-            {
-                BalancingBar();
-            }
-            else if (!balancebar && isGrounded && !sliding && !im.runPressed)
-            {
-                isCrouch = !isCrouch;
-                Crouch();
-            }
-            else if (!balancebar && !sliding && im.runPressed && isGrounded)
-            {
-                Slide();
-            }
-        }
-        if (Input.GetButton("Jump") && ledge && im.forwardPressed && isClimable)
-        {
-            //two raycast forward and up to check if there is a object blocking the climb
-            if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f)
-                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
-            {
-                LedgeCLimb();
-            }
-        }
-        else if (Input.GetButton("Jump") && ledge && im.backwardsPressed)
-        {
-            ResetValues();
-            Invoke("LedgeGrabBool", 1);
-            Invoke("ResetLedge", ledeReset);
-        }
-        if (im.spacebar)
-        {
-            if (wc.vault && isGrounded && !ledge && !cooldownActionAftherLedge)
-            {
-                Vault();
-            }
-            else if (wc.medium && !wc.vault && !ledge && !sliding && !cooldownActionAftherLedge && isGrounded && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
-                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
-                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
-                 {
-                MediumWall();
-                 }
-            else if (!ledge && !lerpValueOn)
-            {
-                Jump();
-            }
-        }
-        if (!isCrouch && !im.forwardPressed && !im.backwardsPressed && !im.leftPressed && !im.rightPressed)
-        {
-            getsInput = false;
-        }
-        else
-        {
-            getsInput = true;
-        }
-        if (im.runPressed && !sliding && !isCrouch && getsInput)
-        {
-            movementSpeed = runningSpeed;
-        }
-        if (!im.runPressed && !sliding && !isCrouch && getsInput)
-        {
-            movementSpeed = walkingSpeed;
-        }
-        if (!im.runPressed && !sliding && isCrouch && getsInput)
-        {
-            movementSpeed = crouchingSpeed;
-        }
-        if (sliding && !getsInput)
-        {
-            movementSpeed = walkingSpeed / 2;
-        }
-    }
-    #endregion
     #region wallrun
     public void CheckForWall()
     {
@@ -536,7 +532,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!ledge && !balancebar && !wc.laderbool)
         {
-            var movementVec = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+            var movementVec = new Vector3(inputX, 0, inputZ).normalized;
             var jumpVec = new Vector3(0, inputY, 0);
             if (!sliding && !lerpValueOn && !isLedgeClimbing)
             {
@@ -553,7 +549,7 @@ public class PlayerMovement : MonoBehaviour
         {
             RaycastHit LedgeCheckWallLeft;
             RaycastHit LedgeCheckWallRight;
-            float ledgeInput = (Input.GetAxisRaw("Horizontal"));
+            float ledgeInput = inputX;
             Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), transform.right, Color.green, 0.1f);
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, -0.5f)), transform.right, out LedgeCheckWallRight, 0.5f))//right
             {
@@ -609,7 +605,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
             var movementVec = new Vector3(ledgeInput, 0, 0).normalized;
-            anim.SetFloat("ledgeVelocity", (Input.GetAxisRaw("Horizontal") + 1));
+            anim.SetFloat("ledgeVelocity", inputX + 1);
             if (!gotYValue)
             {
                 GetYAxees();
@@ -626,8 +622,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 ResetValues();
             }
-            var movementVec = new Vector3(0, 0, Input.GetAxisRaw("Vertical")).normalized;
-            anim.SetFloat("balancingVelocity", Input.GetAxisRaw("Vertical") + 1);
+            var movementVec = new Vector3(0, 0, inputZ).normalized;
+            anim.SetFloat("balancingVelocity", inputZ + 1);
             var jumpVec = new Vector3(0, inputY, 0);
             if (!sliding && !lerpValueOn && !isLedgeClimbing)
             {
@@ -749,6 +745,8 @@ public class PlayerMovement : MonoBehaviour
         {
             ResetAnim();
             anim.SetBool("isLedgeGrabbing", true);
+
+            rb.velocity=new Vector3(0,rb.velocity.y,0);
 
             notTrigger.enabled = false;
             cooldownActionAftherLedge = true;

@@ -113,10 +113,10 @@ public class IKHandPlacement : MonoBehaviour
         {
             ///1234
             print("koek");
-            //Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
-            //Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
+            Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0, 0.0f)), transform.forward, Color.magenta);
+            Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0, 0.0f)), transform.forward, Color.blue);
             //Left Hand IK Check
-            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, out LHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0, 0.0f)), transform.forward, out LHit, 1f, layers))
             {
                 Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
                 lookAt = lookAt.y < 0 ? -lookAt : lookAt;
@@ -126,7 +126,7 @@ public class IKHandPlacement : MonoBehaviour
 
                 //Setting leftHandPos to raycast hit points and subtracting the offsets
                 leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
-                //leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
+                leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
                 leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
                 print("gsg");
             }
@@ -137,7 +137,7 @@ public class IKHandPlacement : MonoBehaviour
             }
 
             //Right Hand IK Check
-            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), out RHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0, 0.0f)), transform.forward, out RHit, 1f, layers))
             {
 
                 Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
@@ -149,7 +149,7 @@ public class IKHandPlacement : MonoBehaviour
 
                 //Setting rightHandPos to raycast hit points and subtracting the offsets
                 rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
-                //rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
+                rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
                 rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
                 print("gas");
             }
@@ -296,39 +296,39 @@ public class IKHandPlacement : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
-        //678
-		//Left Hand IK Visual Ray
-		Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), Color.green);
+  //      //678
+		////Left Hand IK Visual Ray
+		//Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(-0.25f, -1.0f, 0.0f)), Color.green);
 
-		//Right Hand IK Visual Ray
-		Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), Color.green);
+		////Right Hand IK Visual Ray
+		//Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.0f, 1.5f, 0.5f)), transform.TransformDirection(new Vector3(0.25f, -1.0f, 0.0f)), Color.green);
 
-		//Left Foot IK Visual Ray
-		Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.5f, 0.5f, 0.0f)), transform.forward, Color.red);
+		////Left Foot IK Visual Ray
+		//Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.5f, 0.5f, 0.0f)), transform.forward, Color.red);
 
-		//Right Foot IK Visual Ray
-		Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.5f, 0.5f, 0.0f)), transform.forward, Color.red);
+		////Right Foot IK Visual Ray
+		//Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.5f, 0.5f, 0.0f)), transform.forward, Color.red);
 
-        //ledge grab
-        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), Color.yellow);
-        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), Color.blue);
+  //      //ledge grab
+  //      Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(-0.4f, -1.0f, 0.0f)), Color.yellow);
+  //      Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.0f, 0.75f, 0.4f)), transform.TransformDirection(new Vector3(0.4f, -1.0f, 0.0f)), Color.blue);
 
-        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
-        Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
+  //      Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
+  //      Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0.2f, 0.0f)), transform.forward, Color.red);
 
-        //wallrun      
-        //hands
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.green);
+  //      //wallrun      
+  //      //hands
+  //      Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(-0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.green);
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.green);
-        //feets
+  //      Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.green);
+  //      //feets
 
-        //right wall
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0f, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.red);
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.red);
-        //leftwall
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.red);
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.red);
+  //      //right wall
+  //      Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0f, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.red);
+  //      Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), Color.red);
+  //      //leftwall
+  //      Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.25f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.red);
+  //      Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0.45f, 0.4f)), transform.TransformDirection(new Vector3(-1, -2f, 0.0f)), Color.red);
     }
 
 	void OnAnimatorIK()

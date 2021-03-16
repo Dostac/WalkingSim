@@ -25,8 +25,10 @@ public class IKFootPlacement : MonoBehaviour
         { // Only carry out the following code if there is an Animator set.
 
             // Set the weights of left and right feet to the current value defined by the curve in our animations.
-            anim.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
-            anim.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
+            anim.SetIKPositionWeight(AvatarIKGoal.LeftFoot, anim.GetFloat("IKLeftFootWeight"));
+            anim.SetIKRotationWeight(AvatarIKGoal.LeftFoot, anim.GetFloat("IKLeftFootWeight"));
+            anim.SetIKPositionWeight(AvatarIKGoal.RightFoot, anim.GetFloat("IKRightFootWeight"));
+            anim.SetIKRotationWeight(AvatarIKGoal.RightFoot, anim.GetFloat("IKRightFootWeight"));
 
             // Left Foot
             RaycastHit hit;
@@ -36,14 +38,14 @@ public class IKFootPlacement : MonoBehaviour
             {
 
                 // We're only concerned with objects that are tagged as "Walkable"
-                if (hit.transform.CompareTag("Walkable") || hit.transform.CompareTag("WallRunWall"))
+                if (hit.transform.tag == "Walkable")
                 {
 
                     Vector3 footPosition = hit.point; // The target foot position is where the raycast hit a walkable object...
                     footPosition.y += DistanceToGround; // ... taking account the distance to the ground we added above.
-                    anim.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);                    
-                    Vector3 forward = Vector3.ProjectOnPlane(transform.forward, hit.normal);
-                    anim.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(forward, hit.normal));
+                    anim.SetIKPosition(AvatarIKGoal.LeftFoot, footPosition);
+                    anim.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+
                 }
 
             }
@@ -53,14 +55,13 @@ public class IKFootPlacement : MonoBehaviour
             if (Physics.Raycast(ray, out hit, DistanceToGround + 1f, layerMask))
             {
 
-                if (hit.transform.CompareTag("Walkable") || hit.transform.CompareTag("WallRunWall"))
+                if (hit.transform.tag == "Walkable")
                 {
 
                     Vector3 footPosition = hit.point;
                     footPosition.y += DistanceToGround;
                     anim.SetIKPosition(AvatarIKGoal.RightFoot, footPosition);
-                    Vector3 forward = Vector3.ProjectOnPlane(transform.forward, hit.normal);
-                    anim.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(forward, hit.normal));
+                    anim.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));
 
                 }
 
