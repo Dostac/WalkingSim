@@ -113,10 +113,10 @@ public class IKHandPlacement : MonoBehaviour
         {
             ///1234
             print("koek");
-            Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0, 0.0f)), transform.forward, Color.magenta);
-            Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0, 0.0f)), transform.forward, Color.blue);
+            Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0f, 0.0f)), transform.forward, Color.magenta);
+            Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0f, 0.0f)), transform.forward, Color.blue);
             //Left Hand IK Check
-            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0, 0.0f)), transform.forward, out LHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0.2f, 0.0f)), transform.forward, out LHit, 1f, layers))
             {
                 Vector3 lookAt = Vector3.Cross(-LHit.normal, transform.right);
                 lookAt = lookAt.y < 0 ? -lookAt : lookAt;
@@ -137,7 +137,7 @@ public class IKHandPlacement : MonoBehaviour
             }
 
             //Right Hand IK Check
-            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0, 0.0f)), transform.forward, out RHit, 1f, layers))
+            if (Physics.Raycast(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0.2f, 0.0f)), transform.forward, out RHit, 1f, layers))
             {
 
                 Vector3 lookAt = Vector3.Cross(-RHit.normal, transform.right);
