@@ -457,7 +457,7 @@ Material:
     - _ShiverDirectionality: 0.5
     - _ShiverDrag: 0.2
     - _Smoothness: 0.121
-    - _SmoothnessRemapMax: 0.20275086
+    - _SmoothnessRemapMax: 0.49031666
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
     - _SmoothnessViewAngleOffset: 0
@@ -560,7 +560,7 @@ Material:
     - _PeeledBarkUVRangeScale: {r: 0, g: 1, b: 2, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
+    - _ThicknessRemap: {r: 0, g: 0.16970441, b: 0, a: 0}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
