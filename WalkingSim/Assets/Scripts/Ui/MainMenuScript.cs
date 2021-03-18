@@ -24,6 +24,7 @@ public class MainMenuScript : MonoBehaviour
     public void Start()
     {
         Main();
+        Time.timeScale = 1;
     }
     #region button functions
     public void QuitGame()

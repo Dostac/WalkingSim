@@ -12,7 +12,9 @@ public class LoadingScreen : MonoBehaviour
     public int scene;
     [Space(5)]
     [Tooltip("this text is gonna be the text it says how mutch procent the loading progress is")]
-    public TMP_Text text;
+    public TMP_Text progressText;
+    [Tooltip("this text is gonna be the text that is the loading...")]
+    public TMP_Text loadingText;
     [Space(3)]
     [Tooltip("this slider is gonna be the slider it says how mutch procent the loading progress is")]
     public Slider slider;
@@ -33,13 +35,34 @@ public class LoadingScreen : MonoBehaviour
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(scene);
         loadingScreen.SetActive(true);
+        Loading();
         while (!operation.isDone)
         {
             float progress = Mathf.Clamp01(operation.progress / .9f);
             slider.value = progress;
-            text.text = progress * 100f + "%";
+            progressText.text = progress * 100f + "%";
             yield return null;
         }
+    }
+    public void Loading()
+    {
+        loadingText.text = ("loading");
+        Invoke("LoadingDot", 0.25f);
+    }
+    public void LoadingDot()
+    {
+        loadingText.text = ("loading.");
+        Invoke("LoadingDotDot", 0.25f);
+    }
+    public void LoadingDotDot()
+    {
+        loadingText.text = ("loading..");
+        Invoke("LoadingDotDotDot", 0.25f);
+    }
+    public void LoadingDotDotDot()
+    {
+        loadingText.text = ("loading...");
+        Invoke("Loading", 0.25f);
     }
     #endregion
 }
