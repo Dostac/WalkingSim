@@ -111,8 +111,6 @@ public class IKHandPlacement : MonoBehaviour
         }
         else if (pm.ledge && !pm.isWallRunning && !presentatie)
         {
-            ///1234
-            print("koek");
             Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0f, 0.0f)), transform.forward, Color.magenta);
             Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0f, 0.0f)), transform.forward, Color.blue);
             //Left Hand IK Check
@@ -128,7 +126,6 @@ public class IKHandPlacement : MonoBehaviour
                 leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
                 leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
                 leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
-                print("gsg");
             }
             else
             {
@@ -151,7 +148,6 @@ public class IKHandPlacement : MonoBehaviour
                 rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
                 rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
                 rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
-                print("gas");
             }
             else
             {
