@@ -8,6 +8,7 @@ public class OptionMenu : MonoBehaviour
     //public
     [Tooltip("Get the dropdown from the reselution")]
     public TMP_Dropdown resolutionDropDown;
+    public bool fullscreen;
     [Space(1)]
     //private
     private Resolution[] resolutions;
@@ -43,7 +44,16 @@ public class OptionMenu : MonoBehaviour
     }
     public void SetFullScreen(bool isFullscreen)
     {
-        Screen.fullScreen = isFullscreen;
+        fullscreen = !fullscreen;
+        isFullscreen = fullscreen;
+        if (isFullscreen)
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+        } 
     }
     public void SetQuality(int qualityIndex)
     {
