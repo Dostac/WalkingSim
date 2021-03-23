@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4613994357296956
 Transform:
@@ -98,7 +98,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4204930105589090
 Transform:
@@ -149,7 +149,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 4264736636875188}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -180,7 +180,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4264736636875188
 Transform:
@@ -232,7 +232,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -262,7 +262,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4069064991773546
 Transform:
@@ -271,7 +271,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1639350233275620}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -231.96594, y: 120.618004, z: -140.18814}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -290,16 +290,16 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: -0.04251337, y: 8.791641, z: -0.41721356}
   m_Size: 18.019287
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.25
+  - screenRelativeHeight: 0.6891776
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 23232327252326426}
     - renderer: {fileID: 23361710442102318}
-  - screenRelativeHeight: 0.01
+  - screenRelativeHeight: 0.05225444
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 23967460921841666}
@@ -321,7 +321,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4071774457194794
 Transform:
@@ -401,7 +401,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 58
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4776318189793086
 Transform:
@@ -433,7 +433,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 58
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4892780093831828
 Transform:

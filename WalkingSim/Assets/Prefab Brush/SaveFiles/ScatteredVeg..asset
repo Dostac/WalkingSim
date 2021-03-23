@@ -16,8 +16,6 @@ MonoBehaviour:
   prefabData:
   - prefab: {fileID: 1584198843794870, guid: 3dbf7e32b433b4b4f9ca4247821b0872, type: 3}
     selected: 1
-  - prefab: {fileID: 1547321089394726, guid: c2cf0ab48ed74a448a17217b33f6ba87, type: 3}
-    selected: 1
   paintType: 0
   brushSize: 2
   minBrushSize: 0.1
@@ -58,8 +56,8 @@ MonoBehaviour:
   maxZRotation: 0
   scaleType: 1
   scaleApplicationType: 0
-  minScale: 0.7
-  maxScale: 1
+  minScale: 1
+  maxScale: 1.5
   minXScale: 1
   maxXScale: 1
   minYScale: 1

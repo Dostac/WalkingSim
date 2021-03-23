@@ -190,11 +190,11 @@ Material:
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
     - _HeightAmplitude: 0.19999999
-    - _HeightCenter: 0.275
+    - _HeightCenter: 0.4
     - _HeightMapParametrization: 0
     - _HeightMax: 10
     - _HeightMin: -10
-    - _HeightOffset: 4.5
+    - _HeightOffset: 2
     - _HeightPoMAmplitude: 2
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5

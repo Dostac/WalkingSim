@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4190249152997356
 Transform:
@@ -101,7 +101,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4567514468850002
 Transform:
@@ -151,7 +151,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0.62898636
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -182,7 +182,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4439906523624924
 Transform:
@@ -234,7 +234,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -264,7 +264,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 122
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4389427005912090
 Transform:
@@ -293,19 +293,19 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: -0.48859167, y: 12.815919, z: 0.11692381}
   m_Size: 27.525045
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
   m_LODs:
   - screenRelativeHeight: 0.52187216
     fadeTransitionWidth: 0.1
     renderers:
     - renderer: {fileID: 23038765414645892}
-  - screenRelativeHeight: 0.1535381
+  - screenRelativeHeight: 0.15724659
     fadeTransitionWidth: 0.1
     renderers:
     - renderer: {fileID: 23919723375591536}
-  - screenRelativeHeight: 0.00958443
+  - screenRelativeHeight: 0.0492548
     fadeTransitionWidth: 0.1
     renderers:
     - renderer: {fileID: 23670863638950918}
