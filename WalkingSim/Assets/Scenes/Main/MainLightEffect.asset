@@ -123,7 +123,7 @@ MonoBehaviour:
     max: 1
   m_RayMaxIterations:
     m_OverrideState: 1
-    m_Value: 64
+    m_Value: 48
   m_RayLength:
     m_OverrideState: 0
     m_Value: 50
@@ -306,7 +306,7 @@ MonoBehaviour:
     max: 1
   m_SampleCount:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 8
     min: 4
     max: 64
 --- !u!114 &9030733118314902056
@@ -377,12 +377,12 @@ MonoBehaviour:
     m_Value: 0
   m_MaximumRadiusInPixels:
     m_OverrideState: 0
-    m_Value: 40
+    m_Value: 32
     min: 16
     max: 256
   m_BilateralUpsample:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
   m_DirectionCount:
     m_OverrideState: 0
     m_Value: 2
