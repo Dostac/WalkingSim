@@ -7,7 +7,18 @@ public class CheckPointEvents : MonoBehaviour
     [Tooltip("this only needs to get filed in when finish or close finish is used")]
     public GameObject finishUI;
     #endregion
+    #region private compants
+    private float speedRunTime;
+    private bool isSpeedRunnning;
+    #endregion
     #region events void
+    private void Update()
+    {
+        if (isSpeedRunnning)
+        {
+            speedRunTime += Time.deltaTime;
+        }
+    }
     public void Reload()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -21,6 +32,20 @@ public class CheckPointEvents : MonoBehaviour
     public void CloseFinish()
     {
         finishUI.SetActive(false);
+    }
+    public void StartSpeedRun()
+    {
+        isSpeedRunnning = true;
+    }
+    public void EndSpeedRun(string name)
+    {
+        isSpeedRunnning = false;
+        PlayerPrefs.SetFloat(name, speedRunTime);
+        Invoke("speedRunTime", 0.25f);
+    }
+    public void ResetTime()
+    {
+        speedRunTime = 0;
     }
     #endregion
 }

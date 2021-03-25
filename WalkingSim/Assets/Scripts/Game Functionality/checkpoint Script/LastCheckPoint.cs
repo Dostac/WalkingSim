@@ -6,10 +6,24 @@ public class LastCheckPoint : MonoBehaviour
     public CheckPointManager cpm;
     [Space(5)]
     [Tooltip("a bool that gets checked ingame")]
-    public bool canBeTriggert = false;   
+    public bool canBeTriggert = false;
+    [Space(3)]
+    [Tooltip("a bool that gets checked ingame")]
+    public bool lightOn;
     #endregion
     #region private componants
     private bool achieved;
+    private void Update()
+    {
+        if (!lightOn)
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+        else
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
+        }
+    }
     #endregion
     #region colission
     private void OnTriggerEnter(Collider other)
@@ -20,6 +34,7 @@ public class LastCheckPoint : MonoBehaviour
             {
                 cpm.Complete();
                 achieved = true;
+                lightOn = false;
             }
         }
     }

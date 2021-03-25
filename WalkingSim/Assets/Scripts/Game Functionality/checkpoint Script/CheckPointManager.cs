@@ -28,6 +28,7 @@ public class CheckPointManager : MonoBehaviour
         }
         else
         {
+            checkpoint[index].GetComponent<CheckPoint>().lightOn = true;
             checkpoint[index].GetComponent<CheckPoint>().canBeTriggert = true;
         }        
     }

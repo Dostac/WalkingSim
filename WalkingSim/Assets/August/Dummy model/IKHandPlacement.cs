@@ -4,9 +4,6 @@ using UnityEngine;
 public class IKHandPlacement : MonoBehaviour
 {
     [Header("Bools")]
-    public bool presentatie;
-
-
     public bool useIK = true;
 
 	public bool leftHandIK = false;
@@ -57,8 +54,8 @@ public class IKHandPlacement : MonoBehaviour
 
 		anim = GetComponent<Animator>();
 	}
-	void FixedUpdate()
-	{
+    private void OnAnimatorIK(int layerIndex)
+    {
 		RaycastHit LHit;
 		RaycastHit RHit;
 
@@ -80,6 +77,8 @@ public class IKHandPlacement : MonoBehaviour
                 leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
                 //leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
                 leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
+
+                anim.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.LookRotation(transform.forward, LHit.normal));
             }
             else
             {
@@ -102,6 +101,8 @@ public class IKHandPlacement : MonoBehaviour
                 rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
                 //rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
                 rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
+
+                anim.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward, RHit.normal));
             }
             else
             {
@@ -109,7 +110,7 @@ public class IKHandPlacement : MonoBehaviour
                 rightFootIK = false;
             }
         }
-        else if (pm.ledge && !pm.isWallRunning && !presentatie)
+        else if (pm.ledge && !pm.isWallRunning)
         {
             Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(-0.3f, 0f, 0.0f)), transform.forward, Color.magenta);
             Debug.DrawRay(handpos.position + transform.TransformDirection(new Vector3(0.3f, 0f, 0.0f)), transform.forward, Color.blue);
@@ -126,6 +127,8 @@ public class IKHandPlacement : MonoBehaviour
                 leftHandPos = LHit.point - transform.TransformDirection(leftHandOffset);
                 leftHandRot = Quaternion.FromToRotation(Vector3.forward, LHit.normal);
                 leftHandRot = Quaternion.LookRotation(LHit.point + lookAt, LHit.normal);
+
+                anim.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.LookRotation(transform.forward, LHit.normal));
             }
             else
             {
@@ -148,6 +151,8 @@ public class IKHandPlacement : MonoBehaviour
                 rightHandPos = RHit.point - transform.TransformDirection(rightHandOffset);
                 rightHandRot = Quaternion.FromToRotation(Vector3.forward, RHit.normal);
                 rightHandRot = Quaternion.LookRotation(RHit.point + lookAt, RHit.normal);
+
+                anim.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(transform.forward, RHit.normal));
             }
             else
             {
@@ -174,7 +179,6 @@ public class IKHandPlacement : MonoBehaviour
             {
                 leftHandIK = false;
             }
-
             //Right Hand IK Check
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.25f, 2.15f, 0.4f)), transform.TransformDirection(new Vector3(1, -2f, 0.0f)), out RHit, 1f, layers))
             {
@@ -205,7 +209,9 @@ public class IKHandPlacement : MonoBehaviour
                         leftFootIK = true;
 			            leftFootPos = LFHit.point - leftFootOffset;
 			            leftFootRot = (Quaternion.FromToRotation(Vector3.up, LFHit.normal)) * leftFootRotOffset;
-		            }
+
+                        anim.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, LFHit.normal));
+                    }
                     else
                     {
 			            leftFootIK = false;
@@ -218,7 +224,9 @@ public class IKHandPlacement : MonoBehaviour
                         rightFootIK = true;
 			            rightFootPos = RFHit.point - rightFootOffset;
 			            rightFootRot = (Quaternion.FromToRotation(Vector3.up, RFHit.normal)) * rightFootRotOffset;
-		            }
+
+                        anim.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, RFHit.normal));
+                    }
                     else
                     {
 			            rightFootIK = false;
@@ -234,6 +242,8 @@ public class IKHandPlacement : MonoBehaviour
                         leftFootIK = true;
                         leftFootPos = LFHit.point - leftFootOffset;
                         leftFootRot = (Quaternion.FromToRotation(Vector3.up, LFHit.normal)) * leftFootRotOffset;
+
+                        anim.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, LFHit.normal));
                     }
                     else
                     {
@@ -247,6 +257,8 @@ public class IKHandPlacement : MonoBehaviour
                         rightFootIK = true;
                         rightFootPos = RFHit.point - rightFootOffset;
                         rightFootRot = (Quaternion.FromToRotation(Vector3.up, RFHit.normal)) * rightFootRotOffset;
+
+                        anim.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, RFHit.normal));
                     }
                     else
                     {
@@ -351,7 +363,8 @@ public class IKHandPlacement : MonoBehaviour
 				anim.SetIKPositionWeight(AvatarIKGoal.RightHand, rightHandWeight);
 				anim.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
 
-				anim.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+
+                anim.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
 				anim.SetIKRotation(AvatarIKGoal.RightHand, rightHandRot);
 			}
 

@@ -20,6 +20,9 @@ public class MainMenuScript : MonoBehaviour
     [Space(1)]
     [Tooltip("Get the componant ui canvas/ empty object where the contiune/reset is under")]
     public GameObject conRes;
+    [Header("Sounds")]
+    public AudioSource hoverSound;
+    public AudioSource buttonPressedSound;
     #endregion
     public void Start()
     {
@@ -60,6 +63,16 @@ public class MainMenuScript : MonoBehaviour
     {
         UiOff();
         controlls.SetActive(true);
+    }
+    public void HoverSound()
+    {
+        buttonPressedSound.Stop();
+        hoverSound.Play();
+    }
+    public void PressedSound()
+    {
+        hoverSound.Stop();
+        buttonPressedSound.Play();
     }
     #endregion
     #region ui set active clear void
