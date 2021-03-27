@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 152241482}
   - component: {fileID: 152241480}
   - component: {fileID: 152241479}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: back
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 660953572}
   - component: {fileID: 660953570}
   - component: {fileID: 660953569}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: right
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -369,7 +369,7 @@ GameObject:
   - component: {fileID: 2104488757}
   - component: {fileID: 2104488755}
   - component: {fileID: 2104488754}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(1)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -496,7 +496,7 @@ GameObject:
   - component: {fileID: 7088958548487805718}
   - component: {fileID: 2416727286440395429}
   - component: {fileID: 5279215848989020967}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(9)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -1117,7 +1117,7 @@ GameObject:
   - component: {fileID: 4502552865273970089}
   - component: {fileID: 2617230002232199876}
   - component: {fileID: 2133023813976066474}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(11)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -1296,7 +1296,7 @@ GameObject:
   - component: {fileID: 3818153801538598480}
   - component: {fileID: 4729326239706365498}
   - component: {fileID: 4752643795767097038}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(14)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -1510,7 +1510,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 699881890928221604}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 87fa19748a37eb94ba7c5262c2ba2705, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -1810,7 +1810,7 @@ GameObject:
   - component: {fileID: 7973592049504750929}
   - component: {fileID: 4694313684807055004}
   - component: {fileID: 7762490500319339853}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(4)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -2787,7 +2787,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2551038086955372908}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 87fa19748a37eb94ba7c5262c2ba2705, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -3466,7 +3466,7 @@ GameObject:
   - component: {fileID: 3009276973500338220}
   - component: {fileID: 7813694145666645436}
   - component: {fileID: 1109782891229251959}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(8)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -3563,7 +3563,7 @@ GameObject:
   - component: {fileID: 8430583469563885419}
   - component: {fileID: 5557382303489668837}
   - component: {fileID: 2577938366299520298}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(13)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -3923,7 +3923,7 @@ GameObject:
   - component: {fileID: 2737874133215057175}
   - component: {fileID: 7058988099827604034}
   - component: {fileID: 5888978511162654573}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(6)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -4807,7 +4807,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4309723603014430404}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 87fa19748a37eb94ba7c5262c2ba2705, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -5120,7 +5120,7 @@ GameObject:
   - component: {fileID: 1129858984347334197}
   - component: {fileID: 5008649604063720732}
   - component: {fileID: 7952745699354282380}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(12)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -5379,7 +5379,7 @@ GameObject:
   - component: {fileID: 8911222868609817442}
   - component: {fileID: 7888494791616814769}
   - component: {fileID: 3713480665487385001}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: front (4)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -5790,7 +5790,7 @@ GameObject:
   - component: {fileID: 5910508210365282449}
   - component: {fileID: 240920416462853532}
   - component: {fileID: 2260723860444438914}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(5)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -5982,7 +5982,7 @@ GameObject:
   - component: {fileID: 6573002023342716230}
   - component: {fileID: 1122294651089968056}
   - component: {fileID: 2026011625607815190}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: front (3)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -6571,7 +6571,7 @@ GameObject:
   - component: {fileID: 8622713109116291213}
   - component: {fileID: 4814914098322593131}
   - component: {fileID: 8929636412866252436}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: front (2)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -6669,7 +6669,7 @@ GameObject:
   - component: {fileID: 1277904279149467006}
   - component: {fileID: 7495226399844815080}
   - component: {fileID: 524321009428707802}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: front (1)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -7099,6 +7099,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6081526743686445877}
   - component: {fileID: 8981516885825562502}
+  - component: {fileID: 6786078462668497741}
   m_Layer: 0
   m_Name: Container_BLUE
   m_TagString: Walkable
@@ -7158,6 +7159,18 @@ MonoBehaviour:
   - {fileID: 3321525769876671909}
   - {fileID: 6552503151555066066}
   - {fileID: 8809969741208781641}
+--- !u!114 &6786078462668497741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6858486312941887887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 954896de147a71b45a785ca0c0151173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7054015427530426646
 GameObject:
   m_ObjectHideFlags: 0
@@ -7341,7 +7354,7 @@ GameObject:
   - component: {fileID: 135227744544783718}
   - component: {fileID: 2227995546400888275}
   - component: {fileID: 311635323394477566}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(7)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -7730,7 +7743,7 @@ GameObject:
   - component: {fileID: 1183524398422272765}
   - component: {fileID: 2969180701626155396}
   - component: {fileID: 7465246598709928371}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(3)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -8090,7 +8103,7 @@ GameObject:
   - component: {fileID: 5326759571705716896}
   - component: {fileID: 1876342975755785087}
   - component: {fileID: 3049742896665385193}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(2)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -8415,7 +8428,7 @@ GameObject:
   - component: {fileID: 3074744130550864047}
   - component: {fileID: 342358207850007086}
   - component: {fileID: 5498456293876768286}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: front (5)
   m_TagString: Ledge
   m_Icon: {fileID: 0}
@@ -8605,7 +8618,7 @@ GameObject:
   - component: {fileID: 5249569737626301961}
   - component: {fileID: 7604285063468929214}
   - component: {fileID: 9059724391365762194}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: left(10)
   m_TagString: Ledge
   m_Icon: {fileID: 0}

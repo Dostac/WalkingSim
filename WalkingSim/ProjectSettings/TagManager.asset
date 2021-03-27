@@ -16,8 +16,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - ConcreteGround
+  - Tubs
   - PostProcessing
   - Not in Reflection
   - Wall
@@ -27,10 +27,10 @@ TagManager:
   - GrappleObject
   - Ledge
   - Ground
-  - 
-  - 
-  - 
-  - 
+  - ContainerGround
+  - SandBagGround
+  - Terrain
+  - WaterGround
   - 
   - 
   - 

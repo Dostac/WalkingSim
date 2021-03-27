@@ -103,6 +103,8 @@ public class PlayerMovement : MonoBehaviour
     [Range(0.0005f, 4)]
     [Tooltip("Ledge Offset this is the distance between the ledge and the player")]
     public float cornerToOtherObjectOfset = 0.8f;
+    [Tooltip("Max Distance between the destenation of a action and the player this must be set because other wise it sometimes teleports to a wrong destenation")]
+    public float maxActionDistance=7.50f;
     [Space(10)]
     [Tooltip("This is a bool that wil be checked in a other code")]
     public bool ledge;
@@ -158,25 +160,15 @@ public class PlayerMovement : MonoBehaviour
     public float distanceForDetectionToBeGround = 0.25f;
     public float distanceForDetectionToBeInAir = 0.26f;
     [Space(5)]
+    [Tooltip("the time to check if player is still falling best to set like 0.5f so it checks and also sets the idle aired anim late")]
+    public float timeForFallingCheck=0.5f;
+    [Space(5)]
     public float distanceFromGroundForLanding = 0.26f;
     [Header("Velocity Values")]
     public float velocityToBeAired;
     [Space(2)]
-    public float velocityForRoll;
-    public float velocityForLand;
-
-    [Space(10)]
-    [Header("Falling Values")]
-    public AudioSource jumpSound;
-    public AudioSource walkingSound;
-    public AudioSource runningSound;
-    public AudioSource ledgeMoveSound;
-    public AudioSource rollSound;
-    public AudioSource landingSound;
-    public AudioSource inAirSound;
-    public AudioSource slideSound;
-    public AudioSource vaultingSound;
-    public AudioSource climbingSound;
+    public float fallingSpeedForRoll;
+    public float fallingSpeedForLand;
     #endregion
     #region private values
     private float slidegSpeed;
@@ -221,6 +213,8 @@ public class PlayerMovement : MonoBehaviour
     private Transform LedgeDes;
 
     private WallCollision wc;
+
+    private LedgeMainObject ledgeMainObject;
 
     private InputManager im;
     private Rigidbody rb;
@@ -399,11 +393,19 @@ public class PlayerMovement : MonoBehaviour
         //vaut
         if (lerpValueOn)
         {
-            transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
+            float distance = Vector3.Distance(transform.position, wc.destenation.position);
+            if (distance <= maxActionDistance)
+            {
+                transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
+            }
         }
         else if (isCliming)
         {
-            transform.position = Vector3.Lerp(transform.position, LedgeDes.position + new Vector3(0, handRayCastPivot.localPosition.y, 0), vaultingSpeed * Time.deltaTime * 2);
+            float distance = Vector3.Distance(transform.position, wc.destenation.position);
+            if (distance <= maxActionDistance)
+            {
+                transform.position = Vector3.Lerp(transform.position, LedgeDes.position + new Vector3(0, handRayCastPivot.localPosition.y, 0), vaultingSpeed * Time.deltaTime * 2);
+            }
         }
         //ledge
         if (ledge)
@@ -423,10 +425,61 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit rightSideHit;
             if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 0.2f, ledgeLayer))
             {
+                #region rotation ledge
                 Quaternion rotation = Quaternion.LookRotation(-forwardHit.normal, Vector3.up);
-                //rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.transform.rotation.z);
+                ledgeMainObject = forwardHit.transform.GetComponent<LedgeMainObject>();
+                if (forwardHit.transform.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.transform.rotation.eulerAngles.z,rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.transform.rotation.eulerAngles.x);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.z);
+                }
+                else if (forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetComponent<LedgeMainObject>() != null)
+                {
+                    rotation.eulerAngles = new Vector3(forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.x, rotation.eulerAngles.y, forwardHit.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.parent.transform.rotation.z);
+                }
                 transform.rotation = rotation;
                 player.transform.rotation = rotation;
+                print(rotation);
+                #endregion
 
                 LedgeDes = forwardHit.transform;
 
@@ -438,6 +491,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (im.rightPressed && Input.GetButton("Jump"))
                     {
+                        ledgeMainObject = null;
                         wentToOtherObject = true;
                         Quaternion Rot = Quaternion.LookRotation(-LedgeCheckWallRight.normal, Vector3.up);
                         transform.rotation = Rot;
@@ -450,6 +504,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (im.leftPressed && Input.GetButton("Jump"))
                     {
+                        ledgeMainObject = null;
                         wentToOtherObject = true;
                         Quaternion Rot = Quaternion.LookRotation(-LedgeCheckWallLeft.normal, Vector3.up);
                         transform.rotation = Rot;
@@ -474,6 +529,7 @@ public class PlayerMovement : MonoBehaviour
                             {
                                 if (im.leftPressed && Input.GetButton("Jump"))
                                 {
+                                    ledgeMainObject = null;
                                     Quaternion rotation = Quaternion.LookRotation(-rightSideHit.normal, Vector3.up);
                                     transform.rotation = rotation;
                                     transform.position = Vector3.Lerp(transform.position, rightSideHit.point, speed * Time.deltaTime);
@@ -505,6 +561,7 @@ public class PlayerMovement : MonoBehaviour
                             {
                                 if (im.rightPressed && Input.GetButton("Jump"))
                                 {
+                                    ledgeMainObject = null;
                                     Quaternion rotation = Quaternion.LookRotation(-leftSideHit.normal, Vector3.up);
                                     transform.rotation = rotation;
                                     transform.position = Vector3.Lerp(transform.position, leftSideHit.point, speed * Time.deltaTime);
@@ -780,6 +837,8 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2.25f, 0.0f)), transform.forward, out forwardHit, 1f, ledgeLayer) && !ledge)
         {
             ResetAnim();
+            ResetFalling();
+
             anim.SetBool("isLedgeGrabbing", true);
 
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
@@ -882,7 +941,6 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Walkable"))
         {
             EnterGround();
-            print(rb.velocity.y);
         }
     }
     #endregion
@@ -991,7 +1049,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (rb.velocity.y <= velocityToBeAired)
             {
-                anim.SetBool("isFalling", true);
+                Invoke("CheckIfStillAired", timeForFallingCheck);
             }
         }
     }
@@ -999,16 +1057,21 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded && !ledge && !isCliming && !isVaulting && !lerpValueOn && !action && !sliding && !isWallRunning)
         {
-            if (rb.velocity.y <= velocityForRoll)
+            if (rb.velocity.magnitude <= fallingSpeedForRoll)
             {
                 anim.SetBool("isRolling", true);
-                print("roll");
             }
-            else if (rb.velocity.y > velocityForLand)
+            else if (rb.velocity.magnitude > fallingSpeedForLand)
             {
                 anim.SetBool("isLanding", true);
-                print("land");
             }
+        }
+    }
+    public void CheckIfStillAired()
+    {
+        if (!isGrounded)
+        {
+            anim.SetBool("isFalling", true);
         }
     }
     #endregion
@@ -1082,7 +1145,7 @@ public class PlayerMovement : MonoBehaviour
         notTrigger.radius = isTrigger.radius;
         notTrigger.height = isTrigger.height;
         notTrigger.center = isTrigger.center;
-
+        ledgeMainObject = null;
         Invoke("ResetAction", resetActionTime);
     }
     public void ResetLedge()
@@ -1096,71 +1159,6 @@ public class PlayerMovement : MonoBehaviour
     public void ResetStartLedge()
     {
         startLedge = false;
-    }
-    public void SoundReset()
-    {
-        jumpSound.Stop();
-        runningSound.Stop();
-        walkingSound.Stop();
-        ledgeMoveSound.Stop();
-        rollSound.Stop();
-        landingSound.Stop();
-        inAirSound.Stop();
-        slideSound.Stop();
-        vaultingSound.Stop();
-        climbingSound.Stop();
-    }
-    #endregion
-    #region sounds
-    public void RunningSound()
-    {
-        SoundReset();
-        runningSound.Play();
-    }
-    public void WalkingSound()
-    {
-        SoundReset();
-        walkingSound.Play();
-    }
-    public void JumpingSound()
-    {
-        SoundReset();
-        jumpSound.Play();
-    }
-    public void SlidingSound()
-    {
-        SoundReset();
-        slideSound.Play();
-    }
-    public void LandingSound()
-    {
-        SoundReset();
-        landingSound.Play();
-    }
-    public void InAirSound()
-    {
-        SoundReset();
-        inAirSound.Play();
-    }
-    public void RollSound()
-    {
-        SoundReset();
-        rollSound.Play();
-    }
-    public void LedgeMoveSound()
-    {
-        SoundReset();
-        ledgeMoveSound.Play();
-    }
-    public void VaultSound()
-    {
-        SoundReset();
-        vaultingSound.Play();
-    }
-    public void ClimbSound()
-    {
-        SoundReset();
-        climbingSound.Play();
     }
     #endregion
     #region gizoms
