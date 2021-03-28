@@ -9,6 +9,7 @@ public class CheckPointEvents : MonoBehaviour
     #endregion
     #region private compants
     private float speedRunTime;
+    private float oldTime;
     private bool isSpeedRunnning;
     #endregion
     #region events void
@@ -40,8 +41,12 @@ public class CheckPointEvents : MonoBehaviour
     public void EndSpeedRun(string name)
     {
         isSpeedRunnning = false;
-        PlayerPrefs.SetFloat(name, speedRunTime);
-        Invoke("speedRunTime", 0.25f);
+        PlayerPrefs.GetFloat(name, oldTime);
+        if (speedRunTime > oldTime)
+        {
+            PlayerPrefs.SetFloat(name, speedRunTime);
+        }
+        Invoke("ResetTime", 0.25f);
     }
     public void ResetTime()
     {

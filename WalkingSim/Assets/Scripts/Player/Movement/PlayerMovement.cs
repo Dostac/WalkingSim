@@ -202,6 +202,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isClimable;
     private bool canLedge;
     private bool gotYValue;
+    private bool secondCheckAir;
 
     private bool isLedgeClimbing;
     private bool wentToOtherObject;
@@ -478,7 +479,6 @@ public class PlayerMovement : MonoBehaviour
                 }
                 transform.rotation = rotation;
                 player.transform.rotation = rotation;
-                print(rotation);
                 #endregion
 
                 LedgeDes = forwardHit.transform;
@@ -794,6 +794,7 @@ public class PlayerMovement : MonoBehaviour
         if (jumpCount >= 1)
         {
             ResetAnim();
+            CheckIfInAired();
             anim.SetBool("isJumping", true);
 
             inputY += jumpForce;
@@ -974,6 +975,7 @@ public class PlayerMovement : MonoBehaviour
         {
             runningSpeedAftherRun = grafityCorectionMinValue;
         }
+        CheckIfInAired();
     }
     public void ResetFalling()
     {
@@ -981,31 +983,30 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isJumping", false);
         anim.SetBool("isRolling", false);
         anim.SetBool("isLanding", false);
+        secondCheckAir = false;
     }
     public void GroundDetection()
     {
         if (!isGrounded)
         {
             RaycastHit FallDetection;
-            if (!isGrounded && !isCliming && !isLedgeClimbing && !isWallRunning && !isVaulting && !lerpValueOn &&
+            if (!isCliming && !isLedgeClimbing && !isWallRunning && !isVaulting && !lerpValueOn &&
                 Physics.Raycast(transform.position + (new Vector3(0f, 0.25f, 0f)), -transform.up, out FallDetection, 20f, groundLayer))
             {
                 groundDistance = Vector3.Distance(transform.position, FallDetection.point) * 3;
-            }
-            if (!isGrounded && !ledge && !isCliming && !isVaulting && !lerpValueOn && !action && !sliding && !isWallRunning)
-            {
-                if (groundDistance <= distanceForDetectionToBeGround)
-                {
-                    Grounded();
-                }
-                else if (groundDistance > distanceForDetectionToBeGround)
-                {
-                    CheckIfAired();
-                }
-                if (groundDistance <= distanceFromGroundForLanding)
-                {
-                    GetLandAnim();
-                }
+
+                    if (groundDistance <= distanceForDetectionToBeGround)
+                    {
+                        Grounded();
+                    }
+                    else if (groundDistance > distanceForDetectionToBeGround)
+                    {
+                        CheckIfAired();
+                    }
+                    if (groundDistance <= distanceFromGroundForLanding)
+                    {
+                        GetLandAnim();
+                    }
             }
         }
     }
@@ -1045,11 +1046,19 @@ public class PlayerMovement : MonoBehaviour
     }
     public void CheckIfInAired()
     {
-        if (!isGrounded && !ledge && !isCliming && !isVaulting && !lerpValueOn && !action && !sliding&&!isWallRunning)
+        if (!isGrounded && !ledge && !isCliming && !isVaulting && !lerpValueOn && !action && !sliding && !isWallRunning)
         {
-            if (rb.velocity.y <= velocityToBeAired)
+            print("getting checked check");
+            if (rb.velocity.magnitude >= velocityToBeAired)
             {
                 Invoke("CheckIfStillAired", timeForFallingCheck);
+                print("getting checked");
+                secondCheckAir = true;
+            }
+            else if(!secondCheckAir)
+            {
+                secondCheckAir = true;
+                Invoke("CheckIfInAired", 0.5f);
             }
         }
     }
@@ -1069,10 +1078,9 @@ public class PlayerMovement : MonoBehaviour
     }
     public void CheckIfStillAired()
     {
-        if (!isGrounded)
-        {
-            anim.SetBool("isFalling", true);
-        }
+        print("not grounded");
+        anim.SetBool("isFalling", true);
+        print("falling"); 
     }
     #endregion
     #region player value voids
