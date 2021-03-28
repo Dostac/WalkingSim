@@ -173,9 +173,10 @@ GameObject:
   - component: {fileID: 6899729369745702904}
   - component: {fileID: 7525260833183150173}
   - component: {fileID: 5731938363755873431}
+  - component: {fileID: 1290688262}
   m_Layer: 0
   m_Name: van 003a_2006
-  m_TagString: Untagged
+  m_TagString: Walkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -187,7 +188,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6091984785162757442}
-  m_LocalRotation: {x: -0.45363843, y: 0.5424133, z: 0.54241323, w: 0.4536385}
+  m_LocalRotation: {x: -0.45363975, y: 0.5424122, z: 0.5424122, w: 0.45363975}
   m_LocalPosition: {x: 240.35, y: -26.95773, z: 32.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -249,6 +250,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1290688262
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6091984785162757442}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4972357449096699917, guid: 7c7f83f48bd9ffe4ca1238e445afc52d, type: 3}
 --- !u!1 &7887706199533630676
 GameObject:
   m_ObjectHideFlags: 0
