@@ -20,6 +20,8 @@ public class MainMenuScript : MonoBehaviour
     [Space(1)]
     [Tooltip("Get the componant ui canvas/ empty object where the contiune/reset is under")]
     public GameObject conRes;
+    [Header("Speed run pannels")]
+    public GameObject pannel1, pannel2, pannel3;
     [Header("Sounds")]
     public AudioSource hoverSound;
     public AudioSource buttonPressedSound;
@@ -74,6 +76,21 @@ public class MainMenuScript : MonoBehaviour
         hoverSound.Stop();
         buttonPressedSound.Play();
     }
+    public void SpeedRunPannel1()
+    {
+        UiOff();
+        pannel1.SetActive(true);
+    }
+    public void SpeedRunPannel2()
+    {
+        UiOff();
+        pannel2.SetActive(true);
+    }
+    public void SpeedRunPannel3()
+    {
+        UiOff();
+        pannel3.SetActive(true);
+    }
     #endregion
     #region ui set active clear void
     public void UiOff()
@@ -83,6 +100,9 @@ public class MainMenuScript : MonoBehaviour
         credits.SetActive(false);
         controlls.SetActive(false);
         conRes.SetActive(false);
+        pannel1.SetActive(false);
+        pannel2.SetActive(false);
+        pannel3.SetActive(false);
     }
     #endregion
 }

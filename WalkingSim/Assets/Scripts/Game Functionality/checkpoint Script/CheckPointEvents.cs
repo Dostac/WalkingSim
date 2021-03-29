@@ -45,6 +45,8 @@ public class CheckPointEvents : MonoBehaviour
         if (speedRunTime > oldTime)
         {
             PlayerPrefs.SetFloat(name, speedRunTime);
+            print(speedRunTime);
+            print(oldTime);
         }
         Invoke("ResetTime", 0.25f);
     }
