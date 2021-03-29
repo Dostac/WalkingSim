@@ -15,6 +15,7 @@ public class MainMenuCamereaScript : MonoBehaviour
     public GameObject controllsPos;
     public GameObject loadingScreenPos;
     public GameObject ressetContrinuePos;
+    public GameObject recordsPos;
     #endregion
     #region private componants
     private bool lerp;
@@ -67,6 +68,11 @@ public class MainMenuCamereaScript : MonoBehaviour
     public void ResetContinue()
     {
         destenation = ressetContrinuePos.transform;
+        lerp = true;
+    }
+    public void Records()
+    {
+        destenation = recordsPos.transform;
         lerp = true;
     }
     #endregion

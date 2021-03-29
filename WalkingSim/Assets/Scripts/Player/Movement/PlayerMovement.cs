@@ -1048,11 +1048,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded && !ledge && !isCliming && !isVaulting && !lerpValueOn && !action && !sliding && !isWallRunning)
         {
-            print("getting checked check");
             if (rb.velocity.magnitude >= velocityToBeAired)
             {
                 Invoke("CheckIfStillAired", timeForFallingCheck);
-                print("getting checked");
                 secondCheckAir = true;
             }
             else if(!secondCheckAir)
@@ -1078,9 +1076,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void CheckIfStillAired()
     {
-        print("not grounded");
         anim.SetBool("isFalling", true);
-        print("falling"); 
     }
     #endregion
     #region player value voids
