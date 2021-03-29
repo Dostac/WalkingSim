@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: CraneLayered
   m_Shader: {fileID: 4800000, guid: 81d02e8644315b742b154842a3a2f98c, type: 3}
-  m_ShaderKeywords: _HEIGHTMAP1 _HEIGHTMAP3 _LAYEREDLIT_4_LAYERS _MAIN_LAYER_INFLUENCE_MODE
+  m_ShaderKeywords: _DETAIL_MAP0 _HEIGHTMAP1 _HEIGHTMAP3 _LAYEREDLIT_4_LAYERS _MAIN_LAYER_INFLUENCE_MODE
     _MASKMAP1 _MASKMAP2 _MASKMAP3 _NORMALMAP _NORMALMAP0 _NORMALMAP1 _NORMALMAP2
     _NORMALMAP3 _NORMALMAP_TANGENT_SPACE _NORMALMAP_TANGENT_SPACE0 _NORMALMAP_TANGENT_SPACE1
     _NORMALMAP_TANGENT_SPACE2 _NORMALMAP_TANGENT_SPACE3
@@ -102,8 +102,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMap0:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 5, y: 5}
+        m_Texture: {fileID: 2800000, guid: cc05cebed2d68a54a93e50a9848ec5c0, type: 3}
+        m_Scale: {x: 16, y: 16}
         m_Offset: {x: 0, y: 0}
     - _DetailMap1:
         m_Texture: {fileID: 0}
@@ -329,7 +329,7 @@ Material:
     - _DetailAlbedoScale2: 1
     - _DetailAlbedoScale3: 1
     - _DetailNormalScale: 1
-    - _DetailNormalScale0: 1
+    - _DetailNormalScale0: 0
     - _DetailNormalScale1: 1
     - _DetailNormalScale2: 1
     - _DetailNormalScale3: 1.93
@@ -467,7 +467,7 @@ Material:
     - _NormalMapSpace2: 0
     - _NormalMapSpace3: 0
     - _NormalScale: 1
-    - _NormalScale0: 1
+    - _NormalScale0: 1.15
     - _NormalScale1: 1
     - _NormalScale2: 1
     - _NormalScale3: 1
@@ -487,7 +487,7 @@ Material:
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
     - _Smoothness: 0.5
-    - _Smoothness0: 0.5
+    - _Smoothness0: 0.77
     - _Smoothness1: 0.5
     - _Smoothness2: 0.5
     - _Smoothness3: 0.5

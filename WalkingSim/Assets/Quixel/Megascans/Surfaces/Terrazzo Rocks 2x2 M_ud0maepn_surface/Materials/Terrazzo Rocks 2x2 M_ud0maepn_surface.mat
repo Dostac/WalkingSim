@@ -284,8 +284,8 @@ Material:
     - _SurfaceType: 0
     - _TessellationBackFaceCullEpsilon: -0.25
     - _TessellationFactor: 30
-    - _TessellationFactorMaxDistance: 50
-    - _TessellationFactorMinDistance: 20
+    - _TessellationFactorMaxDistance: 5
+    - _TessellationFactorMinDistance: 3
     - _TessellationFactorTriangleSize: 100
     - _TessellationMode: 0
     - _TessellationShapeFactor: 0.75
