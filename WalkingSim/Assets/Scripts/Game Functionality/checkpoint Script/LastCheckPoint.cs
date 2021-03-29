@@ -10,31 +10,34 @@ public class LastCheckPoint : MonoBehaviour
     [Space(3)]
     [Tooltip("a bool that gets checked ingame")]
     public bool lightOn;
+    public bool isSpeedRunPoint;
     #endregion
     #region private componants
     private bool achieved;
-    private void Update()
+    #endregion
+    #region fucntions
+    public void Update()
     {
-        if (!lightOn)
-        {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-        }
-        else
+        if (lightOn)
         {
             gameObject.GetComponent<MeshRenderer>().enabled = true;
         }
+        else
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
-    #endregion
-    #region colission
     private void OnTriggerEnter(Collider other)
     {
         if (canBeTriggert)
         {
-            if (!achieved && other.gameObject.CompareTag ("Player"))
+            if (!achieved && other.gameObject.CompareTag ("Player")&&cpm.index>=cpm.checkpoint.Count)
             {
                 cpm.Complete();
-                achieved = true;
+                cpm.index = 0;
+                achieved = false;
                 lightOn = false;
+                canBeTriggert = false;
             }
         }
     }

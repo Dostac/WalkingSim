@@ -9,20 +9,22 @@ public class CheckPoint : MonoBehaviour
     [Space(3)]
     [Tooltip("dont touch this in code it checks if it can be triggert")]
     public bool lightOn;
+    public bool isSpeedRunPoint;
+    public bool isStartSpeedRun;
     #endregion
     #region private componants
     private bool achieved;
     #endregion
-    #region collision
-    private void Update()
+    #region fucntions
+    public void Update()
     {
-        if (!lightOn)
+        if (lightOn)
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
         }
         else
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
     }
     public void Add()
@@ -38,6 +40,7 @@ public class CheckPoint : MonoBehaviour
                 Add();
                 achieved = false;
                 lightOn = false;
+                canBeTriggert = false;
             }
         }
     }

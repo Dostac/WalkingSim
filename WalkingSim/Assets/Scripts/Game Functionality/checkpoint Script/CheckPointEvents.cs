@@ -20,6 +20,10 @@ public class CheckPointEvents : MonoBehaviour
             speedRunTime += Time.deltaTime;
         }
     }
+    public void Test(string textToPrint)
+    {
+        print(textToPrint);
+    }
     public void Reload()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -41,12 +45,10 @@ public class CheckPointEvents : MonoBehaviour
     public void EndSpeedRun(string name)
     {
         isSpeedRunnning = false;
-        PlayerPrefs.GetFloat(name, oldTime);
-        if (speedRunTime > oldTime)
+        oldTime=PlayerPrefs.GetFloat(name);
+        if (speedRunTime < oldTime)
         {
             PlayerPrefs.SetFloat(name, speedRunTime);
-            print(speedRunTime);
-            print(oldTime);
         }
         Invoke("ResetTime", 0.25f);
     }

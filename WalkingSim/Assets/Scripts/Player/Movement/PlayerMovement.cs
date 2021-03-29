@@ -110,6 +110,10 @@ public class PlayerMovement : MonoBehaviour
     public bool ledge;
     [Tooltip("This is a bool that wil be checked in a other code")]
     public bool balancebar;
+    [Tooltip("This is a bool that wil be checked in a other code")]
+    public bool getsInput;
+    [Tooltip("This is a bool that wil be checked in a other code")]
+    public bool isGrounded;
     [Space(10)]
     [Tooltip("Set a value for the sliding speed to multiply with")]
     public float sldingMultiplier = 1.5f;
@@ -185,12 +189,11 @@ public class PlayerMovement : MonoBehaviour
     private float allowPlayerRotation;
 
     private int jumpCount;
+    private int dubbelJumpCount;
 
     private bool isCrouch;
     private bool isVaulting;
     private bool sliding;
-    private bool isGrounded;
-    private bool getsInput;
 
     private bool frozen;
     private bool action;
@@ -209,6 +212,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isCliming;
     private bool cooldownActionAftherLedge;
     private bool startLedge;
+    private bool canDubbelJump = true;
 
     private Vector3 desireMovementDirection;
     private Transform LedgeDes;
@@ -302,6 +306,11 @@ public class PlayerMovement : MonoBehaviour
             else if (!ledge && !lerpValueOn)
             {
                 Jump();
+                if (canDubbelJump)
+                {
+                    dubbelJumpCount++;                
+                }
+                Invoke("CantDubbelJump", 0.4f);
             }
         }
         if (!isCrouch && !im.forwardPressed && !im.backwardsPressed && !im.leftPressed && !im.rightPressed)
@@ -367,6 +376,10 @@ public class PlayerMovement : MonoBehaviour
     #region action updator (update)
     public void AtionUpdator()
     {
+        if (rb.velocity.magnitude > velocityToBeAired+2)
+        {
+            CheckIfAired();
+        }
         RaycastHit ledgeCheck;
         if (canLedge && wc.ledge && !lerpValueOn && !isCliming && !isCrouch && !isGrounded)
         {
@@ -791,11 +804,21 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Jump()
     {
-        if (jumpCount >= 1)
+        if (jumpCount >= jumps - 1)
         {
             ResetAnim();
             CheckIfInAired();
             anim.SetBool("isJumping", true);
+
+            inputY += jumpForce;
+            jumpCount--;
+            isCrouch = false;
+        }
+        else if (dubbelJumpCount>=2&& jumpCount >= jumps)
+        {
+            ResetAnim();
+            CheckIfInAired();
+            anim.SetBool("isDubbelJumping", true);
 
             inputY += jumpForce;
             jumpCount--;
@@ -950,6 +973,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = true;
         canLedge = true;
+        canDubbelJump = false;
         jumpCount = jumps;
         ResetFalling();
     }
@@ -981,9 +1005,11 @@ public class PlayerMovement : MonoBehaviour
     {
         anim.SetBool("isFalling", false);
         anim.SetBool("isJumping", false);
+        anim.SetBool("isDubbelJumping", false);
         anim.SetBool("isRolling", false);
         anim.SetBool("isLanding", false);
         secondCheckAir = false;
+        dubbelJumpCount = 0;
     }
     public void GroundDetection()
     {
@@ -1058,6 +1084,11 @@ public class PlayerMovement : MonoBehaviour
                 secondCheckAir = true;
                 Invoke("CheckIfInAired", 0.5f);
             }
+            else if (rb.velocity.y <= -velocityToBeAired)
+            {
+                Invoke("CheckIfStillAired", timeForFallingCheck);
+                secondCheckAir = true;
+            }
         }
     }
     public void GetLandAnim()
@@ -1080,6 +1111,10 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     #region player value voids
+    public void CantDubbelJump()
+    {
+        canDubbelJump = false;
+    }
     public void TimeUpdate()
     {
         if (isWallRunning)//this is a reset time for the wallrun
