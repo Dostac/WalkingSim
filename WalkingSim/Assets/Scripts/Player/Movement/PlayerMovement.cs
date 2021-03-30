@@ -213,6 +213,7 @@ public class PlayerMovement : MonoBehaviour
     private bool cooldownActionAftherLedge;
     private bool startLedge;
     private bool canDubbelJump = true;
+    private bool JustDJumped;
 
     private Vector3 desireMovementDirection;
     private Transform LedgeDes;
@@ -305,21 +306,25 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (!ledge && !lerpValueOn)
             {
-                if (canDubbelJump)
+                if (canDubbelJump&& !JustDJumped)
                 {
+                    print("spacebar");
                     if (Time.time - doubleTapTime < 0.4f)
                     {
                         Debug.Log("Double-tapped");
                         doubleTapTime = 0f;
                         DubbelJump();
+                        print("Dubbeljump");
                     }
                     canDubbelJump = false;
+                    JustDJumped = true;
                 }
-                else if (!canDubbelJump)
+                else if (!canDubbelJump&&!JustDJumped)
                 {
                     canDubbelJump = true;
                     doubleTapTime = Time.time;
                     Jump();
+                    print("jump");
                 }
             }
         }
@@ -827,12 +832,12 @@ public class PlayerMovement : MonoBehaviour
     }
     public void DubbelJump()
     {
-        if (jumpCount >= jumps)
+        if (jumpCount >= jumps-1)
         {
             ResetAnim();
             CheckIfInAired();
             anim.SetBool("isDubbelJumping", true);
-
+            print("dd");
             inputY += jumpForce;
             jumpCount--;
             isCrouch = false;
@@ -992,6 +997,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = true;
         canLedge = true;
         canDubbelJump = false;
+        JustDJumped = false;
         jumpCount = jumps;
         ResetFalling();
     }
