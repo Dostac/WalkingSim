@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 80
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4350519487092050
 Transform:
@@ -66,7 +66,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 1.6318406
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -97,7 +97,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 80
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4493532936230390
 Transform:
@@ -149,7 +149,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -180,7 +180,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 81
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4238015398485120
 Transform:
@@ -265,7 +265,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 80
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4798498493366978
 Transform:
@@ -318,7 +318,7 @@ MeshRenderer:
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_ScaleInLightmap: 0
   m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
@@ -349,7 +349,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 81
+  m_StaticEditorFlags: 57
   m_IsActive: 1
 --- !u!4 &4007961938150956
 Transform:
@@ -379,23 +379,23 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: 0.107298374, y: 15.667065, z: -0.00001859665}
   m_Size: 33.69026
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.91438353
+  - screenRelativeHeight: 0.96414435
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 23163968626707404}
-  - screenRelativeHeight: 0.53439564
+  - screenRelativeHeight: 0.75265294
     fadeTransitionWidth: 0.01
     renderers:
     - renderer: {fileID: 23109200430250450}
-  - screenRelativeHeight: 0.15129028
+  - screenRelativeHeight: 0.30519608
     fadeTransitionWidth: 0.01
     renderers:
     - renderer: {fileID: 23574399452017762}
-  - screenRelativeHeight: 0.02388517
+  - screenRelativeHeight: 0.055341024
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 23397389722738280}

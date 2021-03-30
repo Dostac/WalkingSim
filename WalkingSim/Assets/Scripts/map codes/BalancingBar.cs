@@ -1,20 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class BalancingBar : MonoBehaviour
 {
+    #region public componants
     [Header("for other script")]
+    [Tooltip("the destentation wall detection wil get and then playermovement")]
     public Transform destenation;
     [Header("Pivot Transforms")]
+    [Tooltip("begin transform position check if it is the right position ")]
     public Transform beginPivot;
+    [Tooltip("end transform position check if it is the right position ")]
     public Transform endPivot;
-
+    #endregion
+    #region private componants
     private GameObject player;
+    #endregion
+    #region checking for player posistion
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-
         destenation = beginPivot;
     }
     private void Update()
@@ -30,4 +33,5 @@ public class BalancingBar : MonoBehaviour
             destenation = beginPivot;
         }
     }
+    #endregion
 }

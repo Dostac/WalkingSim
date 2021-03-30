@@ -3,108 +3,92 @@ using System.Collections.Generic;
 using UnityEngine;
 public class WallCollision : MonoBehaviour
 {
+    #region public componants
     [Header("bools to check")]
-    public bool large;
+    [Tooltip("bool that will be checked in an other script")]
     public bool medium;
+    [Tooltip("bool that will be checked in an other script")]
     public bool vault;
+    [Tooltip("bool that will be checked in an other script")]
     public bool ledge;
+    [Tooltip("bool that will be checked in an other script")]
     public bool balancingBar;
+    [Tooltip("bool that will be checked in an other script")]
     public bool balanceBegin;
+    [Tooltip("bool that will be checked in an other script")]
     public bool balanceEnd;
+    [Tooltip("bool that will be checked in an other script")]
     public bool laderbool;
-    public bool hop;
-    public bool isHopping;
-    [Header("Pivot Transforms")]
+    [Space(10)]
+    [Tooltip("the destenation that the code wil set and the playermovement wil get")]
     public Transform destenation;
-
-    LargeWall largewall = null;
-    MediumWall mediumwall = null;
-    VaultWall vaultwall = null;
-    Ledge legecol = null;
-    BalancingBar balancB = null;
-    Hops hops=null;
-    Lader lader = null;
-
+    #endregion
+    #region private componants
+    private MediumWall mediumwall = null;
+    private VaultWall vaultwall = null;
+    private Ledge legecol = null;
+    private BalancingBar balancB = null;
+    private Lader lader = null;
+    #endregion
+    #region collision
     public void OnTriggerEnter(Collider other)
     {
-        largewall = other.gameObject.GetComponent<LargeWall>();
-        if (largewall != null)
-        {
-            large = true;
-            destenation = other.gameObject.GetComponent<LargeWall>().destenation;
-        }
         vaultwall = other.gameObject.GetComponent<VaultWall>();
+        legecol = other.gameObject.GetComponent<Ledge>();
+        lader = other.gameObject.GetComponent<Lader>();
+        mediumwall = other.gameObject.GetComponent<MediumWall>();
+        balancB = other.gameObject.GetComponent<BalancingBar>();
         if (vaultwall != null)
         {
             vault = true;
             destenation = other.gameObject.GetComponent<VaultWall>().destenation;
         }
-        mediumwall = other.gameObject.GetComponent<MediumWall>();
-        if (mediumwall != null)
+        else if (mediumwall != null)
         {
             medium = true;
             destenation = other.gameObject.GetComponent<MediumWall>().destenation;
         }
-        legecol = other.gameObject.GetComponent<Ledge>();
-        if (legecol != null)
+        else if (legecol != null)
         {
             ledge = true;
             destenation = other.gameObject.GetComponent<Ledge>().climbPoint;
         }
-        balancB = other.gameObject.GetComponent<BalancingBar>();
-        if (balancB != null)
+        else if (balancB != null)
         {
             balancingBar = true;
             destenation = other.gameObject.GetComponent<BalancingBar>().destenation;
         }
-        lader = other.gameObject.GetComponent<Lader>();
-        if (lader != null)
+        else if (lader != null)
         {
             laderbool = true;            
-        }
-        hops = other.gameObject.GetComponent<Hops>();
-        if (hops != null)
-        {
-            hop = true;
-            destenation = other.gameObject.GetComponent<Hops>().destenation;
         }
     }
     public void OnTriggerExit(Collider other)
     {
-        largewall = other.gameObject.GetComponent<LargeWall>();
-        if (largewall != null)
-        {
-            large = false;
-        }
         mediumwall = other.gameObject.GetComponent<MediumWall>();
-        if (mediumwall != null)
-        {
-            medium = false;
-        }
         vaultwall = other.gameObject.GetComponent<VaultWall>();
-        if (vaultwall != null)
-        {
-            vault = false;
-        }
         legecol = other.gameObject.GetComponent<Ledge>();
+        balancB = other.gameObject.GetComponent<BalancingBar>();
+        lader = other.gameObject.GetComponent<Lader>();
         if (legecol != null)
         {
             ledge = false;
         }
-        balancB = other.gameObject.GetComponent<BalancingBar>();
-        if (balancB != null)
+        else if (mediumwall != null)
+        {
+            medium = false;
+        }
+        else   if (vaultwall != null)
+        {
+            vault = false;
+        }
+        else if (balancB != null)
         {
             balancingBar = false;
         }
-        lader = other.gameObject.GetComponent<Lader>();
-        if (lader != null)
+        else if(lader != null)
         {
             laderbool = false;
-        }
-        hops = other.gameObject.GetComponent<Hops>();
-        if (hops != null)
-        {
-            hop = false;
         }
     }
     public void OnTriggerStay(Collider other)
@@ -115,4 +99,5 @@ public class WallCollision : MonoBehaviour
             ledge = true;
         }
     }
+    #endregion
 }

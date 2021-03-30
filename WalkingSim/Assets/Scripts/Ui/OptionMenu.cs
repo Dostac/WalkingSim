@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using TMPro;
 public class OptionMenu : MonoBehaviour
-
 {
+    #region componants
+    //public
+    [Tooltip("Get the dropdown from the reselution")]
     public TMP_Dropdown resolutionDropDown;
-    Resolution[] resolutions;
-    // Start is called before the first frame update
+    public bool fullscreen;
+    [Space(1)]
+    //private
+    private Resolution[] resolutions;
+    #endregion
     public void Start()
     {
         resolutions = Screen.resolutions;
@@ -33,6 +36,7 @@ public class OptionMenu : MonoBehaviour
         resolutionDropDown.value = currentResolutionIndex;
         resolutionDropDown.RefreshShownValue();
     }
+    #region Void functions for dropdowns or buttons
     public void SetResolution(int resolutionIndex)
     {
         Resolution resolution = resolutions[resolutionIndex];
@@ -40,10 +44,20 @@ public class OptionMenu : MonoBehaviour
     }
     public void SetFullScreen(bool isFullscreen)
     {
-        Screen.fullScreen = isFullscreen;
+        fullscreen = !fullscreen;
+        isFullscreen = fullscreen;
+        if (isFullscreen)
+        {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+        } 
     }
     public void SetQuality(int qualityIndex)
     {
         QualitySettings.SetQualityLevel(qualityIndex);
     }
+    #endregion
 }

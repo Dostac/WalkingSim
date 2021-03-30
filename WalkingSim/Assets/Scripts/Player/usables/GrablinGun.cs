@@ -1,21 +1,32 @@
 using UnityEngine;
 public class GrablinGun : MonoBehaviour
 {
+    #region public componants
+    [Header("layer")]
     public LayerMask whatIsGrappleable;
+    [Header("transforms")]
+    [Tooltip("get the right transform" +
+        "cam=camerea" +
+        "player is player" +
+        "guntip = begin where the line comesout")]
     public Transform gunTip, cam, player;
+    [Header("crosshair")]
     public float offset;
+    [Space(1)]
     public GameObject crosshair;
-
+    #endregion
+    #region private componants
     private LineRenderer lr;
     private Vector3 grapplePoint;
     private float maxDistance = 100f;
     private SpringJoint joint;
-
+    private Vector3 currentGrapplePosition;
+    #endregion
+    #region Grapple functions
     void Awake()
     {
         lr = GetComponent<LineRenderer>();
     }
-
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -42,10 +53,6 @@ public class GrablinGun : MonoBehaviour
     {
         DrawRope();
     }
-
-    /// <summary>
-    /// Call whenever we want to start a grapple
-    /// </summary>
     void StartGrapple()
     {
         RaycastHit hit;
@@ -71,22 +78,13 @@ public class GrablinGun : MonoBehaviour
             currentGrapplePosition = gunTip.position;
         }
     }
-
-
-    /// <summary>
-    /// Call whenever we want to stop a grapple
-    /// </summary>
     void StopGrapple()
     {
         lr.positionCount = 0;
         Destroy(joint);
     }
-
-    private Vector3 currentGrapplePosition;
-
     void DrawRope()
     {
-        //If not grappling, don't draw rope
         if (!joint) return;
 
         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f);
@@ -94,14 +92,13 @@ public class GrablinGun : MonoBehaviour
         lr.SetPosition(0, gunTip.position);
         lr.SetPosition(1, currentGrapplePosition);
     }
-
     public bool IsGrappling()
     {
         return joint != null;
     }
-
     public Vector3 GetGrapplePoint()
     {
         return grapplePoint;
     }
+    #endregion
 }
