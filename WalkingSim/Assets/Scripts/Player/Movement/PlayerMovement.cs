@@ -188,8 +188,8 @@ public class PlayerMovement : MonoBehaviour
 
     private float allowPlayerRotation;
 
+    private float doubleTapTime;
     private int jumpCount;
-    private int dubbelJumpCount;
 
     private bool isCrouch;
     private bool isVaulting;
@@ -305,12 +305,22 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (!ledge && !lerpValueOn)
             {
-                Jump();
                 if (canDubbelJump)
                 {
-                    dubbelJumpCount++;                
+                    if (Time.time - doubleTapTime < 0.4f)
+                    {
+                        Debug.Log("Double-tapped");
+                        doubleTapTime = 0f;
+                        DubbelJump();
+                    }
+                    canDubbelJump = false;
                 }
-                Invoke("CantDubbelJump", 0.4f);
+                else if (!canDubbelJump)
+                {
+                    canDubbelJump = true;
+                    doubleTapTime = Time.time;
+                    Jump();
+                }
             }
         }
         if (!isCrouch && !im.forwardPressed && !im.backwardsPressed && !im.leftPressed && !im.rightPressed)
@@ -814,7 +824,10 @@ public class PlayerMovement : MonoBehaviour
             jumpCount--;
             isCrouch = false;
         }
-        else if (dubbelJumpCount>=2&& jumpCount >= jumps)
+    }
+    public void DubbelJump()
+    {
+        if (jumpCount >= jumps)
         {
             ResetAnim();
             CheckIfInAired();
@@ -853,7 +866,12 @@ public class PlayerMovement : MonoBehaviour
         notTrigger.height = capsuleHeightActions;
         notTrigger.center = capsuleCenterActions;
 
+        Invoke("NoGraf", mediumWallReset-0.1f);
         Invoke("ResetValues", mediumWallReset);
+    }
+    public void NoGraf()
+    {
+        rb.isKinematic = true;
     }
     public void LedgeGrab()
     {
@@ -1009,7 +1027,7 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isRolling", false);
         anim.SetBool("isLanding", false);
         secondCheckAir = false;
-        dubbelJumpCount = 0;
+        doubleTapTime = 0;
     }
     public void GroundDetection()
     {
@@ -1111,10 +1129,6 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     #region player value voids
-    public void CantDubbelJump()
-    {
-        canDubbelJump = false;
-    }
     public void TimeUpdate()
     {
         if (isWallRunning)//this is a reset time for the wallrun
