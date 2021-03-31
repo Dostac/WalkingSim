@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: LumberTycoon
+  productName: WalkingSimulator
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -24,7 +24,7 @@ PlayerSettings:
   m_SplashScreenLogoStyle: 1
   m_SplashScreenDrawMode: 1
   m_SplashScreenBackgroundAnimationZoom: 0
-  m_SplashScreenLogoAnimationZoom: 0.37
+  m_SplashScreenLogoAnimationZoom: 0.822
   m_SplashScreenBackgroundLandscapeAspect: 1
   m_SplashScreenBackgroundPortraitAspect: 1
   m_SplashScreenBackgroundLandscapeUvs:
@@ -43,6 +43,8 @@ PlayerSettings:
   - logo: {fileID: 21300000, guid: 3708ab853ed2c134ca4946ee537cb516, type: 3}
     duration: 2.56
   - logo: {fileID: 10404, guid: 0000000000000000e000000000000000, type: 0}
+    duration: 2
+  - logo: {fileID: 0}
     duration: 2
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
@@ -131,7 +133,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.0.0.7
+  bundleVersion: 1.0.1.0
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -564,7 +566,7 @@ PlayerSettings:
   ps4attribVROutputEnabled: 0
   monoEnv: 
   splashScreenBackgroundSourceLandscape: {fileID: 21300000, guid: e0e6b9ba76fd9d743a35b0e31b2e3157, type: 3}
-  splashScreenBackgroundSourcePortrait: {fileID: 0}
+  splashScreenBackgroundSourcePortrait: {fileID: 21300000, guid: 366566ed94c92a84b9ee9e280d5a25e7, type: 3}
   blurSplashScreenBackground: 0
   spritePackerPolicy: 
   webGLMemorySize: 16

@@ -18,6 +18,7 @@ public class Audio_GroundDetector : MonoBehaviour
     public LayerMask water;
     public LayerMask container;
     public LayerMask sandBag;
+    public LayerMask wood;
     [Space(10)]
     [Header("General Sounds")]
     public AudioSource jumpSound;
@@ -60,7 +61,11 @@ public class Audio_GroundDetector : MonoBehaviour
     [Header("little rocks Sounds")]
     public AudioSource slideSound_Rocks;
     public AudioSource walkingSound_Rocks;
-    public AudioSource runningSound_rocks;
+    public AudioSource runningSound_Rocks;
+    [Header("wood Sounds")]
+    public AudioSource slideSound_Wood;
+    public AudioSource walkingSound_Wood;
+    public AudioSource runningSound_Wood;
     #region sounds
     public void RunningSound()
     {
@@ -210,7 +215,7 @@ public class Audio_GroundDetector : MonoBehaviour
                 {
                     slideSound = slideSound_Rocks;
                     walkingSound = walkingSound_Rocks;
-                    runningSound = runningSound_rocks;
+                    runningSound = runningSound_Rocks;
                 }
                 else if (textureValues[6] > 0)//grass
                 {
@@ -219,35 +224,41 @@ public class Audio_GroundDetector : MonoBehaviour
                     runningSound = runningSound_Grass;
                 }
             }
-        else if (FallDetection.transform.gameObject.layer == concrete)
-        {
-            slideSound = slideSound_Concrete;
-            walkingSound = walkingSound_Concrete;
-            runningSound = runningSound_Concrete;
-        }
-        else if (FallDetection.transform.gameObject.layer == container)
-        {
-            slideSound = slideSound_Container;
-            walkingSound = walkingSound_Container;
-            runningSound = runningSound_Container;
-        }
-        else if (FallDetection.transform.gameObject.layer == water)
-        {
-            walkingSound = walkingSound_Water;
-            runningSound = runningSound_Water;
-        }
-        else if (FallDetection.transform.gameObject.layer == sandBag)
-        {
-            slideSound = slideSound_Sandbag;
-            walkingSound = walkingSound_Sandbag;
-            runningSound = runningSound_Sandbag;
-        }
-        else if (FallDetection.transform.gameObject.layer == tube)
-        {
-            slideSound = slideSound_Tube;
-            walkingSound = walkingSound_Tube;
-            runningSound = runningSound_Tube;
-        }
+            else if (FallDetection.transform.gameObject.layer == concrete)
+            {
+                slideSound = slideSound_Concrete;
+                walkingSound = walkingSound_Concrete;
+                runningSound = runningSound_Concrete;
+            }
+            else if (FallDetection.transform.gameObject.layer == container)
+            {
+                slideSound = slideSound_Container;
+                walkingSound = walkingSound_Container;
+                runningSound = runningSound_Container;
+            }
+            else if (FallDetection.transform.gameObject.layer == water)
+            {
+                walkingSound = walkingSound_Water;
+                runningSound = runningSound_Water;
+            }
+            else if (FallDetection.transform.gameObject.layer == sandBag)
+            {
+                slideSound = slideSound_Sandbag;
+                walkingSound = walkingSound_Sandbag;
+                runningSound = runningSound_Sandbag;
+            }
+            else if (FallDetection.transform.gameObject.layer == tube)
+            {
+                slideSound = slideSound_Tube;
+                walkingSound = walkingSound_Tube;
+                runningSound = runningSound_Tube;
+            }
+            else if (FallDetection.transform.gameObject.layer == wood)
+            {
+                slideSound = slideSound_Wood;
+                walkingSound = walkingSound_Wood;
+                runningSound = runningSound_Wood;
+            }
         }
     }
 }

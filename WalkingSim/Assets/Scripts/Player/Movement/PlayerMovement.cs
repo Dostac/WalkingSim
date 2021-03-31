@@ -25,6 +25,12 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Set a speed value")]
     public float vaultingSpeed = 1.5f;
 
+    [Tooltip("Set a Reductionspeed value")]
+    public float speedReductionAiredR=2;
+
+    [Tooltip("Set a Reductionspeed value")]
+    public float speedReductionAiredW=1;
+
     [Header("Time Values")]
     [Tooltip("Set a time value for the slide")]
     public float slidingTime = 1;
@@ -159,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Reset time for the ledge reset to be active again")]
     public float ToOtherObjectInvokeTime = 0.25f;
     [Tooltip("Reset time for the ledge to get reset again")]
-    public float invokeStartLEdge = 0.25f;
+    public float invokeStartLedge = 0.25f;
     [Header("falling Values")]
     public float distanceForDetectionToBeGround = 0.25f;
     public float distanceForDetectionToBeInAir = 0.26f;
@@ -341,11 +347,25 @@ public class PlayerMovement : MonoBehaviour
         }
         if (im.runPressed && !sliding && !isCrouch && getsInput)
         {
-            movementSpeed = runningSpeed;
+            if (isGrounded)
+            {
+                movementSpeed = runningSpeed;
+            }
+            else
+            {
+                movementSpeed = runningSpeed-speedReductionAiredR;
+            }
         }
         if (!im.runPressed && !sliding && !isCrouch && getsInput)
         {
-            movementSpeed = walkingSpeed;
+            if (isGrounded)
+            {
+                movementSpeed = walkingSpeed;
+            }
+            else
+            {
+                movementSpeed = walkingSpeed- speedReductionAiredW;
+            }
         }
         if (!im.runPressed && !sliding && isCrouch && getsInput)
         {
@@ -353,6 +373,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (sliding && !getsInput)
         {
+
             movementSpeed = walkingSpeed / 2;
         }
     }
@@ -700,8 +721,18 @@ public class PlayerMovement : MonoBehaviour
             }
             if (sliding && !isWallRunning && !lerpValueOn && !isLedgeClimbing)
             {
-                transform.Translate(new Vector3(0, 0, 1) * Time.deltaTime * slidegSpeed);
-                transform.Translate(jumpVec * Time.deltaTime * runningSpeedAftherRun);
+                if (isGrounded)
+                {
+                    transform.Translate(new Vector3(0, 0, 1) * Time.deltaTime * slidegSpeed);
+                    transform.Translate(jumpVec * Time.deltaTime * runningSpeedAftherRun);
+
+                }
+                else
+                {
+                    float value = slidegSpeed - 2;
+                    transform.Translate(new Vector3(0, 0, 1) * Time.deltaTime * value);
+                    transform.Translate(jumpVec * Time.deltaTime * runningSpeedAftherRun);
+                }
             }
         }
         else if (ledge && !balancebar && !wc.laderbool && !isLedgeClimbing)
@@ -908,7 +939,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position -= transform.forward * ledgeOffSet;
 
             Invoke("LedgeClimbBool", ledgeClimbBoolInvoke);
-            Invoke("ResetStartLedge", invokeStartLEdge);
+            Invoke("ResetStartLedge", invokeStartLedge);
         }
     }
     public void LedgeCLimb()
