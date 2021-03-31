@@ -185,6 +185,7 @@ public class PlayerMovement : MonoBehaviour
     private float runningSpeedAftherRun;
     private float curentYPos;
     private float groundDistance;
+    private float actionDistance;
 
     private float allowPlayerRotation;
 
@@ -260,6 +261,10 @@ public class PlayerMovement : MonoBehaviour
         inputX = Input.GetAxisRaw("Horizontal");
         inputZ = Input.GetAxisRaw("Vertical");
 
+        if (wc.destenation != null)
+        {
+            actionDistance = Vector3.Distance(transform.position, wc.destenation.position);
+        }
         RaycastHit LedgeClimbSpace;
         if (Input.GetButtonDown("C"))
         {
@@ -281,7 +286,8 @@ public class PlayerMovement : MonoBehaviour
         {
             //two raycast forward and up to check if there is a object blocking the climb
             if (!Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 1f)
-                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
+                && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f)
+                && actionDistance <= maxActionDistance)
             {
                 LedgeCLimb();
             }
@@ -294,11 +300,12 @@ public class PlayerMovement : MonoBehaviour
         }
         if (im.spacebar)
         {
-            if (wc.vault && isGrounded && !ledge && !cooldownActionAftherLedge)
+            
+            if (wc.vault && isGrounded && !ledge && !cooldownActionAftherLedge&& actionDistance <= maxActionDistance)
             {
                 Vault();
             }
-            else if (wc.medium && !wc.vault && !ledge && im.runPressed && !sliding && !cooldownActionAftherLedge && isGrounded && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+            else if (wc.medium && !wc.vault && !ledge && im.runPressed && !sliding && !cooldownActionAftherLedge && actionDistance <= maxActionDistance && isGrounded && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
             {
@@ -308,13 +315,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (canDubbelJump&& !JustDJumped)
                 {
-                    print("spacebar");
                     if (Time.time - doubleTapTime < 0.4f)
                     {
-                        Debug.Log("Double-tapped");
                         doubleTapTime = 0f;
                         DubbelJump();
-                        print("Dubbeljump");
                     }
                     canDubbelJump = false;
                     JustDJumped = true;
@@ -324,7 +328,6 @@ public class PlayerMovement : MonoBehaviour
                     canDubbelJump = true;
                     doubleTapTime = Time.time;
                     Jump();
-                    print("jump");
                 }
             }
         }
@@ -422,19 +425,11 @@ public class PlayerMovement : MonoBehaviour
         //vaut
         if (lerpValueOn)
         {
-            float distance = Vector3.Distance(transform.position, wc.destenation.position);
-            if (distance <= maxActionDistance)
-            {
-                transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
-            }
+            transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
         }
         else if (isCliming)
         {
-            float distance = Vector3.Distance(transform.position, wc.destenation.position);
-            if (distance <= maxActionDistance)
-            {
-                transform.position = Vector3.Lerp(transform.position, LedgeDes.position + new Vector3(0, handRayCastPivot.localPosition.y, 0), vaultingSpeed * Time.deltaTime * 2);
-            }
+            transform.position = Vector3.Lerp(transform.position, LedgeDes.position + new Vector3(0, handRayCastPivot.localPosition.y, 0), vaultingSpeed * Time.deltaTime * 2);
         }
         //ledge
         if (ledge)
@@ -656,6 +651,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (rb.velocity.magnitude <= maxWallSpeed)
         {
+                    canDubbelJump = false;
+        JustDJumped = false;
+        jumpCount = jumps;
             if (wallRight)
             {
                 rb.AddForce(transform.right * wallrunForce / 5 * Time.deltaTime);
@@ -683,6 +681,9 @@ public class PlayerMovement : MonoBehaviour
         {
             runningSpeedAftherRun = grafityCorectionMinValue;
         }
+        canDubbelJump = false;
+        JustDJumped = false;
+        jumpCount = jumps;
     }
     #endregion
     #region player movement (update)
@@ -837,7 +838,6 @@ public class PlayerMovement : MonoBehaviour
             ResetAnim();
             CheckIfInAired();
             anim.SetBool("isDubbelJumping", true);
-            print("dd");
             inputY += jumpForce;
             jumpCount--;
             isCrouch = false;
