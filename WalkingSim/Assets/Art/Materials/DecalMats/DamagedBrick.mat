@@ -171,7 +171,9 @@ Material:
     - _DecalColorMask2: 15
     - _DecalColorMask3: 12
     - _DecalMaskMapBlueScale: 1
+    - _DecalMeshBiasType: 0
     - _DecalMeshDepthBias: 0
+    - _DecalMeshViewBias: 0
     - _DecalStencilRef: 16
     - _DecalStencilWriteMask: 16
     - _DepthOffsetEnable: 0
