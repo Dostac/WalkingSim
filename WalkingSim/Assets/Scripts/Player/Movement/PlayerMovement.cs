@@ -223,6 +223,7 @@ public class PlayerMovement : MonoBehaviour
     private bool JustDJumped;
 
     private Vector3 desireMovementDirection;
+    private Transform destenation;
     private Transform LedgeDes;
 
     private WallCollision wc;
@@ -249,6 +250,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Update()
     {
+        DestenationUpdator();
         PlayerInput();
         CheckForWall();
         TimeUpdate();
@@ -261,6 +263,13 @@ public class PlayerMovement : MonoBehaviour
         Movement();
         GroundDetection();
     }
+    public void DestenationUpdator()
+    {
+        if (wc.destenation !=null)
+        {
+         destenation = wc.destenation;
+        }
+    }
     #region playerinput (update)
     public void PlayerInput()
     {
@@ -269,7 +278,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (wc.destenation != null)
         {
-            actionDistance = Vector3.Distance(transform.position, wc.destenation.position);
+            actionDistance = Vector3.Distance(transform.position, destenation.position);
         }
         RaycastHit LedgeClimbSpace;
         if (Input.GetButtonDown("C"))
@@ -306,12 +315,11 @@ public class PlayerMovement : MonoBehaviour
         }
         if (im.spacebar)
         {
-            
             if (wc.vault && isGrounded && !ledge && !cooldownActionAftherLedge&& actionDistance <= maxActionDistance)
             {
                 Vault();
             }
-            else if (wc.medium && !wc.vault && !ledge && im.runPressed && !sliding && !cooldownActionAftherLedge && actionDistance <= maxActionDistance && isGrounded && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), wc.destenation.position, out LedgeClimbSpace, 2f)
+            else if (wc.medium && !wc.vault && !ledge && im.runPressed && !sliding && !cooldownActionAftherLedge && actionDistance <= maxActionDistance && isGrounded && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), destenation.position, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 3, 0.0f)), transform.forward, out LedgeClimbSpace, 2f)
                 && !Physics.Raycast(transform.position + transform.TransformDirection(new Vector3(0.0f, 2, -0.25f)), transform.up, out LedgeClimbSpace, 1f))
             {
@@ -446,7 +454,10 @@ public class PlayerMovement : MonoBehaviour
         //vaut
         if (lerpValueOn)
         {
-            transform.position = Vector3.Lerp(transform.position, wc.destenation.position, vaultingSpeed * Time.deltaTime);
+            if (destenation != null)
+            {
+                transform.position = Vector3.Lerp(transform.position, destenation.position, vaultingSpeed * Time.deltaTime);
+            }
         }
         else if (isCliming)
         {
@@ -985,8 +996,8 @@ public class PlayerMovement : MonoBehaviour
         freezeRot = true;
         balancebar = true;
         action = true;
-        transform.LookAt(wc.destenation);
-        player.transform.LookAt(wc.destenation);
+        transform.LookAt(destenation);
+        player.transform.LookAt(destenation);
 
         anim.SetBool("isBalancing", true);
     }

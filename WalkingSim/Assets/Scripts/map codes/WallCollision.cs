@@ -38,27 +38,27 @@ public class WallCollision : MonoBehaviour
         lader = other.gameObject.GetComponent<Lader>();
         mediumwall = other.gameObject.GetComponent<MediumWall>();
         balancB = other.gameObject.GetComponent<BalancingBar>();
-        if (vaultwall != null)
+        if (vaultwall != null&& destenation==null)
         {
             vault = true;
             destenation = other.gameObject.GetComponent<VaultWall>().destenation;
         }
-        else if (mediumwall != null)
+        else if (mediumwall != null && destenation == null)
         {
             medium = true;
             destenation = other.gameObject.GetComponent<MediumWall>().destenation;
         }
-        else if (legecol != null)
+        else if (legecol != null && destenation == null)
         {
             ledge = true;
             destenation = other.gameObject.GetComponent<Ledge>().climbPoint;
         }
-        else if (balancB != null)
+        else if (balancB != null && destenation == null)
         {
             balancingBar = true;
             destenation = other.gameObject.GetComponent<BalancingBar>().destenation;
         }
-        else if (lader != null)
+        else if (lader != null && destenation == null)
         {
             laderbool = true;            
         }
@@ -73,22 +73,27 @@ public class WallCollision : MonoBehaviour
         if (legecol != null)
         {
             ledge = false;
+            destenation = null;
         }
         else if (mediumwall != null)
         {
             medium = false;
+            destenation = null;
         }
         else   if (vaultwall != null)
         {
             vault = false;
+            destenation = null;
         }
         else if (balancB != null)
         {
             balancingBar = false;
+            destenation = null;
         }
         else if(lader != null)
         {
             laderbool = false;
+            destenation = null;
         }
     }
     public void OnTriggerStay(Collider other)
