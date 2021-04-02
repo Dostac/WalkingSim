@@ -113,6 +113,8 @@ public class PlayerMovement : MonoBehaviour
     public float maxActionDistance=7.50f;
     [Space(10)]
     [Tooltip("This is a bool that wil be checked in a other code")]
+    public bool action;
+    [Tooltip("This is a bool that wil be checked in a other code")]
     public bool ledge;
     [Tooltip("This is a bool that wil be checked in a other code")]
     public bool balancebar;
@@ -203,7 +205,6 @@ public class PlayerMovement : MonoBehaviour
     private bool sliding;
 
     private bool frozen;
-    private bool action;
 
     private bool lader;
 

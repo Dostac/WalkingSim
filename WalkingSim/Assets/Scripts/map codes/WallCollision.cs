@@ -22,6 +22,7 @@ public class WallCollision : MonoBehaviour
     [Space(10)]
     [Tooltip("the destenation that the code wil set and the playermovement wil get")]
     public Transform destenation;
+    public PlayerMovement pm;
     #endregion
     #region private componants
     private MediumWall mediumwall = null;
@@ -38,27 +39,27 @@ public class WallCollision : MonoBehaviour
         lader = other.gameObject.GetComponent<Lader>();
         mediumwall = other.gameObject.GetComponent<MediumWall>();
         balancB = other.gameObject.GetComponent<BalancingBar>();
-        if (vaultwall != null&& destenation==null)
+        if (vaultwall != null&& destenation==null&& !pm.action)
         {
             vault = true;
             destenation = other.gameObject.GetComponent<VaultWall>().destenation;
         }
-        else if (mediumwall != null && destenation == null)
+        else if (mediumwall != null && destenation == null && !pm.action)
         {
             medium = true;
             destenation = other.gameObject.GetComponent<MediumWall>().destenation;
         }
-        else if (legecol != null && destenation == null)
+        else if (legecol != null && destenation == null && !pm.action)
         {
             ledge = true;
             destenation = other.gameObject.GetComponent<Ledge>().climbPoint;
         }
-        else if (balancB != null && destenation == null)
+        else if (balancB != null && destenation == null && !pm.action)
         {
             balancingBar = true;
             destenation = other.gameObject.GetComponent<BalancingBar>().destenation;
         }
-        else if (lader != null && destenation == null)
+        else if (lader != null && destenation == null && !pm.action)
         {
             laderbool = true;            
         }
