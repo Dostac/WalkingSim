@@ -2298,7 +2298,6 @@ GameObject:
   - component: {fileID: 6683443306152265628}
   - component: {fileID: 6683443306152265629}
   - component: {fileID: 6683443306152265630}
-  - component: {fileID: 778748948}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2464,8 +2463,11 @@ MonoBehaviour:
   runningSpeed: 6
   walkingSpeed: 3.5
   crouchingSpeed: 2.5
+  rollSpeed: 1
   ledgeSpeed: 1
   vaultingSpeed: 3
+  speedReductionAiredR: 2
+  speedReductionAiredW: 1
   slidingTime: 1
   wallRunningTime: 5
   grafityCorectionValue: 4
@@ -2499,10 +2501,13 @@ MonoBehaviour:
   ledgeOffSet: 0.15
   cornerToOtherObjectOfset: 0.31
   maxActionDistance: 4.5
+  action: 0
   ledge: 0
   balancebar: 0
   getsInput: 0
   isGrounded: 0
+  landed: 0
+  rol: 0
   sldingMultiplier: 1.5
   isTrigger: {fileID: 6683443306152265617}
   notTrigger: {fileID: 6683443306152265618}
@@ -2513,13 +2518,15 @@ MonoBehaviour:
   capsuleCenterCrouch: {x: -0.01670074, y: 0.5909799, z: 0.0531683}
   capsuleHeightCrouch: 1.070153
   resetActionTime: 0.5
+  landTimeRolling: 0.65
+  landTimeLanding: 0.35
   ledgeClimbLerpReset: 0.6
   ledgeClimReset: 0.65
   ledeReset: 1
   ledgeClimbBoolInvoke: 0.5
   mediumWallReset: 1
   ToOtherObjectInvokeTime: 1
-  invokeStartLEdge: 0.25
+  invokeStartLedge: 0.25
   distanceForDetectionToBeGround: 0.25
   distanceForDetectionToBeInAir: 0.26
   timeForFallingCheck: 0.125
@@ -2527,74 +2534,6 @@ MonoBehaviour:
   velocityToBeAired: 0.5
   fallingSpeedForRoll: 8
   fallingSpeedForLand: 8.1
---- !u!114 &778748948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6683443306152265631}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81afde2837a414d46aa35161c5df932b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 6683443306152265623}
-  t: {fileID: 0}
-  posX: 0
-  posZ: 0
-  textureValues: []
-  terrain:
-    serializedVersion: 2
-    m_Bits: 524288
-  concrete:
-    serializedVersion: 2
-    m_Bits: 64
-  tube:
-    serializedVersion: 2
-    m_Bits: 128
-  water:
-    serializedVersion: 2
-    m_Bits: 16
-  container:
-    serializedVersion: 2
-    m_Bits: 131072
-  sandBag:
-    serializedVersion: 2
-    m_Bits: 262144
-  jumpSound: {fileID: 0}
-  ledgeMoveSound: {fileID: 0}
-  rollSound: {fileID: 0}
-  landingSound: {fileID: 0}
-  climbingSound: {fileID: 0}
-  inAirSound: {fileID: 0}
-  vaultingSound: {fileID: 0}
-  slideSound: {fileID: 0}
-  walkingSound: {fileID: 0}
-  runningSound: {fileID: 0}
-  slideSound_Grass: {fileID: 0}
-  walkingSound_Grass: {fileID: 0}
-  runningSound_Grass: {fileID: 0}
-  slideSound_Gravel: {fileID: 0}
-  walkingSound_Gravel: {fileID: 0}
-  runningSound_Gravel: {fileID: 0}
-  slideSound_Concrete: {fileID: 0}
-  walkingSound_Concrete: {fileID: 0}
-  runningSound_Concrete: {fileID: 0}
-  slideSound_Tube: {fileID: 0}
-  walkingSound_Tube: {fileID: 0}
-  runningSound_Tube: {fileID: 0}
-  walkingSound_Water: {fileID: 0}
-  runningSound_Water: {fileID: 0}
-  slideSound_Container: {fileID: 0}
-  walkingSound_Container: {fileID: 0}
-  runningSound_Container: {fileID: 0}
-  slideSound_Sandbag: {fileID: 0}
-  walkingSound_Sandbag: {fileID: 0}
-  runningSound_Sandbag: {fileID: 0}
-  slideSound_Rocks: {fileID: 0}
-  walkingSound_Rocks: {fileID: 0}
-  runningSound_rocks: {fileID: 0}
 --- !u!1 &6756695317553602243
 GameObject:
   m_ObjectHideFlags: 0
@@ -3489,6 +3428,7 @@ MonoBehaviour:
   balanceEnd: 0
   laderbool: 0
   destenation: {fileID: 0}
+  pm: {fileID: 0}
 --- !u!65 &9163953090868257834
 BoxCollider:
   m_ObjectHideFlags: 0

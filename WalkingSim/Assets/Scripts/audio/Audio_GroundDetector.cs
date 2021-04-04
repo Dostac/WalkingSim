@@ -129,7 +129,6 @@ public class Audio_GroundDetector : MonoBehaviour
         slideSound.Stop();
         vaultingSound.Stop();
         climbingSound.Stop();
-        SoundReset();
     }
     #endregion
     void Start()
