@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     public float crouchingSpeed;
 
     [Tooltip("Set a speed value")]
+    public float rollSpeed=1;
+
+    [Tooltip("Set a speed value")]
     public float ledgeSpeed;
 
     [Tooltip("Set a speed value")]
@@ -122,6 +125,10 @@ public class PlayerMovement : MonoBehaviour
     public bool getsInput;
     [Tooltip("This is a bool that wil be checked in a other code")]
     public bool isGrounded;
+    [Tooltip("This is a bool that wil be checked in a other code")]
+    public bool landed;
+    [Tooltip("This is a bool that wil be checked in a other code")]
+    public bool rol;
     [Space(10)]
     [Tooltip("Set a value for the sliding speed to multiply with")]
     public float sldingMultiplier = 1.5f;
@@ -150,6 +157,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Invoke Resets")]
     [Tooltip("Reset time for a invoke afther a action")]
     public float resetActionTime = 0.5f;
+    [Space(5)]
+    [Tooltip("Reset time for a invoke to resetlanding afther a roll")]
+    public float landTimeRolling=0.65f;
+    [Tooltip("Reset time for a invoke to resetlanding afther a normal land")]
+    public float landTimeLanding=0.35f;
     [Space(5)]
     [Tooltip("Reset time for ledge climb lerp")]
     public float ledgeClimbLerpReset = 0.6f;
@@ -424,6 +436,10 @@ public class PlayerMovement : MonoBehaviour
     #region action updator (update)
     public void AtionUpdator()
     {
+        if (rol)
+        {
+            transform.position += transform.forward * Time.deltaTime * rollSpeed;
+        }
         if (rb.velocity.magnitude > velocityToBeAired+2)
         {
             CheckIfAired();
@@ -722,7 +738,7 @@ public class PlayerMovement : MonoBehaviour
     #region player movement (update)
     public void Movement()
     {
-        if (!ledge && !balancebar && !wc.laderbool&&!lerpValueOn)
+        if (!ledge && !balancebar && !wc.laderbool&&!lerpValueOn && !landed)
         {
             var movementVec = new Vector3(inputX, 0, inputZ).normalized;
             var jumpVec = new Vector3(0, inputY, 0);
@@ -747,7 +763,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
-        else if (ledge && !balancebar && !wc.laderbool && !isLedgeClimbing)
+        else if (ledge && !balancebar && !wc.laderbool && !isLedgeClimbing && !landed)
         {
             RaycastHit LedgeCheckWallLeft;
             RaycastHit LedgeCheckWallRight;
@@ -777,7 +793,7 @@ public class PlayerMovement : MonoBehaviour
             var curentPos = new Vector3(transform.position.x, curentYPos, transform.position.z);
             transform.position = curentPos;
         }
-        else if (!ledge && balancebar && !wc.laderbool)
+        else if (!ledge && balancebar && !wc.laderbool && !landed)
         {
             if (!wc.balancingBar && wc.balanceBegin || !wc.balancingBar && wc.balanceEnd)
             {
@@ -792,7 +808,7 @@ public class PlayerMovement : MonoBehaviour
                 transform.Translate(jumpVec * Time.deltaTime * runningSpeed);
             }
         }
-        else if (!ledge && !balancebar && wc.laderbool && !isLedgeClimbing && lader)
+        else if (!ledge && !balancebar && wc.laderbool && !isLedgeClimbing && lader && !landed)
         {
             if (im.forwardPressed)
             {

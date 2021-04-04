@@ -5,11 +5,19 @@ using UnityEngine.Events;
 public class SkyHitBox : MonoBehaviour
 {
     public UnityEvent onSkyBoxHit;
+    private PlayerMovement pm;
+    private void Start()
+    {
+        pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+    }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!pm.action)
         {
-            onSkyBoxHit?.Invoke();
+            if (other.CompareTag("Player"))
+            {
+                onSkyBoxHit?.Invoke();
+            }
         }
     }
 }

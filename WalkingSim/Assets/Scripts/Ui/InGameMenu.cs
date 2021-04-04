@@ -17,8 +17,6 @@ public class InGameMenu : MonoBehaviour
     [Header("Sounds")]
     public AudioSource hoverSound;
     public AudioSource buttonPressedSound;
-    public AudioSource beginSpeedRunSound;
-    public AudioSource endSpeedRunSound;
     #endregion
     #region private componants
     private bool uiVisibility = true;
@@ -86,20 +84,9 @@ public class InGameMenu : MonoBehaviour
         Resetsound();
         buttonPressedSound.Play();
     }
-    public void BeginSpeedRunSound()
-    {
-        Resetsound();
-        beginSpeedRunSound.Play();
-    }
-    public void EndSpeedRunSound()
-    {
-        Resetsound();
-        endSpeedRunSound.Play();
-    }
+
     public void Resetsound()
     {
-        endSpeedRunSound.Stop();
-        beginSpeedRunSound.Stop();
         buttonPressedSound.Stop();
         hoverSound.Stop();
     }

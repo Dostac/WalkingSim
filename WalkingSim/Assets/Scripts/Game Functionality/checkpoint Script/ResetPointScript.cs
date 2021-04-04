@@ -4,6 +4,8 @@ public class ResetPointScript : MonoBehaviour
     #region public componants
     [Tooltip("so you can see where it is and so other scripts can get it")]
     public Vector3 spawnPos;
+    [Tooltip("the position the player wil be reset to the most")]
+    public Transform spawnPositonBegin;
     [Tooltip("for testing and before building")]
     public bool setActieve, resetPos;
     #endregion
@@ -23,10 +25,6 @@ public class ResetPointScript : MonoBehaviour
     #region respawn function and save
     private void Start()
     {
-        if (resetPos)
-        {
-            ResetPos();
-        }
         if (setActieve)
         {
 
@@ -36,7 +34,7 @@ public class ResetPointScript : MonoBehaviour
             posZ = PlayerPrefs.GetFloat("posZ");
 
             spawnPos = new Vector3(posX, posY, posZ);
-            Respawn();
+            ResetPositon();
         }
     }
     public void SetPosition()
@@ -64,7 +62,12 @@ public class ResetPointScript : MonoBehaviour
         spawnPos = new Vector3(posX, posY, posZ);
         player.transform.position = spawnPos;
     }
-
+    public void ResetPositon()
+    {
+        player.transform.position = spawnPositonBegin.position;
+        player.transform.rotation = spawnPositonBegin.rotation;
+        player.GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
+    }
     public void OnApplicationQuit()
     {
         SavePos();
