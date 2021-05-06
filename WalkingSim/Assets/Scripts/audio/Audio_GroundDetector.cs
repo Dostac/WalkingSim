@@ -7,6 +7,8 @@ public class Audio_GroundDetector : MonoBehaviour
     [Header("Terrain Detection Componants")]
     public Transform playerTransform;
     public Terrain t;
+    public Animator anim;
+    public PlayerMovement pm;
     [Space(5)]
     public int posX;
     public int posZ;
@@ -66,16 +68,27 @@ public class Audio_GroundDetector : MonoBehaviour
     public AudioSource slideSound_Wood;
     public AudioSource walkingSound_Wood;
     public AudioSource runningSound_Wood;
+    private bool isIdiling;
     #region sounds
     public void RunningSound()
     {
-        SoundReset();
-        runningSound.Play();
+        if (!isIdiling)
+        {
+            SoundReset();
+            runningSound.volume = Random.Range(0.2f, 0.4f);
+            runningSound.pitch = Random.Range(0.8f, 1.1f);
+            runningSound.Play();
+        }     
     }
     public void WalkingSound()
     {
-        SoundReset();
-        walkingSound.Play();
+        if (!isIdiling)
+        {
+            SoundReset();
+            walkingSound.volume = Random.Range(0.2f, 0.4f);
+            walkingSound.pitch = Random.Range(0.8f, 1.1f);
+            walkingSound.Play();
+        }
     }
     public void JumpingSound()
     {
@@ -135,6 +148,7 @@ public class Audio_GroundDetector : MonoBehaviour
     {
         t = Terrain.activeTerrain;
         playerTransform = gameObject.transform;
+        anim = transform.GetComponent<Animator>();
     }
 
     public void GetTerrainTexture()
@@ -172,6 +186,16 @@ public class Audio_GroundDetector : MonoBehaviour
 
     public void Update()
     {
+        if (!pm.getsInput)
+        { 
+            runningSound.Stop();
+            walkingSound.Stop();
+            isIdiling = true;
+        }
+        else
+        {
+            isIdiling = false;
+        }
         GetTerrainTexture();
         RaycastHit FallDetection;
         Ray rayDir = new Ray(transform.position + (new Vector3(0f, 0.25f, 0f)), -transform.up);
